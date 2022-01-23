@@ -12,9 +12,9 @@ class PlanningController extends Controller
 
     public function show (Hub $hub)
     {
-        $a = Storage::get('planning/Gujan/planning-2022.xlsx');
+
         if (Storage::get('planning/Gujan/planning-2022.xlsx')) {
-            dd($a);
+            dd('ok');
         }
         dd('non');
     }
