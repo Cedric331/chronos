@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Planning\importHubRequest;
+use App\Imports\FirstSheetImport;
 use App\Models\Hub;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PlanningController extends Controller
 {
 
     public function show (Hub $hub)
     {
+        Excel::import(new FirstSheetImport(), Storage::path('planning/Gujan/planning-2022.xlsx'));
 
         if (Storage::get('planning/Gujan/planning-2022.xlsx')) {
             dd('ok');
