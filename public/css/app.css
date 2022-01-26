@@ -1004,10 +1004,6 @@ select {
   font-size: 1rem;
   line-height: 1.5rem;
 }
-.text-xl {
-  font-size: 1.25rem;
-  line-height: 1.75rem;
-}
 .font-medium {
   font-weight: 500;
 }
@@ -1025,9 +1021,6 @@ select {
 }
 .leading-4 {
   line-height: 1rem;
-}
-.leading-tight {
-  line-height: 1.25;
 }
 .leading-6 {
   line-height: 1.5rem;
