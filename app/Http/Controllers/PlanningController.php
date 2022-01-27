@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Filters\FilterCell;
 use App\Http\Requests\Planning\importHubRequest;
+use App\Models\Collaborateur;
+use App\Models\CollaborateurDate;
+use App\Models\Date;
 use App\Models\Hub;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
@@ -19,9 +21,12 @@ class PlanningController extends Controller
         $inputFileType = IOFactory::identify($inputFileName);
 
         $reader = IOFactory::createReader($inputFileType);
+
         $reader->setLoadSheetsOnly(' PLANNING ');
         $reader->setReadDataOnly(true);
-        $spreadsheet = $reader->load($inputFileName);
+
+            $spreadsheet = $reader->load($inputFileName);
+
         $sheet = $spreadsheet->getActiveSheet();
 
         $cells = [
@@ -54,19 +59,22 @@ class PlanningController extends Controller
             'AF' => '21h00'
         ];
 
-        $a = collect();
-//        $sheet->getHighestRow()
-        for ($i = 345; $i < 1000; $i++) {
+        $collect = collect();
+
+        for ($i = 1000; $i < $sheet->getHighestRow(); $i++) {
             if ($sheet->getCell('B' . $i)->getCalculatedValue() !== null) {
                 $excel_date = $sheet->getCell('B'. $i)->getCalculatedValue();
                 $unix_date = ($excel_date - 25569) * 86400;
                 $excel_date = 25569 + ($unix_date / 86400);
                 $unix_date = ($excel_date - 25569) * 86400;
 
-//                if ($unix_date > time() - strtotime('1 day ago')) {
                     $numberMembers = $i;
                     $members = collect();
                     while ($sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() !== null || $sheet->getCell('D'. $numberMembers)->getValue()) {
+                        $member['collaborateur'] = $sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() ?
+                            $sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() :
+                            $sheet->getCell('D'. $numberMembers)->getValue();
+
                         $horaires = $sheet->getCell('C' . $numberMembers)->getOldCalculatedValue();
                         $debutJournee = 'OFF';
                         $finJournee = 'OFF';
@@ -89,32 +97,63 @@ class PlanningController extends Controller
                             }
                         }
 
-                        $member = $sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() ?
-                            $sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() :
-                            $sheet->getCell('D'. $numberMembers)->getValue();
-
-                        $rotation = [
+                        $horaires = [
                             'debut_journee' => $debutJournee,
                             'debut_pause' => $debutPause,
                             'fin_pause' => $finPause,
                             'fin_journee' => $finJournee,
                         ];
-                        $members->push([$member, $rotation]);
+                        $member['horaire'] = $horaires;
+                        $members->push($member);
                         $numberMembers++;
                     }
                     $object = [
                         date("l d F", $unix_date) => $members->toArray()
                     ];
-                    $a->push($object);
+                $collect->push($object);
                 }
-//            }
         }
-        dd($a->toArray());
+        $spreadsheet->__destruct();
+        $spreadsheet = null;
+        unset($spreadsheet);
 
-        if (Storage::get('planning/Gujan/planning-2022.xlsx')) {
-            dd('oui');
+        $reader = null;
+        unset($reader);
+
+        $allPlannings = $collect->toArray();
+
+        foreach ($allPlannings as $plannings) {
+            foreach ($plannings as $key => $values) {
+                $date = Date::firstOrCreate([
+                    'date' => date('Y-m-d', strtotime($key))
+                ]);
+
+                foreach ($values as $value) {
+                    $collaborateur = Collaborateur::firstOrCreate([
+                        'name' => $value['collaborateur'],
+                        'hub_id' => Auth::user()->hub_id,
+                    ]);
+                    $hub = Hub::find(Auth::user()->hub_id);
+
+                    CollaborateurDate::where([
+                            ['hub_id', $hub->id],
+                            ['date_id', $date->id],
+                            ['collaborateur_id', $collaborateur->id]
+                        ])->delete();
+
+                    $hub->dates()->attach($date, [
+                        'collaborateur_id' => $collaborateur->id,
+                        'horaire' => json_encode($value['horaire'])
+                    ]);
+//dd($hub->dates()->first());
+                }
+            }
         }
-        dd('non');
+
+//        if (Storage::get('planning/Gujan/planning-2022.xlsx')) {
+//            dd('oui');
+//        }
+//        dd('non');
     }
 
 
