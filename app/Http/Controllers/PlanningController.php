@@ -99,7 +99,10 @@ class PlanningController extends Controller
                         $sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() :
                         $sheet->getCell('D'. $numberMembers)->getValue();
 
-                    $type = $sheet->getCell('E' . $numberMembers)->getOldCalculatedValue();
+                    $type = $sheet->getCell('E' . $numberMembers)->getOldCalculatedValue() ?
+                        $sheet->getCell('E' . $numberMembers)->getOldCalculatedValue() :
+                        $sheet->getCell('E' . $numberMembers)->getValue();
+
                     $horaires = $sheet->getCell('C' . $numberMembers)->getOldCalculatedValue();
                     $debutJournee = 'OFF';
                     $finJournee = 'OFF';
@@ -198,27 +201,29 @@ class PlanningController extends Controller
 
         $collect = collect();
         foreach ($collaborateur->dates as $date) {
-            $horaires = $this->getHoraire($date->pivot->horaire);
-            $lundi = $this->getLundi();
-            if (strtotime($date->date) > strtotime('- '.$lundi.' days')) {
+            if (strtotime($date->date) > strtotime('- '.$this->getLundi().' days')) {
+                $horaires = $this->getHoraire($date->pivot->horaire);
                 $object = [
                     'date' => $this->formatDateFr($date->date),
-                    'horaires' => $horaires
+                    'horaires' => $horaires,
+                    'type' => $this->getType($date->pivot->horaire, $horaires)
                 ];
                 $collect->push($object);
             }
         }
+      $collaborateur = $collaborateur->toArray();
+        unset($collaborateur['dates']);
 
         if (!$request->loadData) {
             return Inertia::render('Planning', [
                 'collaborateurs' => $collaborateurs,
-                'collaborateur' => $collaborateur->name,
+                'collaborateur' => $collaborateur,
                 'plannings' => $collect->toArray()
             ]);
         } else {
             return response()->json([
                 'collaborateurs' => $collaborateurs,
-                'collaborateur' => $collaborateur->name,
+                'collaborateur' => $collaborateur,
                 'plannings' => $collect->toArray()
             ]);
         }
@@ -305,5 +310,18 @@ class PlanningController extends Controller
         };
 
         return $return_value;
+    }
+
+    private function getType($data, $horaires): ?string
+    {
+        if (!$horaires) {
+            return null;
+        }
+        $value = json_decode($data);
+
+        if ($value->type === 'Iti1' || $value->type === 'Iti2' || $value->type === 'Iti3') {
+            $value->type = 'Iti';
+        }
+        return $value->type;
     }
 }

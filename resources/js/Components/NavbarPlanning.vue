@@ -5,28 +5,16 @@
                 <div class="relative flex items-center justify-between h-16">
                     <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                         <div class="flex-shrink-0 flex items-center text-white">
-                            Planning de {{ collaborateur}}
+                            Planning de {{ collaborateur.name }}
                         </div>
                     </div>
                     <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                         <div class="flex justify-center">
                             <div class="xl:w-96">
-                                <select class="form-select appearance-none
-      block
-      w-full
-      text-base
-      font-normal
-      text-gray-700
-      bg-white bg-clip-padding bg-no-repeat
-      border border-solid border-gray-300
-      rounded
-      transition
-      ease-in-out
-      m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example">
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                <select v-model="selected" @change="updateCollaborateur()" class=" block w-full text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600" aria-label="Voir le planning">
+                                    <option v-for="member in collaborateurs" :key="member.id" :value="member" :selected="selected.id === member.id">
+                                        {{ member.name }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -55,7 +43,18 @@
 export default {
     name: "NavbarPlanning",
     props:  {
-        collaborateur: String
+        collaborateur: Object,
+        collaborateurs: Array,
+    },
+    data () {
+        return {
+            selected: this.collaborateur
+        }
+    },
+    methods: {
+        updateCollaborateur() {
+            this.$emit('updateCollaborateur', this.selected)
+        }
     }
 }
 </script>
