@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Helpers\ControllerResponse;
 use App\Http\Requests\Hub\PatchHubRequest;
 use App\Models\Hub;
-use http\Env\Response;
 use Illuminate\Http\Request;
 
 class HubsController extends Controller

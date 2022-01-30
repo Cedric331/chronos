@@ -7,6 +7,6 @@ Route::post('/import/hub/{hub}', [PlanningController::class, 'import'])
     ->middleware('auth')
     ->name('import');
 
-Route::get('/planning/hub/{hub}', [PlanningController::class, 'show'])
+Route::get('/planning', [PlanningController::class, 'loadPlanning'])
     ->middleware('auth')
     ->name('planning');

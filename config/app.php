@@ -106,7 +106,7 @@ return [
     |
     */
 
-    'faker_locale' => 'en_US',
+    'faker_locale' => 'fr_FR',
 
     /*
     |--------------------------------------------------------------------------
@@ -231,5 +231,4 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
     ],
-
 ];

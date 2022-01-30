@@ -23,4 +23,14 @@ class Hub extends Model
         'abonne_freebox',
         'abonne_mobile',
     ];
+
+    public function dates (): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Date::class, 'collaborateur_dates');
+    }
+
+    public function collaborateurs (): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Collaborateur::class, 'collaborateur_dates');
+    }
 }
