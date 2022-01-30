@@ -18,4 +18,10 @@ class Collaborateur extends Model
         'name',
         'hub_id'
     ];
+
+    public function dates (): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Date::class, 'collaborateur_dates')
+            ->withPivot('horaire');
+    }
 }

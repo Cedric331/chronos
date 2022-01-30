@@ -1,6 +1,11 @@
 <template>
+    <notifications position="bottom right" />
     <Head title="Tableau de bord" />
-
+    <Loading
+        :show="show"
+        :loader-class="loadClass"
+        :label="label">
+    </Loading>
     <BreezeAuthenticatedLayout>
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -84,10 +89,12 @@
 <script>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue'
 import { Head } from '@inertiajs/inertia-vue3';
+import Loading from 'vue-full-loading'
 
 export default {
     components: {
         BreezeAuthenticatedLayout,
+        Loading,
         Head,
     },
     data() {
@@ -98,7 +105,10 @@ export default {
             complement_adresse: this.$page.props.hub.complement_adresse,
             abonne_freebox: this.$page.props.hub.abonne_freebox,
             abonne_mobile: this.$page.props.hub.abonne_mobile,
-            file: null
+            file: null,
+            show: false,
+            label: 'Chargement en cours...',
+            loadClass: 'load-class'
         }
     },
     methods: {
@@ -118,6 +128,7 @@ export default {
           this.file = event.target.files[0]
         },
         importExcel (event) {
+            this.show = true
             let data = new FormData()
             data.append('file', this.file)
 
@@ -128,10 +139,49 @@ export default {
             }
 
             axios.post('import/hub/' + this.$page.props.hub.id, data, config)
-                .then(response => {
-                    console.log(response.data)
+                .then(() => {
+                    this.show = false
+                    this.$notify({
+                        title: "Succès",
+                        text: "Le fichier est bien importé!",
+                        type: 'success',
+                    });
+                }).catch(error => {
+                    this.$notify({
+                        title: "Échec",
+                        text: "Oups désolé il y a une erreur!",
+                        type: 'danger',
+                    });
+                }).finally(() => {
+                    this.show = false
                 })
         }
     }
 }
 </script>
+
+<style>
+.success {
+    margin: 5px;
+    padding: 10px;
+    font-size: 12px;
+     background: #68cd86;
+     border-left-color: #42a85f;
+ }
+
+.warn {
+     background: #ffb648;
+     border-left-color: #f48a06;
+ }
+
+.error {
+     background: #e54d42;
+     border-left-color: #b82e24;
+ }
+.load-class {
+    position: absolute;
+    display: inline-block;
+    right:40%;
+    bottom:50%;
+}
+</style>

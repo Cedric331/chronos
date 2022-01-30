@@ -26,7 +26,11 @@ class Hub extends Model
 
     public function dates (): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Date::class, 'collaborateur_dates')
-            ->with('collaborateurs');
+        return $this->belongsToMany(Date::class, 'collaborateur_dates');
+    }
+
+    public function collaborateurs (): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Collaborateur::class, 'collaborateur_dates');
     }
 }

@@ -7,9 +7,12 @@ use App\Models\Collaborateur;
 use App\Models\CollaborateurDate;
 use App\Models\Date;
 use App\Models\Hub;
+use App\Models\Planning;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class PlanningController extends Controller
@@ -17,7 +20,28 @@ class PlanningController extends Controller
 
     public function show (Hub $hub)
     {
-        $inputFileName = Storage::path('planning/Gujan/planning-2022.xlsx');
+        //
+    }
+
+
+    /**
+     * @param importHubRequest $request
+     * @param Hub $hub
+     * @return false|string
+     */
+    public function import (importHubRequest $request, Hub $hub): bool|string
+    {
+        $name = 'planning-'.Carbon::now()->format('Y').'.'.$request->file('file')->getClientOriginalExtension();
+        $request->file('file')->storeAs('planning/'.$hub->ville, $name);
+         $store = Planning::firstOrCreate([
+                'file' => $name,
+                'hub_id' => $hub->id
+            ]);
+
+         if (!$store) {
+             return response()->json(false, 400);
+         }
+        $inputFileName = Storage::path('planning/'.$hub->ville.'/'.$name);
         $inputFileType = IOFactory::identify($inputFileName);
 
         $reader = IOFactory::createReader($inputFileType);
@@ -25,7 +49,7 @@ class PlanningController extends Controller
         $reader->setLoadSheetsOnly(' PLANNING ');
         $reader->setReadDataOnly(true);
 
-            $spreadsheet = $reader->load($inputFileName);
+        $spreadsheet = $reader->load($inputFileName);
 
         $sheet = $spreadsheet->getActiveSheet();
 
@@ -61,57 +85,59 @@ class PlanningController extends Controller
 
         $collect = collect();
 
-        for ($i = 1000; $i < $sheet->getHighestRow(); $i++) {
-            if ($sheet->getCell('B' . $i)->getCalculatedValue() !== null) {
+        for ($i = 0; $i < $sheet->getHighestRow(); $i++) {
+            if ($sheet->getCell('B' . $i)->getCalculatedValue() !== null && is_numeric($sheet->getCell('B' . $i)->getCalculatedValue())) {
                 $excel_date = $sheet->getCell('B'. $i)->getCalculatedValue();
                 $unix_date = ($excel_date - 25569) * 86400;
                 $excel_date = 25569 + ($unix_date / 86400);
                 $unix_date = ($excel_date - 25569) * 86400;
 
-                    $numberMembers = $i;
-                    $members = collect();
-                    while ($sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() !== null || $sheet->getCell('D'. $numberMembers)->getValue()) {
-                        $member['collaborateur'] = $sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() ?
-                            $sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() :
-                            $sheet->getCell('D'. $numberMembers)->getValue();
+                $numberMembers = $i;
+                $members = collect();
+                while ($sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() !== null || $sheet->getCell('D'. $numberMembers)->getValue()) {
+                    $member['collaborateur'] = $sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() ?
+                        $sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() :
+                        $sheet->getCell('D'. $numberMembers)->getValue();
 
-                        $horaires = $sheet->getCell('C' . $numberMembers)->getOldCalculatedValue();
-                        $debutJournee = 'OFF';
-                        $finJournee = 'OFF';
-                        if ($horaires !== 'OFF' && !empty($horaires)) {
-                            $horaire = explode('-', $horaires);
-                            $debutJournee = $horaire[0];
-                            $finJournee = $horaire[1];
-                        }
-                        $debutPause = null;
-                        $finPause = null;
-
-                        foreach ($cells as $cell => $value) {
-                            if ($sheet->getCell($cell . $numberMembers)->getOldCalculatedValue() === 'DEJ') {
-                                if (empty($debutPause)) {
-                                    $debutPause = $value;
-                                }
-                            }
-                            if ($sheet->getCell($cell . $numberMembers)->getOldCalculatedValue() !== 'DEJ' && !empty($debutPause) && empty($finPause)) {
-                                $finPause = $value;
-                            }
-                        }
-
-                        $horaires = [
-                            'debut_journee' => $debutJournee,
-                            'debut_pause' => $debutPause,
-                            'fin_pause' => $finPause,
-                            'fin_journee' => $finJournee,
-                        ];
-                        $member['horaire'] = $horaires;
-                        $members->push($member);
-                        $numberMembers++;
+                    $type = $sheet->getCell('E' . $numberMembers)->getOldCalculatedValue();
+                    $horaires = $sheet->getCell('C' . $numberMembers)->getOldCalculatedValue();
+                    $debutJournee = 'OFF';
+                    $finJournee = 'OFF';
+                    if ($horaires !== 'OFF' && !empty($horaires)) {
+                        $horaire = explode('-', $horaires);
+                        $debutJournee = $horaire[0];
+                        $finJournee = $horaire[1];
                     }
-                    $object = [
-                        date("l d F", $unix_date) => $members->toArray()
+                    $debutPause = null;
+                    $finPause = null;
+
+                    foreach ($cells as $cell => $value) {
+                        if ($sheet->getCell($cell . $numberMembers)->getOldCalculatedValue() === 'DEJ') {
+                            if (empty($debutPause)) {
+                                $debutPause = $value;
+                            }
+                        }
+                        if ($sheet->getCell($cell . $numberMembers)->getOldCalculatedValue() !== 'DEJ' && !empty($debutPause) && empty($finPause)) {
+                            $finPause = $value;
+                        }
+                    }
+
+                    $horaires = [
+                        'debut_journee' => $debutJournee,
+                        'debut_pause' => $debutPause,
+                        'fin_pause' => $finPause,
+                        'fin_journee' => $finJournee,
+                        'type' => $type,
                     ];
-                $collect->push($object);
+                    $member['horaire'] = $horaires;
+                    $members->push($member);
+                    $numberMembers++;
                 }
+                $object = [
+                    date("l d F", $unix_date) => $members->toArray()
+                ];
+                $collect->push($object);
+            }
         }
         $spreadsheet->__destruct();
         $spreadsheet = null;
@@ -136,36 +162,148 @@ class PlanningController extends Controller
                     $hub = Hub::find(Auth::user()->hub_id);
 
                     CollaborateurDate::where([
-                            ['hub_id', $hub->id],
-                            ['date_id', $date->id],
-                            ['collaborateur_id', $collaborateur->id]
-                        ])->delete();
+                        ['hub_id', $hub->id],
+                        ['date_id', $date->id],
+                        ['collaborateur_id', $collaborateur->id]
+                    ])->delete();
 
                     $hub->dates()->attach($date, [
                         'collaborateur_id' => $collaborateur->id,
                         'horaire' => json_encode($value['horaire'])
                     ]);
-//dd($hub->dates()->first());
                 }
             }
         }
 
-//        if (Storage::get('planning/Gujan/planning-2022.xlsx')) {
-//            dd('oui');
-//        }
-//        dd('non');
+        return response()->json(true);
     }
 
+    /**
+     * @param Request $request
+     */
+    public function loadPlanning (Request $request): \Illuminate\Http\JsonResponse|\Inertia\Response
+    {
+        $hub = Hub::findOrFail(Auth::user()->hub_id);
+        if ($request->id) {
+            $collaborateur = Collaborateur::with('dates')
+                ->where('hub_id', $hub->id)
+                ->find($request->id);
+        } else {
+            $collaborateur = Collaborateur::with('dates')
+                ->where('hub_id', $hub->id)
+                ->first();
+        }
+
+        $collaborateurs = Collaborateur::where('hub_id', $hub->id)->get();
+
+        $collect = collect();
+        foreach ($collaborateur->dates as $date) {
+            $horaires = $this->getHoraire($date->pivot->horaire);
+            $lundi = $this->getLundi();
+            if (strtotime($date->date) > strtotime('- '.$lundi.' days')) {
+                $object = [
+                    'date' => $this->formatDateFr($date->date),
+                    'horaires' => $horaires
+                ];
+                $collect->push($object);
+            }
+        }
+
+        if (!$request->loadData) {
+            return Inertia::render('Planning', [
+                'collaborateurs' => $collaborateurs,
+                'collaborateur' => $collaborateur->name,
+                'plannings' => $collect->toArray()
+            ]);
+        } else {
+            return response()->json([
+                'collaborateurs' => $collaborateurs,
+                'collaborateur' => $collaborateur->name,
+                'plannings' => $collect->toArray()
+            ]);
+        }
+    }
 
     /**
-     * @param importHubRequest $request
-     * @param Hub $hub
-     * @return false|string
+     * @param $data
+     * @return mixed
      */
-    public function import (importHubRequest $request, Hub $hub)
+    private function getHoraire ($data): mixed
     {
-        $name = 'planning-'.Carbon::now()->format('Y').'.'.$request->file('file')->getClientOriginalExtension();
-        $path = $request->file('file')->storeAs('planning/'.$hub->ville, $name);
-        return $path;
+        $horaires = json_decode($data);
+        $isPlanifier = true;
+
+        if ($horaires->debut_journee === 'OFF' || empty($horaires->debut_journee)) {
+            $isPlanifier = false;
+        }
+        if ($isPlanifier) {
+            return $horaires;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @param $data
+     * @return string
+     */
+    private function formatDateFr($data): string
+    {
+        $format = date('l d F', strtotime($data));
+        $date = explode(' ', $format);
+        $days = [
+            'Monday' => 'Lundi',
+            'Tuesday' => 'Mardi',
+            'Wednesday' => 'Mercredi',
+            'Thursday' => 'Jeudi',
+            'Friday' => 'Vendredi',
+            'Saturday' => 'Samedi',
+            'Sunday' => 'Dimanche'
+        ];
+        $months = [
+            'Janvier' => 'January',
+            'Février' => 'February',
+            'Mars' => 'March',
+            'Avril' => 'April',
+            'Mai' => 'May',
+            'Juin' => 'June',
+            'Juillet' => 'July',
+            'Aout' => 'August',
+            'Septembre' => 'September',
+            'Octobre' => 'October',
+            'Novembre' => 'November',
+            'Décembre' => 'December'
+        ];
+        foreach ($days as $key => $value) {
+            if ($date[0] === $key) {
+                $date[0] = $value;
+            }
+        }
+        foreach ($months as $key => $value) {
+            if ($date[2] === $value) {
+                $date[2] = $key;
+            }
+        }
+        return implode(' ', $date);
+    }
+
+    /**
+     * @return int
+     */
+    private function getLundi (): int
+    {
+        $today = date('l', strtotime('now'));
+
+        $return_value = match ($today) {
+            'Monday' => 1,
+            'Tuesday' => 2,
+            'Wednesday' => 3,
+            'Thursday' => 4,
+            'Friday' => 5,
+            'Saturday' => 6,
+            'Sunday' => 7
+        };
+
+        return $return_value;
     }
 }
