@@ -4,33 +4,21 @@
     <BreezeValidationErrors class="mb-4" />
 
     <form @submit.prevent="submit">
-        <div>
-            <BreezeLabel for="name" value="Name" />
-            <BreezeInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus autocomplete="name" />
+<h2>Bienvenue {{ signature }}</h2>
+        <div class="mt-4">
+            <BreezeLabel for="password" value="Mot de passe" />
+            <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="password" required autocomplete="new-password" />
         </div>
 
         <div class="mt-4">
-            <BreezeLabel for="email" value="Email" />
-            <BreezeInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autocomplete="username" />
-        </div>
-
-        <div class="mt-4">
-            <BreezeLabel for="password" value="Password" />
-            <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="new-password" />
-        </div>
-
-        <div class="mt-4">
-            <BreezeLabel for="password_confirmation" value="Confirm Password" />
-            <BreezeInput id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" required autocomplete="new-password" />
+            <BreezeLabel for="password_confirmation" value="Confirmer le mot de passe" />
+            <BreezeInput id="password_confirmation" type="password" class="mt-1 block w-full" v-model="password_confirmation" required autocomplete="new-password" />
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
-                Already registered?
-            </Link>
 
-            <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Register
+            <BreezeButton class="ml-4" :disabled="!password && !password_confirmation">
+                S'inscrire
             </BreezeButton>
         </div>
     </form>
@@ -55,24 +43,39 @@ export default {
         Head,
         Link,
     },
-
+    props: {
+        name: String,
+        email: String,
+        hub: String,
+        signature: String,
+    },
     data() {
         return {
-            form: this.$inertia.form({
-                name: '',
-                email: '',
-                password: '',
-                password_confirmation: '',
-                terms: false,
-            })
+            name: this.name,
+            email: this.email,
+            password: '',
+            password_confirmation: ''
         }
     },
 
     methods: {
         submit() {
-            this.form.post(this.route('register'), {
-                onFinish: () => this.form.reset('password', 'password_confirmation'),
+            axios.post(this.signature , {
+                name: this.name,
+                email: this.email,
+                hub: this.hub,
+                password: this.password,
+                password_confirmation: this.password_confirmation,
             })
+            .then(() => {
+                this.form.reset('password', 'password_confirmation')
+            })
+            .catch(error => {
+                console.log(error)
+            })
+            // this.form.post(this.route('register'), {
+            //     onFinish: () => this.form.reset('password', 'password_confirmation'),
+            // })
         }
     }
 }

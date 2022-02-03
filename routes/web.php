@@ -19,8 +19,9 @@ use Inertia\Inertia;
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';
 require __DIR__.'/hub.php';
+require __DIR__.'/equipe.php';
 require __DIR__.'/planning.php';

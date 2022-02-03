@@ -18,9 +18,9 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 class PlanningController extends Controller
 {
 
-    public function show (Hub $hub)
+    public function __construct()
     {
-        //
+        $this->middleware(['role:Coordinateur'], ['only' => ['import']]);
     }
 
 
@@ -314,13 +314,14 @@ class PlanningController extends Controller
 
     private function getType($data, $horaires): ?string
     {
-        if (!$horaires) {
-            return null;
-        }
         $value = json_decode($data);
 
         if ($value->type === 'Iti1' || $value->type === 'Iti2' || $value->type === 'Iti3') {
-            $value->type = 'Iti';
+            if (!$horaires) {
+                return null;
+            } else {
+                $value->type = 'Iti';
+            }
         }
         return $value->type;
     }

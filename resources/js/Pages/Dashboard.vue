@@ -21,51 +21,93 @@
                                 <dt class="text-sm font-medium text-gray-500">
                                     Département
                                 </dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    <input type="text" v-model="departement" @change="update()">
-                                </dd>
+                                <div v-if="$page.props.auth.user.coordinateur">
+                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                        <input type="text" v-model="departement" @change="update()">
+                                    </dd>
+                                </div>
+                                <div v-else>
+                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                        {{ departement }}
+                                    </dd>
+                                </div>
                             </div>
                             <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                 <dt class="text-sm font-medium text-gray-500">
                                     Adresse
                                 </dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    <input type="text" v-model="adresse" @change="update()">
-                                </dd>
+                                <div v-if="$page.props.auth.user.coordinateur">
+                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                        <input type="text" v-model="adresse" @change="update()">
+                                    </dd>
+                                </div>
+                                <div v-else>
+                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                        {{ adresse }}
+                                    </dd>
+                                </div>
                             </div>
                             <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                 <dt class="text-sm font-medium text-gray-500">
                                     Complément d'adresse
                                 </dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    <input type="text" v-model="complement_adresse" @change="update()">
-                                </dd>
+                                <div v-if="$page.props.auth.user.coordinateur">
+                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                        <input type="text" v-model="complement_adresse" @change="update()">
+                                    </dd>
+                                </div>
+                                <div v-else>
+                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                        {{ complement_adresse }}
+                                    </dd>
+                                </div>
                             </div>
                             <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                 <dt class="text-sm font-medium text-gray-500">
                                     Code Postal
                                 </dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    <input type="number" maxlength="5" minlength="5" v-model="code_postal" @change="update()">
-                                </dd>
+                                <div v-if="$page.props.auth.user.coordinateur">
+                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                        <input type="number" maxlength="5" minlength="5" v-model="code_postal" @change="update()">
+                                    </dd>
+                                </div>
+                                <div v-else>
+                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                        {{ code_postal }}
+                                    </dd>
+                                </div>
                             </div>
                             <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                 <dt class="text-sm font-medium text-gray-500">
                                     Abonné Mobile
                                 </dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    <input type="number" v-model="abonne_mobile" @change="update()">
-                                </dd>
+                                <div v-if="$page.props.auth.user.coordinateur">
+                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                        <input type="number" maxlength="5" minlength="5" v-model="abonne_mobile" @change="update()">
+                                    </dd>
+                                </div>
+                                <div v-else>
+                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                        {{ abonne_mobile }}
+                                    </dd>
+                                </div>
                             </div>
                             <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                 <dt class="text-sm font-medium text-gray-500">
                                     Abonné Freebox
                                 </dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    <input type="number" v-model="abonne_freebox" @change="update()">
-                                </dd>
+                                <div v-if="$page.props.auth.user.coordinateur">
+                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                        <input type="number" maxlength="5" minlength="5" v-model="abonne_freebox" @change="update()">
+                                    </dd>
+                                </div>
+                                <div v-else>
+                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                        {{ abonne_freebox }}
+                                    </dd>
+                                </div>
                             </div>
-                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <div v-if="$page.props.auth.user.coordinateur" class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                 <dt class="text-sm font-medium text-gray-500">
                                     Importé Planning (Excel)
                                 </dt>
@@ -147,11 +189,19 @@ export default {
                         type: 'success',
                     });
                 }).catch(error => {
-                    this.$notify({
-                        title: "Échec",
-                        text: "Oups désolé il y a une erreur!",
-                        type: 'danger',
-                    });
+                    if (error.response.status === 403) {
+                        this.$notify({
+                            title: "Action non autorisé",
+                            text: "Vous n\'avez pas les droits !",
+                            type: 'danger',
+                        });
+                    } else {
+                        this.$notify({
+                            title: "Échec",
+                            text: "Oups désolé il y a une erreur!",
+                            type: 'danger',
+                        });
+                    }
                 }).finally(() => {
                     this.show = false
                 })

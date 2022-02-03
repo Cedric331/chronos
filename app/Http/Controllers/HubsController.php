@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 
 class HubsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['role:Coordinateur'], ['only' => ['update']]);
+    }
 
     /**
      * @param PatchHubRequest $request

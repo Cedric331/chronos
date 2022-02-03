@@ -16,10 +16,13 @@
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <BreezeNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Tableau de bord
+                                    Information sur le Hub
                                 </BreezeNavLink>
                                 <BreezeNavLink :href="route('planning')" :active="route().current('planning')" as="button">
                                     Planning
+                                </BreezeNavLink>
+                                <BreezeNavLink v-if="$page.props.auth.user.coordinateur" :href="route('equipe')" :active="route().current('equipe')" as="button">
+                                    Gestion équipe
                                 </BreezeNavLink>
                             </div>
                         </div>
@@ -65,10 +68,13 @@
                 <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1">
                         <BreezeResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Dashboard
+                            Information sur le Hub
                         </BreezeResponsiveNavLink>
                         <BreezeResponsiveNavLink :href="route('planning')" :active="route().current('planning')" as="button">
                             Planning
+                        </BreezeResponsiveNavLink>
+                        <BreezeResponsiveNavLink v-if="$page.props.auth.user.coordinateur" :href="route('equipe')" :active="route().current('equipe')" as="button">
+                            Gestion équipe
                         </BreezeResponsiveNavLink>
                     </div>
 
