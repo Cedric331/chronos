@@ -24,6 +24,9 @@
                                 <BreezeNavLink v-if="$page.props.auth.user.coordinateur" :href="route('equipe')" :active="route().current('equipe')" as="button">
                                     Gestion équipe
                                 </BreezeNavLink>
+                                <BreezeNavLink v-if="$page.props.auth.user.admin" :href="route('equipe')" :active="route().current('equipe')" as="button">
+                                    Administration
+                                </BreezeNavLink>
                             </div>
                         </div>
 
@@ -44,8 +47,11 @@
                                     </template>
 
                                     <template #content>
-                                        <BreezeDropdownLink :href="route('logout')" method="post" as="button">
-                                            Log Out
+<!--                                        <BreezeDropdownLink :href="route('password.confirm')" as="button">-->
+<!--                                            Modifier mon mot de passe-->
+<!--                                        </BreezeDropdownLink>-->
+                                        <BreezeDropdownLink style="z-index: 9999" :href="route('logout')" method="post" as="button">
+                                            Déconnexion
                                         </BreezeDropdownLink>
                                     </template>
                                 </BreezeDropdown>

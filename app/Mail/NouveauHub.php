@@ -7,20 +7,20 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class newUser extends Mailable
+class NouveauHub extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $user;
+    public array $data;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Array $user)
+    public function __construct(Array $data)
     {
-        $this->user = $user;
+        $this->data = $data;
     }
 
     /**
@@ -30,6 +30,6 @@ class newUser extends Mailable
      */
     public function build()
     {
-        return $this->from(env('MAIL_FROM_ADDRESS'))->view('emails.user');
+        return $this->view('view.name');
     }
 }

@@ -200,19 +200,21 @@ class PlanningController extends Controller
         $collaborateurs = Collaborateur::where('hub_id', $hub->id)->get();
 
         $collect = collect();
-        foreach ($collaborateur->dates as $date) {
-            if (strtotime($date->date) > strtotime('- '.$this->getLundi().' days')) {
-                $horaires = $this->getHoraire($date->pivot->horaire);
-                $object = [
-                    'date' => $this->formatDateFr($date->date),
-                    'horaires' => $horaires,
-                    'type' => $this->getType($date->pivot->horaire, $horaires)
-                ];
-                $collect->push($object);
+        if ($collaborateur) {
+            foreach ($collaborateur->dates as $date) {
+                if (strtotime($date->date) > strtotime('- '.$this->getLundi().' days')) {
+                    $horaires = $this->getHoraire($date->pivot->horaire);
+                    $object = [
+                        'date' => $this->formatDateFr($date->date),
+                        'horaires' => $horaires,
+                        'type' => $this->getType($date->pivot->horaire, $horaires)
+                    ];
+                    $collect->push($object);
+                }
             }
+            $collaborateur = $collaborateur->toArray();
+            unset($collaborateur['dates']);
         }
-      $collaborateur = $collaborateur->toArray();
-        unset($collaborateur['dates']);
 
         if (!$request->loadData) {
             return Inertia::render('Planning', [

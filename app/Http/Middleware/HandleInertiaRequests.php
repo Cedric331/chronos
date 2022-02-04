@@ -39,7 +39,10 @@ class HandleInertiaRequests extends Middleware
                 ? $request->user()->only('id', 'name', 'email')
                 : null,
             'auth.user.coordinateur' => fn () => $request->user()
-                ? $request->user()->isCoordinateur()
+                ? $request->user()->isCoordinateur() || $request->user()->isAdmin()
+                : null,
+            'auth.user.admin' => fn () => $request->user()
+                ? $request->user()->isAdmin()
                 : null,
             'hub' => $request->user() ? Hub::find($request->user()->hub_id) : null
         ]);

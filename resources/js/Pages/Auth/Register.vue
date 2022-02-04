@@ -4,7 +4,9 @@
     <BreezeValidationErrors class="mb-4" />
 
     <form @submit.prevent="submit">
-<h2>Bienvenue {{ signature }}</h2>
+        <div class="flex justify-center my-auto">
+            <h1 class="justify-center items-center inline-flex text-3xl">Bienvenue</h1>
+        </div>
         <div class="mt-4">
             <BreezeLabel for="password" value="Mot de passe" />
             <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="password" required autocomplete="new-password" />
@@ -68,14 +70,12 @@ export default {
                 password_confirmation: this.password_confirmation,
             })
             .then(() => {
-                this.form.reset('password', 'password_confirmation')
+                this.password = null
+                this.password_confirmation = null
             })
             .catch(error => {
                 console.log(error)
             })
-            // this.form.post(this.route('register'), {
-            //     onFinish: () => this.form.reset('password', 'password_confirmation'),
-            // })
         }
     }
 }

@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\newUser;
-use App\Models\NewUsers;
+use App\Mail\nouveauUtilisateur;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,9 +15,18 @@ use Inertia\Inertia;
 
 class EquipeController extends Controller
 {
-    public function show ()
+    public function __construct()
+    {
+        $this->middleware('role:Coordinateur');
+    }
+
+    /**
+     * @return \Inertia\Response
+     */
+    public function show (): \Inertia\Response
     {
         $users = User::where('hub_id', Auth::user()->hub_id)
+            ->where('status', 'Conseiller')
             ->get();
 
         return Inertia::render('GestionEquipe', [
@@ -26,7 +34,11 @@ class EquipeController extends Controller
         ]);
     }
 
-    public function store (Request $request)
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store (Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -46,8 +58,8 @@ class EquipeController extends Controller
         ];
 
         Mail::to($request->email)
-            ->send(new newUser($data));
+            ->send(new nouveauUtilisateur($data));
 
-        return true;
+        return response()->json(true);
     }
 }
