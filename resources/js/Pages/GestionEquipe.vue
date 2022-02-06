@@ -26,7 +26,7 @@
                 </div>
             </div>
     </div>
-        <ModalUser v-show="showModal" @update="data => update(data)" @closeModal="data => this.showModal = data"></ModalUser>
+        <ModalUser v-show="showModal" @error="sendError()" @update="data => update(data)" @closeModal="data => this.showModal = data"></ModalUser>
 </BreezeAuthenticatedLayout>
 </template>
 
@@ -57,6 +57,13 @@ export default {
                 title: "Succès",
                 text: "Invitation envoyée avec succès !",
                 type: 'success',
+            });
+        },
+        sendError () {
+            this.$notify({
+                title: "Erreur",
+                text: "Erreur lors de l\'envoi de l\'invitation !",
+                type: 'danger',
             });
         }
     }

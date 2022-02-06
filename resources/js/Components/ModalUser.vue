@@ -47,6 +47,9 @@
                     <button @click="closeModal()" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                         Annuler
                     </button>
+                    <div v-if="errors" class="mb-4 sm:align-middle font-medium text-sm text-red-600">
+                        {{ errors }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -65,43 +68,54 @@ export default {
             name: null,
             email: null,
             status: false,
+            errors: null
         }
     },
     methods: {
         closeModal () {
             this.name = null
             this.email = null
+            this.errors = null
             this.status = false
             this.$emit('closeModal', false)
         },
+        verification () {
+          if (this.name === null || this.email === null) {
+              this.errors = "Vous devez remplir tous les champs"
+          }  else {
+              return true
+          }
+        },
         store () {
-        if (this.isAdmin) {
-            axios.post('administration/create/user',{
-                name: this.name,
-                email: this.email,
-                status: this.status,
-                hub: this.hub
-            }).then(() => {
-                this.$emit('update', true)
-            }).catch(error => {
-                console.log(error)
-            })
-            .finally(() => {
-                this.closeModal()
-            })
-        } else {
-            axios.post('equipe',{
-                name: this.name,
-                email: this.email
-            }).then(response => {
-                this.$emit('update', response.data)
-            }).catch(error => {
-                console.log(error)
-            })
-            .finally(() => {
-                this.closeModal()
-            })
-            }
+           if (this.verification()) {
+               if (this.isAdmin) {
+                   axios.post('administration/create/user',{
+                       name: this.name,
+                       email: this.email,
+                       status: this.status,
+                       hub: this.hub
+                   }).then(() => {
+                       this.$emit('update', true)
+                   }).catch(error => {
+                       console.log(error)
+                   })
+                       .finally(() => {
+                           this.closeModal()
+                       })
+               } else {
+                   axios.post('equipe',{
+                       name: this.name,
+                       email: this.email
+                   }).then(response => {
+                       this.$emit('update', response.data)
+                   }).catch(error => {
+                       this.$emit('error', error.response.data)
+                   })
+                       .finally(() => {
+                           this.closeModal()
+                       })
+               }
+           }
         }
     }
 }
