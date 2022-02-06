@@ -16,10 +16,6 @@ class Hub extends Model
      */
     protected $fillable = [
         'ville',
-        'departement',
-        'code_postal',
-        'adresse',
-        'complement_adresse',
         'abonne_freebox',
         'abonne_mobile',
     ];
@@ -32,5 +28,10 @@ class Hub extends Model
     public function collaborateurs (): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Collaborateur::class, 'collaborateur_dates');
+    }
+
+    public function members ()
+    {
+        return $this->hasMany(User::class, 'hub_id');
     }
 }

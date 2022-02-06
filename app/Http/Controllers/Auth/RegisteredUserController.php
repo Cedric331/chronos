@@ -29,6 +29,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'hub' => $request->hub,
+            'status' => $request->status,
             'signature' => $url,
         ]);
     }
@@ -37,7 +38,7 @@ class RegisteredUserController extends Controller
      * Handle an incoming registration request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Inertia\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      *
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -46,24 +47,32 @@ class RegisteredUserController extends Controller
         $request['name'] = Crypt::decrypt($request->name);
         $request['email'] = Crypt::decrypt($request->email);
         $request['hub'] = Crypt::decrypt($request->hub);
+        $request['status'] = Crypt::decrypt($request->status);
 
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', 'min:8', 'confirmed', Rules\Password::defaults()],
         ]);
+
+       $status = $request->status ? 'Coordinateur' : 'Conseiller';
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'status' => $status,
             'hub_id' => $request->hub,
             'password' => Hash::make($request->password),
         ]);
+
+        if ($request->status) {
+            $user->assignRole('Coordinateur');
+        }
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return Inertia::render('Dashboard');
+        return redirect(RouteServiceProvider::HOME);
     }
 }

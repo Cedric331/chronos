@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ControllerResponse;
 use App\Mail\NouveauHub;
+use App\Mail\nouveauUtilisateur;
 use App\Models\Hub;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
+use Inertia\Inertia;
 
 class AdminController extends Controller
 {
@@ -20,55 +21,70 @@ class AdminController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Inertia\Response
      */
-    public function createHub (Request $request): \Illuminate\Http\JsonResponse
+    public function show (): \Inertia\Response
     {
-        $hub = Hub::create([
-            'departement' => $request->departement,
-            'code_postal' => $request->code_postal,
-            'adresse' => $request->adresse,
-            'complement_adresse' => $request->complement_adresse,
-            'abonne_freebox' => $request->abonne_freebox,
-            'abonne_mobile' => $request->abonne_mobile
-        ]);
+        $hubs = Hub::with('members')->get();
 
-        return ControllerResponse::store($hub);
+        return Inertia::render('Admin/Dashboard', [
+            'hubs' => $hubs,
+        ]);
     }
 
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function creeateCoordinateur(Request $request): \Illuminate\Http\JsonResponse
+    public function createHub (Request $request): \Illuminate\Http\JsonResponse
     {
-        $hub = Hub::find($request->hub);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'status' => 'Coordinateur',
-            'hub_id' => $hub->id,
+        $request->validate([
+            'ville' => 'required', 'string'
         ]);
 
-        $user->assignRole('Coordinateur');
+        $create = Hub::create([
+            'ville' => $request->ville,
+        ]);
 
+        if ($create) {
+            return response()->json(Hub::with('members')->find($create->id));
+        } else {
+            return response()->json('Erreur', 422);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function createUser(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email',
+        ]);
+
+        $hub = Hub::find($request->hub);
         $url = URL::signedRoute('register', [
             'name' => Crypt::encrypt($request->name),
             'email' => Crypt::encrypt($request->email),
+            'status' => Crypt::encrypt($request->status),
             'hub' => Crypt::encrypt($hub->id),
         ]);
 
         $data = [
             'name' => $request->name,
             'email' => $request->email,
-            'hub' => $hub->name,
+            'hub' => $hub->ville,
             'url' => $url
         ];
 
-        Mail::to($request->email)->send(new NouveauHub($data));
+        if ($request->status) {
+            Mail::to($request->email)->send(new NouveauHub($data));
+        } else {
+            Mail::to($request->email)->send(new nouveauUtilisateur($data));
+        }
 
-        return ControllerResponse::store($user);
+        return response()->json(true);
     }
 }

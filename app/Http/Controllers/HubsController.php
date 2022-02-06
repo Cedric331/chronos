@@ -22,10 +22,6 @@ class HubsController extends Controller
     public function update(PatchHubRequest $request, int $id): \Illuminate\Http\JsonResponse
     {
         $update = Hub::find($id)->update([
-                    'departement' => $request->departement,
-                    'code_postal' => $request->code_postal,
-                    'adresse' => $request->adresse,
-                    'complement_adresse' => $request->complement_adresse,
                     'abonne_freebox' => $request->abonne_freebox,
                     'abonne_mobile' => $request->abonne_mobile
                 ]);

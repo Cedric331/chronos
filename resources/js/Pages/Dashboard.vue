@@ -19,66 +19,6 @@
                         <dl>
                             <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                 <dt class="text-sm font-medium text-gray-500">
-                                    Département
-                                </dt>
-                                <div v-if="$page.props.auth.user.coordinateur">
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                        <input type="text" v-model="departement" @change="update()">
-                                    </dd>
-                                </div>
-                                <div v-else>
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                        {{ departement }}
-                                    </dd>
-                                </div>
-                            </div>
-                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-500">
-                                    Adresse
-                                </dt>
-                                <div v-if="$page.props.auth.user.coordinateur">
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                        <input type="text" v-model="adresse" @change="update()">
-                                    </dd>
-                                </div>
-                                <div v-else>
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                        {{ adresse }}
-                                    </dd>
-                                </div>
-                            </div>
-                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-500">
-                                    Complément d'adresse
-                                </dt>
-                                <div v-if="$page.props.auth.user.coordinateur">
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                        <input type="text" v-model="complement_adresse" @change="update()">
-                                    </dd>
-                                </div>
-                                <div v-else>
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                        {{ complement_adresse }}
-                                    </dd>
-                                </div>
-                            </div>
-                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-500">
-                                    Code Postal
-                                </dt>
-                                <div v-if="$page.props.auth.user.coordinateur">
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                        <input type="number" maxlength="5" minlength="5" v-model="code_postal" @change="update()">
-                                    </dd>
-                                </div>
-                                <div v-else>
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                        {{ code_postal }}
-                                    </dd>
-                                </div>
-                            </div>
-                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-500">
                                     Abonné Mobile
                                 </dt>
                                 <div v-if="$page.props.auth.user.coordinateur">
@@ -141,10 +81,6 @@ export default {
     },
     data() {
         return {
-            departement: this.$page.props.hub.departement,
-            adresse: this.$page.props.hub.adresse,
-            code_postal: this.$page.props.hub.code_postal,
-            complement_adresse: this.$page.props.hub.complement_adresse,
             abonne_freebox: this.$page.props.hub.abonne_freebox,
             abonne_mobile: this.$page.props.hub.abonne_mobile,
             file: null,
@@ -156,10 +92,6 @@ export default {
     methods: {
         update () {
             axios.patch('hub/' + this.$page.props.hub.id, {
-                departement: this.departement,
-                adresse: this.adresse,
-                code_postal: this.code_postal,
-                complement_adresse: this.complement_adresse,
                 abonne_freebox: this.abonne_freebox,
                 abonne_mobile: this.abonne_mobile,
             }).then(response => {

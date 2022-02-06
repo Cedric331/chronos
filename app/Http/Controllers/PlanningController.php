@@ -20,7 +20,7 @@ class PlanningController extends Controller
 
     public function __construct()
     {
-        $this->middleware(['role:Coordinateur'], ['only' => ['import']]);
+        $this->middleware(['role:Coordinateur|Administrateur'], ['only' => ['import']]);
     }
 
 

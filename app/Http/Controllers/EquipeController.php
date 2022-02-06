@@ -17,7 +17,7 @@ class EquipeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('role:Coordinateur');
+        $this->middleware('role:Coordinateur|Administrateur');
     }
 
     /**

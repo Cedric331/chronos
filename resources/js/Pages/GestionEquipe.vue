@@ -55,7 +55,7 @@ export default {
             this.user = data
             this.$notify({
                 title: "Succès",
-                text: "Envoi d\'une invitation avec succès",
+                text: "Invitation envoyée avec succès !",
                 type: 'success',
             });
         }

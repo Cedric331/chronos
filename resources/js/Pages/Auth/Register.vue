@@ -1,11 +1,11 @@
 <template>
-    <Head title="Register" />
+    <Head title="Inscription" />
 
     <BreezeValidationErrors class="mb-4" />
 
     <form @submit.prevent="submit">
         <div class="flex justify-center my-auto">
-            <h1 class="justify-center items-center inline-flex text-3xl">Bienvenue</h1>
+            <h1 class="justify-center items-center inline-flex text-3xl">Bienvenue sur Chronos Hub</h1>
         </div>
         <div class="mt-4">
             <BreezeLabel for="password" value="Mot de passe" />
@@ -49,12 +49,11 @@ export default {
         name: String,
         email: String,
         hub: String,
+        status: String,
         signature: String,
     },
     data() {
         return {
-            name: this.name,
-            email: this.email,
             password: '',
             password_confirmation: ''
         }
@@ -66,12 +65,12 @@ export default {
                 name: this.name,
                 email: this.email,
                 hub: this.hub,
+                status: this.status,
                 password: this.password,
                 password_confirmation: this.password_confirmation,
             })
             .then(() => {
-                this.password = null
-                this.password_confirmation = null
+                this.$inertia.reload()
             })
             .catch(error => {
                 console.log(error)

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="min-h-screen bg-white">
+        <div class="min-h-screen bg-gray-50">
             <nav class="bg-white border-b border-gray-100">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -24,7 +24,7 @@
                                 <BreezeNavLink v-if="$page.props.auth.user.coordinateur" :href="route('equipe')" :active="route().current('equipe')" as="button">
                                     Gestion équipe
                                 </BreezeNavLink>
-                                <BreezeNavLink v-if="$page.props.auth.user.admin" :href="route('equipe')" :active="route().current('equipe')" as="button">
+                                <BreezeNavLink v-if="$page.props.auth.user.admin" :href="route('administration')" :active="route().current('administration')" as="button">
                                     Administration
                                 </BreezeNavLink>
                             </div>
@@ -47,9 +47,9 @@
                                     </template>
 
                                     <template #content>
-<!--                                        <BreezeDropdownLink :href="route('password.confirm')" as="button">-->
-<!--                                            Modifier mon mot de passe-->
-<!--                                        </BreezeDropdownLink>-->
+                                        <BreezeDropdownLink :href="route('user.update')" as="button">
+                                            Modifier mon mot de passe
+                                        </BreezeDropdownLink>
                                         <BreezeDropdownLink style="z-index: 9999" :href="route('logout')" method="post" as="button">
                                             Déconnexion
                                         </BreezeDropdownLink>

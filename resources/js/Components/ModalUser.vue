@@ -30,13 +30,21 @@
                                 placeholder="Email"
                             />
                         </div>
+                        <div v-if="isAdmin" class="flex justify-center md:ml-2">
+                            <div class="form-check form-switch">
+                                <input v-model="status" class="form-check-input appearance-none w-9 -ml-10 rounded-full float-left h-5 align-top bg-white bg-no-repeat bg-contain bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" id="status" checked>
+                                <label class="form-check-label inline-block text-gray-800" for="status">
+                                    {{ status ? 'Coordinateur' : 'Conseiller'}}
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button @click="store()" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                    <button @click="store()" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm">
                         Créer
                     </button>
-                    <button @click="closeModal()" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                    <button @click="closeModal()" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                         Annuler
                     </button>
                 </div>
@@ -48,22 +56,43 @@
 <script>
 export default {
     name: "ModalUser",
+    props: {
+        isAdmin: Boolean,
+        hub: Number
+    },
     data () {
         return {
             name: null,
-            email: null
+            email: null,
+            status: false,
         }
     },
     methods: {
         closeModal () {
             this.name = null
             this.email = null
+            this.status = false
             this.$emit('closeModal', false)
         },
         store () {
-            axios.post('equipe',{
+        if (this.isAdmin) {
+            axios.post('administration/create/user',{
                 name: this.name,
                 email: this.email,
+                status: this.status,
+                hub: this.hub
+            }).then(() => {
+                this.$emit('update', true)
+            }).catch(error => {
+                console.log(error)
+            })
+            .finally(() => {
+                this.closeModal()
+            })
+        } else {
+            axios.post('equipe',{
+                name: this.name,
+                email: this.email
             }).then(response => {
                 this.$emit('update', response.data)
             }).catch(error => {
@@ -72,6 +101,7 @@ export default {
             .finally(() => {
                 this.closeModal()
             })
+            }
         }
     }
 }

@@ -10,7 +10,7 @@
 <ul>
     <li><strong>Nom :</strong></li> : {{ $data['name'] }}
     <li><strong>Email identifiant :</strong></li> : {{ $data['email'] }}
-    <li><strong>Lien pour finaliser l'inscription :</strong></li> : {{ $data['url'] }}
+    <li><strong><a href="{{ $data['url'] }}" target="_blank">Cliquer ici</a> pour finaliser l'inscription </strong></li>
 </ul>
 </body>
 </html>
