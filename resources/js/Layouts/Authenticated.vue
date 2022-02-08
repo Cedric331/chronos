@@ -82,6 +82,9 @@
                         <BreezeResponsiveNavLink v-if="$page.props.auth.user.coordinateur" :href="route('equipe')" :active="route().current('equipe')" as="button">
                             Gestion équipe
                         </BreezeResponsiveNavLink>
+                        <BreezeResponsiveNavLink v-if="$page.props.auth.user.admin" :href="route('administration')" :active="route().current('administration')" as="button">
+                            Administration
+                        </BreezeResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
@@ -93,7 +96,7 @@
 
                         <div class="mt-3 space-y-1">
                             <BreezeResponsiveNavLink :href="route('logout')" method="post" as="button">
-                                Log Out
+                                Déconnexion
                             </BreezeResponsiveNavLink>
                         </div>
                     </div>

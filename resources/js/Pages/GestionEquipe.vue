@@ -16,9 +16,14 @@
                                 <div class="px-2 mt-8">
                                     <p class="text-gray-800 text-lg text-center">{{ user.name }}</p>
                                     <p class="text-gray-800 text-lg text-center">{{ user.email }}</p>
-<!--                                    <div class="w-full flex justify-center pt-5 pb-5">-->
-<!--                                        Ajouté le 01/01/2022-->
-<!--                                    </div>-->
+                                    <div class="w-full flex justify-around pt-5 pb-5">
+                                        <button @click="edit(user)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                                            Éditer
+                                        </button>
+                                        <button @click="deleteConfirm(user)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full">
+                                            Supprimer
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -26,17 +31,33 @@
                 </div>
             </div>
     </div>
-        <ModalUser v-show="showModal" @error="sendError()" @update="data => update(data)" @closeModal="data => this.showModal = data"></ModalUser>
+        <Dialog
+            v-if="confirm"
+            :user="user"
+            @closeConfirm="data => this.closeDialogue(data)">
+        </Dialog>
+        <ModalUser
+            v-show="showModal"
+            :isUpdate="isUpdate"
+            :userUpdate="user"
+            @refresh="refreshData()"
+            @error="sendError()"
+            @update="data => update(data)"
+            @closeModal="data => this.closeModal(data)">
+        </ModalUser>
 </BreezeAuthenticatedLayout>
 </template>
 
 <script>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue'
 import ModalUser from "@/Components/ModalUser.vue";
+import Dialog from "@/Components/Dialog.vue";
+
 export default {
     name: "GestionEquipe",
     components: {
         BreezeAuthenticatedLayout,
+        Dialog,
         ModalUser
     },
     props: {
@@ -44,15 +65,33 @@ export default {
     },
     data () {
         return {
-            showModal: false
+            showModal: false,
+            confirm: false,
+            isUpdate: false,
+            user: null
         }
     },
     methods: {
         openModal() {
             this.showModal = true
+            this.isUpdate = false
+        },
+        closeModal() {
+            this.showModal = false
+            this.isUpdate = false
+        },
+        closeDialogue (data) {
+            this.confirm = false
+            if (data) {
+                this.$notify({
+                    title: "Succès",
+                    text: "Membre supprimé avec succès !",
+                    type: 'success',
+                });
+            }
+            this.refreshData()
         },
         update (data) {
-            this.user = data
             this.$notify({
                 title: "Succès",
                 text: "Invitation envoyée avec succès !",
@@ -65,6 +104,18 @@ export default {
                 text: "Erreur lors de l\'envoi de l\'invitation !",
                 type: 'danger',
             });
+        },
+        edit (user) {
+            this.user = user
+            this.isUpdate = true
+            this.showModal = true
+        },
+        deleteConfirm (user) {
+            this.user = user
+            this.confirm = true
+        },
+        refreshData () {
+            this.$inertia.reload()
         }
     }
 }

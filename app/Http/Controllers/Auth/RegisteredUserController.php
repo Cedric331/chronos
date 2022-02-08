@@ -47,7 +47,9 @@ class RegisteredUserController extends Controller
         $request['name'] = Crypt::decrypt($request->name);
         $request['email'] = Crypt::decrypt($request->email);
         $request['hub'] = Crypt::decrypt($request->hub);
-        $request['status'] = Crypt::decrypt($request->status);
+        if ($request->status) {
+            $request['status'] = Crypt::decrypt($request->status);
+        }
 
         $request->validate([
             'name' => 'required|string|max:255',

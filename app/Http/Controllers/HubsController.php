@@ -11,7 +11,15 @@ class HubsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['role:Coordinateur'], ['only' => ['update']]);
+        $this->middleware(['role:Coordinateur|Administrateur']);
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index (): \Illuminate\Http\JsonResponse
+    {
+        return response()->json(Hub::all());
     }
 
     /**

@@ -106,7 +106,7 @@ class PlanningController extends Controller
                     $horaires = $sheet->getCell('C' . $numberMembers)->getOldCalculatedValue();
                     $debutJournee = 'OFF';
                     $finJournee = 'OFF';
-                    if ($horaires !== 'OFF' && !empty($horaires)) {
+                    if (strpos($horaires, '-') && !empty($horaires)) {
                         $horaire = explode('-', $horaires);
                         $debutJournee = $horaire[0];
                         $finJournee = $horaire[1];

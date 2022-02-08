@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ControllerResponse;
 use App\Mail\NouveauHub;
-use App\Mail\nouveauUtilisateur;
+use App\Mail\NouveauUtilisateur;
 use App\Models\Hub;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -82,7 +82,7 @@ class AdminController extends Controller
         if ($request->status) {
             Mail::to($request->email)->send(new NouveauHub($data));
         } else {
-            Mail::to($request->email)->send(new nouveauUtilisateur($data));
+            Mail::to($request->email)->send(new NouveauUtilisateur($data));
         }
 
         return response()->json(true);

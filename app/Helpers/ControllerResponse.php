@@ -29,4 +29,17 @@ class ControllerResponse
             return response()->json(['error' => 'Erreur lors de la mise à jour des information'], 400);
         }
     }
+
+    /**
+     * @param $delete
+     * @return \Illuminate\Http\JsonResponse
+     */
+    static function delete($delete): \Illuminate\Http\JsonResponse
+    {
+        if ($delete) {
+            return response()->json(true);
+        } else {
+            return response()->json(['error' => 'Erreur lors de la suppression'], 400);
+        }
+    }
 }

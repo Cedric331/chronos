@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\nouveauUtilisateur;
+use App\Helpers\ControllerResponse;
+use App\Mail\NouveauUtilisateur;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -58,8 +59,41 @@ class EquipeController extends Controller
         ];
 
         Mail::to($request->email)
-            ->send(new nouveauUtilisateur($data));
+            ->send(new NouveauUtilisateur($data));
 
         return response()->json(true);
+    }
+
+    /**
+     * @param Request $request
+     * @param User $user
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update (Request $request, User $user): \Illuminate\Http\JsonResponse
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'hub' => 'required'
+        ]);
+
+        $update = $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'hub_id' => $request->hub,
+        ]);
+
+        return ControllerResponse::update($update);
+    }
+
+    /**
+     * @param User $user
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete (User $user): \Illuminate\Http\JsonResponse
+    {
+       $delete = $user->delete();
+
+       return ControllerResponse::delete($delete);
     }
 }

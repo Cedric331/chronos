@@ -10,3 +10,11 @@ Route::get('/equipe', [EquipeController::class, 'show'])
 Route::post('/equipe', [EquipeController::class, 'store'])
     ->middleware('auth')
     ->name('equipe.post');
+
+Route::patch('/equipe/{user}', [EquipeController::class, 'update'])
+    ->middleware('auth')
+    ->name('equipe.patch');
+
+Route::delete('/equipe/{user}', [EquipeController::class, 'delete'])
+    ->middleware('auth')
+    ->name('equipe.delete');

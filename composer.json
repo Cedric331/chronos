@@ -1,6 +1,13 @@
 {
     "name": "laravel/laravel",
     "type": "project",
+    "authors": [
+        {
+            "name": "Lima Cédric",
+            "email": "limacedric@hotmail.fr",
+            "role": "Developer"
+        }
+    ],
     "description": "The Laravel Framework.",
     "keywords": ["framework", "laravel"],
     "license": "MIT",
