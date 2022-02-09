@@ -114,7 +114,7 @@ export default {
               hub: this.hub_id
           })
             .then(() => {
-                this.$emit('refresh')
+                this.$emit('update', 'user')
             })
             .catch(error => {
                 console.log(error)

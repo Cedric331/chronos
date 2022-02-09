@@ -17,10 +17,10 @@
                                     <p class="text-gray-800 text-lg text-center">{{ user.name }}</p>
                                     <p class="text-gray-800 text-lg text-center">{{ user.email }}</p>
                                     <div class="w-full flex justify-around pt-5 pb-5">
-                                        <button @click="edit(user)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                                        <button @click="edit(user)" class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-full">
                                             Éditer
                                         </button>
-                                        <button @click="deleteConfirm(user)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full">
+                                        <button @click="deleteConfirm(user)" class="bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-4 rounded-full">
                                             Supprimer
                                         </button>
                                     </div>
@@ -92,11 +92,20 @@ export default {
             this.refreshData()
         },
         update (data) {
-            this.$notify({
-                title: "Succès",
-                text: "Invitation envoyée avec succès !",
-                type: 'success',
-            });
+            if (data === 'user') {
+                this.$notify({
+                    title: "Succès",
+                    text: "Modification effectuée avec succès !",
+                    type: 'info',
+                });
+            } else {
+                this.$notify({
+                    title: "Succès",
+                    text: "Invitation envoyée avec succès !",
+                    type: 'success',
+                });
+            }
+            this.refreshData()
         },
         sendError () {
             this.$notify({

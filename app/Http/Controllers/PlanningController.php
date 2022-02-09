@@ -94,14 +94,17 @@ class PlanningController extends Controller
 
                 $numberMembers = $i;
                 $members = collect();
-                while ($sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() !== null || $sheet->getCell('D'. $numberMembers)->getValue()) {
-                    $member['collaborateur'] = $sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() ?
-                        $sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() :
-                        $sheet->getCell('D'. $numberMembers)->getValue();
 
+                while (($sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() !== null || $sheet->getCell('D'. $numberMembers)->getValue())
+                && ($sheet->getCell('E'. $numberMembers)->getOldCalculatedValue() !== null || $sheet->getCell('E'. $numberMembers)->getValue()))
+                {
                     $type = $sheet->getCell('E' . $numberMembers)->getOldCalculatedValue() ?
                         $sheet->getCell('E' . $numberMembers)->getOldCalculatedValue() :
                         $sheet->getCell('E' . $numberMembers)->getValue();
+
+                    $member['collaborateur'] = $sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() ?
+                        $sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() :
+                        $sheet->getCell('D'. $numberMembers)->getValue();
 
                     $horaires = $sheet->getCell('C' . $numberMembers)->getOldCalculatedValue();
                     $debutJournee = 'OFF';
@@ -135,7 +138,8 @@ class PlanningController extends Controller
                     $member['horaire'] = $horaires;
                     $members->push($member);
                     $numberMembers++;
-                }
+            }
+
                 $object = [
                     date("l d F", $unix_date) => $members->toArray()
                 ];
@@ -151,6 +155,11 @@ class PlanningController extends Controller
 
         $allPlannings = $collect->toArray();
 
+        $collaborateurs = Collaborateur::where('hub_id', Auth::user()->hub_id)->get();
+        foreach ($collaborateurs as $item) {
+            $item->dates()->detach();
+            $item->delete();
+        }
         foreach ($allPlannings as $plannings) {
             foreach ($plannings as $key => $values) {
                 $date = Date::firstOrCreate([
@@ -163,12 +172,6 @@ class PlanningController extends Controller
                         'hub_id' => Auth::user()->hub_id,
                     ]);
                     $hub = Hub::find(Auth::user()->hub_id);
-
-                    CollaborateurDate::where([
-                        ['hub_id', $hub->id],
-                        ['date_id', $date->id],
-                        ['collaborateur_id', $collaborateur->id]
-                    ])->delete();
 
                     $hub->dates()->attach($date, [
                         'collaborateur_id' => $collaborateur->id,
