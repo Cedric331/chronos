@@ -1,4 +1,5 @@
 <template>
+    <notifications position="bottom right" />
     <div>
         <div class="min-h-screen bg-gray-50">
             <nav class="bg-white border-b border-gray-100">
@@ -30,8 +31,23 @@
                             </div>
                         </div>
 
+                        <div class="flex">
+                            <div v-if="$page.props.auth.user.coordinateur" class="flex items-center sm:ml-6">
+                                <div class="ml-3 relative">
+                                    <select @change="updateHub(hub.id)" v-model="hub" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0" style="border-width: 0">
+                                        <option v-for="hub in $page.props.hubs" :key="hub.id" :value="hub" :selected="$page.props.hub.id === hub.id">
+                                            {{ hub.ville }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div v-else class="flex items-center sm:ml-6">
+                                <p class="block w-full text-sm font-medium rounded-md text-gray-500 bg-white m-0">
+                                    {{ hub.ville }}
+                                </p>
+                            </div>
+
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
-                            <!-- Settings Dropdown -->
                             <div class="ml-3 relative">
                                 <BreezeDropdown align="right" width="48">
                                     <template #trigger>
@@ -57,33 +73,6 @@
                                 </BreezeDropdown>
                             </div>
                         </div>
-
-                        <div class="hidden sm:flex sm:items-center sm:ml-6">
-                            <!-- Settings Dropdown -->
-                            <div class="ml-3 relative">
-                                <BreezeDropdown align="right" width="48">
-                                    <template #trigger>
-                                        <span class="inline-flex rounded-md">
-                                            <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                                                {{ $page.props.hub.ville }}
-
-                                                <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </template>
-
-                                    <template #content>
-                                        <BreezeDropdownLink :href="route('user.update')" as="button">
-                                            Modifier mon mot de passe
-                                        </BreezeDropdownLink>
-                                        <BreezeDropdownLink style="z-index: 9999" :href="route('logout')" method="post" as="button">
-                                            Déconnexion
-                                        </BreezeDropdownLink>
-                                    </template>
-                                </BreezeDropdown>
-                            </div>
                         </div>
 
                         <!-- Hamburger -->
@@ -140,7 +129,7 @@
 
             <!-- Page Content -->
             <main>
-                <slot />
+                <slot ref="ChildComponent" />
             </main>
         </div>
     </div>
@@ -167,6 +156,23 @@ export default {
     data() {
         return {
             showingNavigationDropdown: false,
+            hub: this.$page.props.hub
+        }
+    },
+    methods: {
+        updateHub (id) {
+            axios.patch('hub/' + id + '/user')
+            .then(() => {
+                this.$inertia.visit(this.$page.url)
+            })
+            .catch(error => {
+                console.log(error)
+                this.$notify({
+                    title: "Erreur",
+                    text: "Oups désolé il y a une erreur !",
+                    type: 'info',
+                });
+            })
         }
     }
 }

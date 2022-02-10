@@ -89,8 +89,6 @@ class PlanningController extends Controller
             if ($sheet->getCell('B' . $i)->getCalculatedValue() !== null && is_numeric($sheet->getCell('B' . $i)->getCalculatedValue())) {
                 $excel_date = $sheet->getCell('B'. $i)->getCalculatedValue();
                 $unix_date = ($excel_date - 25569) * 86400;
-                $excel_date = 25569 + ($unix_date / 86400);
-                $unix_date = ($excel_date - 25569) * 86400;
 
                 $numberMembers = $i;
                 $members = collect();
@@ -141,7 +139,7 @@ class PlanningController extends Controller
             }
 
                 $object = [
-                    date("l d F", $unix_date) => $members->toArray()
+                    date("l d F Y", $unix_date) => $members->toArray()
                 ];
                 $collect->push($object);
             }
@@ -205,12 +203,13 @@ class PlanningController extends Controller
         $collect = collect();
         if ($collaborateur) {
             foreach ($collaborateur->dates as $date) {
-                if (strtotime($date->date) > strtotime('- '.$this->getLundi().' days')) {
+                if (strtotime(date('l d F Y', strtotime($date->date))) > strtotime(date('l d F Y', strtotime('- '.$this->getLundi().' days')))) {
                     $horaires = $this->getHoraire($date->pivot->horaire);
                     $object = [
                         'date' => $this->formatDateFr($date->date),
                         'horaires' => $horaires,
-                        'type' => $this->getType($date->pivot->horaire, $horaires)
+                        'type' => $this->getType($date->pivot->horaire, $horaires),
+                        'today' => $this->formatDateFr(now()) === $this->formatDateFr($date->date)
                     ];
                     $collect->push($object);
                 }

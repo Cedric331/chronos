@@ -5,8 +5,8 @@
                 <div class="min-h-screen">
                     <NavbarPlanning style="z-index: 1" :collaborateur="member" :collaborateurs="members" @updateCollaborateur="data => updateCollaborateur(data)"/>
                     <div class="p-4 gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 select-none">
-                        <div v-for="planning in allPlannings" :key="planning.date" :class="[planning.type === 'CP' ? 'bg-blue-50' : '', planning.type === 'Iti' ? 'bg-red-50' : '',  planning.type !== 'Iti' &&  planning.type !== 'CP' ? 'bg-green-50' : '']" class="w-full cursor-pointer rounded-md shadow-md shadow-dark hover:shadow-blue-400/80 hover:shadow-2xl hover:bg-gray-50">
-                            <div class="p-4">
+                        <div v-for="planning in allPlannings" :key="planning.date" :class="[planning.type === 'CP' ? 'bg-blue-200' : '', planning.type === 'Iti' ? 'bg-red-200' : '',  planning.type !== 'Iti' &&  planning.type !== 'CP' ? 'bg-green-100' : '']" class="w-full cursor-pointer rounded-md shadow-md shadow-dark hover:shadow-blue-400/80 hover:shadow-2xl hover:bg-gray-50">
+                            <div class="p-4" :class="[planning.today ? 'shadow-blue-400/80 shadow-2xl bg-gray-50' : '']">
                                 <p class="font-semibold text-sm py-2">{{ planning.date }}</p>
                                 <div v-if="planning.horaires">
                                     <p class="font-light text-gray-700 text-justify line-clamp-3">

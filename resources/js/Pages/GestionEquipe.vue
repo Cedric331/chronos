@@ -1,5 +1,6 @@
 <template>
     <notifications position="bottom right" />
+    <Head title="Gestion équipe" />
     <BreezeAuthenticatedLayout>
     <div class="mb-16">
             <div class="w-full bg-gray-100 px-10 pt-10 h-16 content-center">
@@ -52,12 +53,14 @@
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue'
 import ModalUser from "@/Components/ModalUser.vue";
 import Dialog from "@/Components/Dialog.vue";
+import { Head } from '@inertiajs/inertia-vue3';
 
 export default {
     name: "GestionEquipe",
     components: {
         BreezeAuthenticatedLayout,
         Dialog,
+        Head,
         ModalUser
     },
     props: {
