@@ -18,6 +18,36 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 class PlanningController extends Controller
 {
 
+    private  $cells = [
+        'F' => '8h00',
+        'G' => '8h30',
+        'H' => '9h00',
+        'I' => '9h30',
+        'J' => '10h00',
+        'K' => '10h30',
+        'L' => '11h00',
+        'M' => '11h30',
+        'N' => '12h00',
+        'O' => '12h30',
+        'P' => '13h00',
+        'Q' => '13h30',
+        'R' => '14h00',
+        'S' => '14h30',
+        'T' => '15h00',
+        'U' => '15h30',
+        'V' => '16h00',
+        'W' => '16h30',
+        'X' => '17h00',
+        'Y' => '17h30',
+        'Z' => '18h00',
+        'AA' => '18h30',
+        'AB' => '19h00',
+        'AC' => '19h30',
+        'AD' =>'20h00',
+        'AE' => '20h30',
+        'AF' => '21h00'
+    ];
+
     public function __construct()
     {
         $this->middleware(['role:Coordinateur|Administrateur'], ['only' => ['import']]);
@@ -53,36 +83,6 @@ class PlanningController extends Controller
 
         $sheet = $spreadsheet->getActiveSheet();
 
-        $cells = [
-            'F' => '8h00',
-            'G' => '8h30',
-            'H' => '9h00',
-            'I' => '9h30',
-            'J' => '10h00',
-            'K' => '10h30',
-            'L' => '11h00',
-            'M' => '11h30',
-            'N' => '12h00',
-            'O' => '12h30',
-            'P' => '13h00',
-            'Q' => '13h30',
-            'R' => '14h00',
-            'S' => '14h30',
-            'T' => '15h00',
-            'U' => '15h30',
-            'V' => '16h00',
-            'W' => '16h30',
-            'X' => '17h00',
-            'Y' => '17h30',
-            'Z' => '18h00',
-            'AA' => '18h30',
-            'AB' => '19h00',
-            'AC' => '19h30',
-            'AD' =>'20h00',
-            'AE' => '20h30',
-            'AF' => '21h00'
-        ];
-
         $collect = collect();
 
         for ($i = 0; $i < $sheet->getHighestRow(); $i++) {
@@ -115,7 +115,7 @@ class PlanningController extends Controller
                     $debutPause = null;
                     $finPause = null;
 
-                    foreach ($cells as $cell => $value) {
+                    foreach ($this->cells as $cell => $value) {
                         if ($sheet->getCell($cell . $numberMembers)->getOldCalculatedValue() === 'DEJ') {
                             if (empty($debutPause)) {
                                 $debutPause = $value;
@@ -206,6 +206,7 @@ class PlanningController extends Controller
                 if (strtotime(date('l d F Y', strtotime($date->date))) > strtotime(date('l d F Y', strtotime('- '.$this->getLundi().' days')))) {
                     $horaires = $this->getHoraire($date->pivot->horaire);
                     $object = [
+                        'date_id' => $date->id,
                         'date' => $this->formatDateFr($date->date),
                         'horaires' => $horaires,
                         'type' => $this->getType($date->pivot->horaire, $horaires),
@@ -231,6 +232,48 @@ class PlanningController extends Controller
                 'plannings' => $collect->toArray()
             ]);
         }
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function loadPlanningDate (Request $request): \Illuminate\Http\JsonResponse
+    {
+        $collaborateurs = Collaborateur::with(['dates' => function ($query) use ($request) {
+                            $query->where('dates.id', $request->date);
+                        }
+                    ])->where('hub_id', Auth::user()->hub_id)
+                    ->get();
+
+        $getDate = Date::select('date')->find($request->date);
+        $showDate = $this->formatDateFr($getDate->date);
+
+        $collect = collect();
+        if ($collaborateurs) {
+            foreach ($collaborateurs as $collaborateur) {
+               foreach ($collaborateur->dates as $date) {
+                $horaires = $this->getHoraire($date->pivot->horaire);
+                $object = [
+                        'collaborateur' => $collaborateur->name,
+                        'horaires' => $horaires,
+                        'type' => $this->getType($date->pivot->horaire, $horaires)
+                    ];
+                $collect->push($object);
+           }
+          }
+        }
+
+            return response()->json([
+                'planning' => $collect->toArray(),
+                'date' => [
+                    'id' => $request->date,
+                    'format' => $showDate,
+                    'previous' => $request->previous,
+                    'next' => $request->next,
+                    'index' => $request->index
+                ]
+            ]);
     }
 
     /**

@@ -23,7 +23,7 @@ class RegisteredUserController extends Controller
      */
     public function create(Request $request)
     {
-        $url = URL::signedRoute('register.post');
+        $url = URL::temporarySignedRoute('register.post', now()->addMinutes(15));
 
         return Inertia::render('Auth/Register', [
             'name' => $request->name,

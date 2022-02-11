@@ -10,3 +10,7 @@ Route::post('/import/hub/{hub}', [PlanningController::class, 'import'])
 Route::get('/planning', [PlanningController::class, 'loadPlanning'])
     ->middleware('auth')
     ->name('planning');
+
+Route::get('/planning/date', [PlanningController::class, 'loadPlanningDate'])
+    ->middleware('auth')
+    ->name('planning.date');

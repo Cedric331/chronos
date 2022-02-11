@@ -46,7 +46,7 @@ class EquipeController extends Controller
             'email' => 'required|string|email|max:255|unique:users'
         ]);
 
-        $url = URL::signedRoute('register', [
+        $url = URL::temporarySignedRoute('register', now()->addHours(24), [
             'name' => Crypt::encrypt($request->name),
             'email' => Crypt::encrypt($request->email),
             'hub' => Crypt::encrypt(Auth::user()->hub_id),
