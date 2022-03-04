@@ -18,9 +18,39 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 class PlanningController extends Controller
 {
 
-    public function show (Hub $hub)
+    private  $cells = [
+        'F' => '8h00',
+        'G' => '8h30',
+        'H' => '9h00',
+        'I' => '9h30',
+        'J' => '10h00',
+        'K' => '10h30',
+        'L' => '11h00',
+        'M' => '11h30',
+        'N' => '12h00',
+        'O' => '12h30',
+        'P' => '13h00',
+        'Q' => '13h30',
+        'R' => '14h00',
+        'S' => '14h30',
+        'T' => '15h00',
+        'U' => '15h30',
+        'V' => '16h00',
+        'W' => '16h30',
+        'X' => '17h00',
+        'Y' => '17h30',
+        'Z' => '18h00',
+        'AA' => '18h30',
+        'AB' => '19h00',
+        'AC' => '19h30',
+        'AD' =>'20h00',
+        'AE' => '20h30',
+        'AF' => '21h00'
+    ];
+
+    public function __construct()
     {
-        //
+        $this->middleware(['role:Coordinateur|Administrateur'], ['only' => ['import']]);
     }
 
 
@@ -53,60 +83,31 @@ class PlanningController extends Controller
 
         $sheet = $spreadsheet->getActiveSheet();
 
-        $cells = [
-            'F' => '8h00',
-            'G' => '8h30',
-            'H' => '9h00',
-            'I' => '9h30',
-            'J' => '10h00',
-            'K' => '10h30',
-            'L' => '11h00',
-            'M' => '11h30',
-            'N' => '12h00',
-            'O' => '12h30',
-            'P' => '13h00',
-            'Q' => '13h30',
-            'R' => '14h00',
-            'S' => '14h30',
-            'T' => '15h00',
-            'U' => '15h30',
-            'V' => '16h00',
-            'W' => '16h30',
-            'X' => '17h00',
-            'Y' => '17h30',
-            'Z' => '18h00',
-            'AA' => '18h30',
-            'AB' => '19h00',
-            'AC' => '19h30',
-            'AD' =>'20h00',
-            'AE' => '20h30',
-            'AF' => '21h00'
-        ];
-
         $collect = collect();
 
         for ($i = 0; $i < $sheet->getHighestRow(); $i++) {
             if ($sheet->getCell('B' . $i)->getCalculatedValue() !== null && is_numeric($sheet->getCell('B' . $i)->getCalculatedValue())) {
                 $excel_date = $sheet->getCell('B'. $i)->getCalculatedValue();
                 $unix_date = ($excel_date - 25569) * 86400;
-                $excel_date = 25569 + ($unix_date / 86400);
-                $unix_date = ($excel_date - 25569) * 86400;
 
                 $numberMembers = $i;
                 $members = collect();
-                while ($sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() !== null || $sheet->getCell('D'. $numberMembers)->getValue()) {
-                    $member['collaborateur'] = $sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() ?
-                        $sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() :
-                        $sheet->getCell('D'. $numberMembers)->getValue();
 
+                while (($sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() !== null || $sheet->getCell('D'. $numberMembers)->getValue())
+                && ($sheet->getCell('E'. $numberMembers)->getOldCalculatedValue() !== null || $sheet->getCell('E'. $numberMembers)->getValue()))
+                {
                     $type = $sheet->getCell('E' . $numberMembers)->getOldCalculatedValue() ?
                         $sheet->getCell('E' . $numberMembers)->getOldCalculatedValue() :
                         $sheet->getCell('E' . $numberMembers)->getValue();
 
+                    $member['collaborateur'] = $sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() ?
+                        $sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() :
+                        $sheet->getCell('D'. $numberMembers)->getValue();
+
                     $horaires = $sheet->getCell('C' . $numberMembers)->getOldCalculatedValue();
                     $debutJournee = 'OFF';
                     $finJournee = 'OFF';
-                    if ($horaires !== 'OFF' && !empty($horaires)) {
+                    if (strpos($horaires, '-') && !empty($horaires)) {
                         $horaire = explode('-', $horaires);
                         $debutJournee = $horaire[0];
                         $finJournee = $horaire[1];
@@ -114,7 +115,7 @@ class PlanningController extends Controller
                     $debutPause = null;
                     $finPause = null;
 
-                    foreach ($cells as $cell => $value) {
+                    foreach ($this->cells as $cell => $value) {
                         if ($sheet->getCell($cell . $numberMembers)->getOldCalculatedValue() === 'DEJ') {
                             if (empty($debutPause)) {
                                 $debutPause = $value;
@@ -135,9 +136,10 @@ class PlanningController extends Controller
                     $member['horaire'] = $horaires;
                     $members->push($member);
                     $numberMembers++;
-                }
+            }
+
                 $object = [
-                    date("l d F", $unix_date) => $members->toArray()
+                    date("l d F Y", $unix_date) => $members->toArray()
                 ];
                 $collect->push($object);
             }
@@ -151,6 +153,11 @@ class PlanningController extends Controller
 
         $allPlannings = $collect->toArray();
 
+        $collaborateurs = Collaborateur::where('hub_id', Auth::user()->hub_id)->get();
+        foreach ($collaborateurs as $item) {
+            $item->dates()->detach();
+            $item->delete();
+        }
         foreach ($allPlannings as $plannings) {
             foreach ($plannings as $key => $values) {
                 $date = Date::firstOrCreate([
@@ -163,12 +170,6 @@ class PlanningController extends Controller
                         'hub_id' => Auth::user()->hub_id,
                     ]);
                     $hub = Hub::find(Auth::user()->hub_id);
-
-                    CollaborateurDate::where([
-                        ['hub_id', $hub->id],
-                        ['date_id', $date->id],
-                        ['collaborateur_id', $collaborateur->id]
-                    ])->delete();
 
                     $hub->dates()->attach($date, [
                         'collaborateur_id' => $collaborateur->id,
@@ -200,19 +201,23 @@ class PlanningController extends Controller
         $collaborateurs = Collaborateur::where('hub_id', $hub->id)->get();
 
         $collect = collect();
-        foreach ($collaborateur->dates as $date) {
-            if (strtotime($date->date) > strtotime('- '.$this->getLundi().' days')) {
-                $horaires = $this->getHoraire($date->pivot->horaire);
-                $object = [
-                    'date' => $this->formatDateFr($date->date),
-                    'horaires' => $horaires,
-                    'type' => $this->getType($date->pivot->horaire, $horaires)
-                ];
-                $collect->push($object);
+        if ($collaborateur) {
+            foreach ($collaborateur->dates as $date) {
+                if (strtotime(date('l d F Y', strtotime($date->date))) > strtotime(date('l d F Y', strtotime('- '.$this->getLundi().' days')))) {
+                    $horaires = $this->getHoraire($date->pivot->horaire);
+                    $object = [
+                        'date_id' => $date->id,
+                        'date' => $this->formatDateFr($date->date),
+                        'horaires' => $horaires,
+                        'type' => $this->getType($date->pivot->horaire, $horaires),
+                        'today' => $this->formatDateFr(now()) === $this->formatDateFr($date->date)
+                    ];
+                    $collect->push($object);
+                }
             }
+            $collaborateur = $collaborateur->toArray();
+            unset($collaborateur['dates']);
         }
-      $collaborateur = $collaborateur->toArray();
-        unset($collaborateur['dates']);
 
         if (!$request->loadData) {
             return Inertia::render('Planning', [
@@ -227,6 +232,48 @@ class PlanningController extends Controller
                 'plannings' => $collect->toArray()
             ]);
         }
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function loadPlanningDate (Request $request): \Illuminate\Http\JsonResponse
+    {
+        $collaborateurs = Collaborateur::with(['dates' => function ($query) use ($request) {
+                            $query->where('dates.id', $request->date);
+                        }
+                    ])->where('hub_id', Auth::user()->hub_id)
+                    ->get();
+
+        $getDate = Date::select('date')->find($request->date);
+        $showDate = $this->formatDateFr($getDate->date);
+
+        $collect = collect();
+        if ($collaborateurs) {
+            foreach ($collaborateurs as $collaborateur) {
+               foreach ($collaborateur->dates as $date) {
+                $horaires = $this->getHoraire($date->pivot->horaire);
+                $object = [
+                        'collaborateur' => $collaborateur->name,
+                        'horaires' => $horaires,
+                        'type' => $this->getType($date->pivot->horaire, $horaires)
+                    ];
+                $collect->push($object);
+           }
+          }
+        }
+
+            return response()->json([
+                'planning' => $collect->toArray(),
+                'date' => [
+                    'id' => $request->date,
+                    'format' => $showDate,
+                    'previous' => $request->previous,
+                    'next' => $request->next,
+                    'index' => $request->index
+                ]
+            ]);
     }
 
     /**
@@ -314,13 +361,14 @@ class PlanningController extends Controller
 
     private function getType($data, $horaires): ?string
     {
-        if (!$horaires) {
-            return null;
-        }
         $value = json_decode($data);
 
         if ($value->type === 'Iti1' || $value->type === 'Iti2' || $value->type === 'Iti3') {
-            $value->type = 'Iti';
+            if (!$horaires) {
+                return null;
+            } else {
+                $value->type = 'Iti';
+            }
         }
         return $value->type;
     }

@@ -7,15 +7,19 @@ use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 //use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
-//Route::get('/register', [RegisteredUserController::class, 'create'])
-//                ->middleware('guest')
-//                ->name('register');
-//
-//Route::post('/register', [RegisteredUserController::class, 'store'])
-//                ->middleware('guest');
+Route::get('/register', [RegisteredUserController::class, 'create'])
+                ->middleware(['guest', 'signed'])
+                ->name('register');
+
+Route::post('/register', [RegisteredUserController::class, 'store'])
+    ->middleware(['guest', 'signed'])
+    ->name('register.post');
 
 Route::get('/', [AuthenticatedSessionController::class, 'create'])
                 ->middleware('guest')
@@ -39,6 +43,13 @@ Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
 Route::post('/reset-password', [NewPasswordController::class, 'store'])
                 ->middleware('guest')
                 ->name('password.update');
+
+Route::get('/update-user', [UserController::class, 'show'])
+                ->middleware('auth')
+                ->name('user.update');
+
+Route::patch('/update-user', [UserController::class, 'update'])
+                ->middleware('auth');
 
 Route::get('/verify-email', [EmailVerificationPromptController::class, '__invoke'])
                 ->middleware('auth')

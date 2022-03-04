@@ -1,6 +1,13 @@
 {
     "name": "laravel/laravel",
     "type": "project",
+    "authors": [
+        {
+            "name": "Lima Cédric",
+            "email": "limacedric@hotmail.fr",
+            "role": "Developer"
+        }
+    ],
     "description": "The Laravel Framework.",
     "keywords": ["framework", "laravel"],
     "license": "MIT",
@@ -13,6 +20,7 @@
         "laravel/sanctum": "^2.8",
         "laravel/tinker": "^2.5",
         "phpoffice/phpspreadsheet": "^1.21",
+        "spatie/laravel-permission": "^5.5",
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {

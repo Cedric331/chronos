@@ -19,60 +19,42 @@
                         <dl>
                             <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                 <dt class="text-sm font-medium text-gray-500">
-                                    Département
-                                </dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    <input type="text" v-model="departement" @change="update()">
-                                </dd>
-                            </div>
-                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-500">
-                                    Adresse
-                                </dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    <input type="text" v-model="adresse" @change="update()">
-                                </dd>
-                            </div>
-                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-500">
-                                    Complément d'adresse
-                                </dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    <input type="text" v-model="complement_adresse" @change="update()">
-                                </dd>
-                            </div>
-                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-500">
-                                    Code Postal
-                                </dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    <input type="number" maxlength="5" minlength="5" v-model="code_postal" @change="update()">
-                                </dd>
-                            </div>
-                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-500">
                                     Abonné Mobile
                                 </dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    <input type="number" v-model="abonne_mobile" @change="update()">
-                                </dd>
+                                <div v-if="$page.props.auth.user.coordinateur">
+                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                        <input type="number" maxlength="5" minlength="5" v-model="abonne_mobile" @change="update()">
+                                    </dd>
+                                </div>
+                                <div v-else>
+                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                        {{ abonne_mobile }}
+                                    </dd>
+                                </div>
                             </div>
                             <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                 <dt class="text-sm font-medium text-gray-500">
                                     Abonné Freebox
                                 </dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    <input type="number" v-model="abonne_freebox" @change="update()">
-                                </dd>
+                                <div v-if="$page.props.auth.user.coordinateur">
+                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                        <input type="number" maxlength="5" minlength="5" v-model="abonne_freebox" @change="update()">
+                                    </dd>
+                                </div>
+                                <div v-else>
+                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                        {{ abonne_freebox }}
+                                    </dd>
+                                </div>
                             </div>
-                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <div v-if="$page.props.auth.user.coordinateur" class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                 <dt class="text-sm font-medium text-gray-500">
                                     Importé Planning (Excel)
                                 </dt>
                                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    <form @submit.prevent="importExcel" enctype="multipart/form-data">
+                                    <form @submit.prevent="confirmImport" enctype="multipart/form-data">
                                         <input type="file" @change="onChange" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150" required/>
-                                        <button type="submit" class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        <button type="submit" class="ml-5 bg-white sm:mt-5 py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                             Importer
                                         </button>
                                     </form>
@@ -83,6 +65,7 @@
                 </div>
             </div>
         </div>
+        <ModalConfirmImport v-if="confirModal" @closeConfirm="this.confirModal = false" @validated="this.validated()"></ModalConfirmImport>
     </BreezeAuthenticatedLayout>
 </template>
 
@@ -90,23 +73,22 @@
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue'
 import { Head } from '@inertiajs/inertia-vue3';
 import Loading from 'vue-full-loading'
+import ModalConfirmImport from "@/Components/ModalConfirmImport";
 
 export default {
     components: {
+        ModalConfirmImport,
         BreezeAuthenticatedLayout,
         Loading,
         Head,
     },
     data() {
         return {
-            departement: this.$page.props.hub.departement,
-            adresse: this.$page.props.hub.adresse,
-            code_postal: this.$page.props.hub.code_postal,
-            complement_adresse: this.$page.props.hub.complement_adresse,
             abonne_freebox: this.$page.props.hub.abonne_freebox,
             abonne_mobile: this.$page.props.hub.abonne_mobile,
             file: null,
             show: false,
+            confirModal: false,
             label: 'Chargement en cours...',
             loadClass: 'load-class'
         }
@@ -114,18 +96,25 @@ export default {
     methods: {
         update () {
             axios.patch('hub/' + this.$page.props.hub.id, {
-                departement: this.departement,
-                adresse: this.adresse,
-                code_postal: this.code_postal,
-                complement_adresse: this.complement_adresse,
                 abonne_freebox: this.abonne_freebox,
                 abonne_mobile: this.abonne_mobile,
-            }).then(response => {
-                console.log(response.data)
+            }).then(() => {
+                this.$notify({
+                    title: "Succès",
+                    text: "Modification du hub effectuée avec succès!",
+                    type: 'success',
+                });
             })
+        },
+        confirmImport () {
+          this.confirModal = true
         },
         onChange (event) {
           this.file = event.target.files[0]
+        },
+        validated () {
+            this.confirModal = false
+            this.importExcel()
         },
         importExcel (event) {
             this.show = true
@@ -147,11 +136,19 @@ export default {
                         type: 'success',
                     });
                 }).catch(error => {
-                    this.$notify({
-                        title: "Échec",
-                        text: "Oups désolé il y a une erreur!",
-                        type: 'danger',
-                    });
+                    if (error.response.status === 403) {
+                        this.$notify({
+                            title: "Action non autorisé",
+                            text: "Vous n\'avez pas les droits !",
+                            type: 'danger',
+                        });
+                    } else {
+                        this.$notify({
+                            title: "Échec",
+                            text: "Oups désolé il y a une erreur!",
+                            type: 'danger',
+                        });
+                    }
                 }).finally(() => {
                     this.show = false
                 })

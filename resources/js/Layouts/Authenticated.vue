@@ -1,6 +1,7 @@
 <template>
+    <notifications position="bottom right" />
     <div>
-        <div class="min-h-screen bg-white">
+        <div class="min-h-screen bg-gray-50">
             <nav class="bg-white border-b border-gray-100">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -16,16 +17,37 @@
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <BreezeNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Tableau de bord
+                                    Information sur le Hub
                                 </BreezeNavLink>
                                 <BreezeNavLink :href="route('planning')" :active="route().current('planning')" as="button">
                                     Planning
                                 </BreezeNavLink>
+                                <BreezeNavLink v-if="$page.props.auth.user.coordinateur" :href="route('equipe')" :active="route().current('equipe')" as="button">
+                                    Gestion équipe
+                                </BreezeNavLink>
+                                <BreezeNavLink v-if="$page.props.auth.user.admin" :href="route('administration')" :active="route().current('administration')" as="button">
+                                    Administration
+                                </BreezeNavLink>
                             </div>
                         </div>
 
+                        <div class="flex">
+                            <div v-if="$page.props.auth.user.coordinateur" class="flex items-center sm:ml-6">
+                                <div class="ml-3 relative">
+                                    <select @change="updateHub(hub.id)" v-model="hub" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0" style="border-width: 0">
+                                        <option v-for="hub in $page.props.hubs" :key="hub.id" :value="hub" :selected="$page.props.hub.id === hub.id">
+                                            {{ hub.ville }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div v-else class="flex items-center sm:ml-6">
+                                <p class="block w-full text-sm font-medium rounded-md text-gray-500 bg-white m-0">
+                                    {{ hub.ville }}
+                                </p>
+                            </div>
+
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
-                            <!-- Settings Dropdown -->
                             <div class="ml-3 relative">
                                 <BreezeDropdown align="right" width="48">
                                     <template #trigger>
@@ -41,12 +63,16 @@
                                     </template>
 
                                     <template #content>
-                                        <BreezeDropdownLink :href="route('logout')" method="post" as="button">
-                                            Log Out
+                                        <BreezeDropdownLink :href="route('user.update')" as="button">
+                                            Modifier mon mot de passe
+                                        </BreezeDropdownLink>
+                                        <BreezeDropdownLink style="z-index: 9999" :href="route('logout')" method="post" as="button">
+                                            Déconnexion
                                         </BreezeDropdownLink>
                                     </template>
                                 </BreezeDropdown>
                             </div>
+                        </div>
                         </div>
 
                         <!-- Hamburger -->
@@ -65,10 +91,16 @@
                 <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1">
                         <BreezeResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Dashboard
+                            Information sur le Hub
                         </BreezeResponsiveNavLink>
                         <BreezeResponsiveNavLink :href="route('planning')" :active="route().current('planning')" as="button">
                             Planning
+                        </BreezeResponsiveNavLink>
+                        <BreezeResponsiveNavLink v-if="$page.props.auth.user.coordinateur" :href="route('equipe')" :active="route().current('equipe')" as="button">
+                            Gestion équipe
+                        </BreezeResponsiveNavLink>
+                        <BreezeResponsiveNavLink v-if="$page.props.auth.user.admin" :href="route('administration')" :active="route().current('administration')" as="button">
+                            Administration
                         </BreezeResponsiveNavLink>
                     </div>
 
@@ -81,7 +113,7 @@
 
                         <div class="mt-3 space-y-1">
                             <BreezeResponsiveNavLink :href="route('logout')" method="post" as="button">
-                                Log Out
+                                Déconnexion
                             </BreezeResponsiveNavLink>
                         </div>
                     </div>
@@ -97,7 +129,7 @@
 
             <!-- Page Content -->
             <main>
-                <slot />
+                <slot ref="ChildComponent" />
             </main>
         </div>
     </div>
@@ -124,6 +156,23 @@ export default {
     data() {
         return {
             showingNavigationDropdown: false,
+            hub: this.$page.props.hub
+        }
+    },
+    methods: {
+        updateHub (id) {
+            axios.patch('hub/' + id + '/user')
+            .then(() => {
+                this.$inertia.visit(this.$page.url)
+            })
+            .catch(error => {
+                console.log(error)
+                this.$notify({
+                    title: "Erreur",
+                    text: "Oups désolé il y a une erreur !",
+                    type: 'info',
+                });
+            })
         }
     }
 }

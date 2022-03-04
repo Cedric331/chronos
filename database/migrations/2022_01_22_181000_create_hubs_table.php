@@ -16,10 +16,6 @@ class CreateHubsTable extends Migration
         Schema::create('hubs', function (Blueprint $table) {
             $table->id();
             $table->string('ville')->unique();
-            $table->string('departement')->nullable();
-            $table->integer('code_postal')->nullable();
-            $table->string('adresse')->nullable();
-            $table->string('complement_adresse')->nullable();
             $table->integer('abonne_freebox')->nullable();
             $table->integer('abonne_mobile')->nullable();
             $table->timestamps();
