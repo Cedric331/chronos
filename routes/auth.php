@@ -28,21 +28,21 @@ Route::get('/', [AuthenticatedSessionController::class, 'create'])
 Route::post('/', [AuthenticatedSessionController::class, 'store'])
                 ->middleware('guest');
 
-//Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
-//                ->middleware('guest')
-//                ->name('password.request');
-//
-//Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
-//                ->middleware('guest')
-//                ->name('password.email');
-//
-//Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
-//                ->middleware('guest')
-//                ->name('password.reset');
-//
-//Route::post('/reset-password', [NewPasswordController::class, 'store'])
-//                ->middleware('guest')
-//                ->name('password.update');
+Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
+                ->middleware('guest')
+                ->name('password.request');
+
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+                ->middleware('guest')
+                ->name('password.email');
+
+Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+                ->middleware('guest')
+                ->name('password.reset');
+
+Route::post('/reset-password', [NewPasswordController::class, 'store'])
+                ->middleware('guest')
+                ->name('password.update');
 
 Route::get('/update-user', [UserController::class, 'show'])
                 ->middleware('auth')
