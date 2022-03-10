@@ -50,7 +50,7 @@ class PlanningController extends Controller
 
     public function __construct()
     {
-        $this->middleware(['role:Coordinateur|Administrateur'], ['only' => ['import']]);
+        $this->middleware(['role:Coordinateur|Administrateur'], ['only' => ['import', 'updatePlanning']]);
     }
 
 
@@ -104,7 +104,10 @@ class PlanningController extends Controller
                         $sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() :
                         $sheet->getCell('D'. $numberMembers)->getValue();
 
-                    $horaires = $sheet->getCell('C' . $numberMembers)->getOldCalculatedValue();
+                    $horaires = $sheet->getCell('C' . $numberMembers)->getOldCalculatedValue() ?
+                        $sheet->getCell('C'. $numberMembers)->getOldCalculatedValue() :
+                        $sheet->getCell('C'. $numberMembers)->getValue();
+
                     $debutJournee = 'OFF';
                     $finJournee = 'OFF';
                     if (strpos($horaires, '-') && !empty($horaires)) {
@@ -209,6 +212,7 @@ class PlanningController extends Controller
                         'date_id' => $date->id,
                         'date' => $this->formatDateFr($date->date),
                         'horaires' => $horaires,
+                        'horaire_id' => $date->pivot->id,
                         'type' => $this->getType($date->pivot->horaire, $horaires),
                         'today' => $this->formatDateFr(now()) === $this->formatDateFr($date->date)
                     ];
@@ -263,7 +267,7 @@ class PlanningController extends Controller
            }
           }
         }
-
+    $collect = $collect->unique();
             return response()->json([
                 'planning' => $collect->toArray(),
                 'date' => [
@@ -371,5 +375,37 @@ class PlanningController extends Controller
             }
         }
         return $value->type;
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updatePlanning (Request $request): \Illuminate\Http\JsonResponse
+    {
+        $type = null;
+        if ($request->planification === null) {
+            return response()->json(false, 400);
+        }
+        if ($request->planification === '3') {
+            $type = 'CP';
+        }
+        if ($request->isTech) {
+            $type = 'Iti1';
+        }
+        foreach ($request->selected as $selected) {
+           $collaborateurDate = CollaborateurDate::find($selected['horaire_id']);
+            $horaires = [
+                'debut_journee' => $request->debut_journee,
+                'debut_pause' => $request->debut_pause,
+                'fin_pause' => $request->fin_pause,
+                'fin_journee' => $request->fin_journee,
+                'type' => $type,
+            ];
+
+           $collaborateurDate->horaire = json_encode($horaires);
+           $collaborateurDate->save();
+        }
+        return response()->json(true);
     }
 }
