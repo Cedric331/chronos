@@ -119,12 +119,16 @@ class PlanningController extends Controller
                     $finPause = null;
 
                     foreach ($this->cells as $cell => $value) {
-                        if ($sheet->getCell($cell . $numberMembers)->getOldCalculatedValue() === 'DEJ') {
+                        $dej = $sheet->getCell($cell . $numberMembers)->getOldCalculatedValue() ?
+                            $sheet->getCell($cell . $numberMembers)->getOldCalculatedValue() :
+                            $sheet->getCell($cell . $numberMembers)->getValue();
+
+                        if ($dej === 'DEJ') {
                             if (empty($debutPause)) {
                                 $debutPause = $value;
                             }
                         }
-                        if ($sheet->getCell($cell . $numberMembers)->getOldCalculatedValue() !== 'DEJ' && !empty($debutPause) && empty($finPause)) {
+                        if ($dej !== 'DEJ' && !empty($debutPause) && empty($finPause)) {
                             $finPause = $value;
                         }
                     }
