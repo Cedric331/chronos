@@ -195,15 +195,21 @@ class PlanningController extends Controller
     public function loadPlanning (Request $request): \Illuminate\Http\JsonResponse|\Inertia\Response
     {
         $hub = Hub::findOrFail(Auth::user()->hub_id);
-        if ($request->id) {
+
+        $collaborateurId = Auth::user()->collaborateur_id;
+          if ($collaborateurId !== null && $request->id === null) {
+            $collaborateur = Collaborateur::with('dates')
+                ->where('hub_id', $hub->id)
+                ->find($collaborateurId);
+            } else if ($request->id) {
             $collaborateur = Collaborateur::with('dates')
                 ->where('hub_id', $hub->id)
                 ->find($request->id);
-        } else {
-            $collaborateur = Collaborateur::with('dates')
-                ->where('hub_id', $hub->id)
-                ->first();
-        }
+            } else {
+                $collaborateur = Collaborateur::with('dates')
+                    ->where('hub_id', $hub->id)
+                    ->first();
+            }
 
         $collaborateurs = Collaborateur::where('hub_id', $hub->id)->get();
 

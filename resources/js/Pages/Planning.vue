@@ -4,7 +4,7 @@
     <BreezeAuthenticatedLayout>
         <div v-if="allPlannings && members && member">
                 <div class="min-h-screen">
-                    <NavbarPlanning style="z-index: 1" :collaborateur="member" :collaborateurs="members" @updateCollaborateur="data => updateCollaborateur(data)"/>
+                    <NavbarPlanning style="z-index: 1" :collaborateur="member" :collaborateurs="members" @notificationUpdate="notificationUpdate()" @updateCollaborateur="data => updateCollaborateur(data)"/>
                     <div class="p-4 gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 select-none">
                         <div v-for="(planning, index) in allPlannings" :key="planning.date" :class="[!planning.horaires && planning.type !== 'CP' ? 'bg-stone-200' : '', planning.type === 'CP' ? 'bg-blue-200' : '', planning.type === 'Iti' ? 'bg-red-200' : '',  planning.type !== 'Iti' &&  planning.type !== 'CP' && !planning.today ? 'bg-green-100' : '', planning.today ? 'shadow-blue-400/80 shadow-2xl bg-gray-50' : '', isSelected(planning) ? 'border-2 border-green-500' : '', $page.props.auth.user.coordinateur ? 'cursor-pointer' : '']" class="w-full rounded-md shadow-md shadow-dark hover:shadow-blue-400/80 hover:shadow-2xl hover:bg-gray-50">
                             <div @click="viewDate(planning.date_id, index)" class="p-1 flex justify-end">
@@ -36,7 +36,7 @@
                                 </div>
                                 <div v-else>
                                     <p class="font-light text-gray-700 text-justify line-clamp-3">
-                                     {{planning.type === 'CP' ? 'Congés payés' : 'Non planifié'}}
+                                     {{planning.type === 'CP' ? 'Congés payés' : 'Repos'}}
                                     </p>
                                 </div>
                             </div>
@@ -126,6 +126,13 @@ export default {
           }
           this.updatePlanning = false
           this.selectedPlanning = []
+        },
+        notificationUpdate () {
+            this.$notify({
+                title: "Succès",
+                text: "Modification effectuée avec succès !",
+                type: 'success',
+            });
         },
         viewDate(data, index) {
             let previous = index === 0 ? null : this.allPlannings[index - 1].date_id

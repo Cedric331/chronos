@@ -23,6 +23,7 @@ class User extends Authenticatable
         'email',
         'status',
         'hub_id',
+        'collaborateur_id',
         'password',
     ];
 

@@ -42,4 +42,24 @@ class UserController extends Controller
         }
         return response()->json('Erreur d\'authentification', 401);
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateFavori (Request $request): \Illuminate\Http\JsonResponse
+    {
+        $user = User::find($request->user);
+
+        $collaborateur = null;
+        if ($user->collaborateur_id !== $request->collaborateur) {
+            $collaborateur = $request->collaborateur;
+        }
+
+        $update = $user->update([
+                    'collaborateur_id' => $collaborateur
+                ]);
+
+        return ControllerResponse::update($update);
+    }
 }

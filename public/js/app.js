@@ -20457,6 +20457,20 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     updateCollaborateur: function updateCollaborateur() {
       this.$emit('updateCollaborateur', this.selected);
+    },
+    updateFavori: function updateFavori() {
+      var _this = this;
+
+      axios.post('update/favori', {
+        user: this.$page.props.auth.user.id,
+        collaborateur: this.selected.id
+      }).then(function () {
+        _this.$page.props.auth.user.collaborateur_id = _this.selected.id;
+
+        _this.$emit('notificationUpdate');
+      })["catch"](function (error) {
+        console.log(error);
+      });
     }
   }
 });
@@ -21369,6 +21383,13 @@ __webpack_require__.r(__webpack_exports__);
 
       this.updatePlanning = false;
       this.selectedPlanning = [];
+    },
+    notificationUpdate: function notificationUpdate() {
+      this.$notify({
+        title: "Succès",
+        text: "Modification effectuée avec succès !",
+        type: 'success'
+      });
     },
     viewDate: function viewDate(data, index) {
       var _this = this;
@@ -22603,23 +22624,43 @@ var _hoisted_6 = {
   "class": "flex-shrink-0 flex items-center text-white xl:visible"
 };
 var _hoisted_7 = {
+  "class": "form-check"
+};
+var _hoisted_8 = ["checked"];
+
+var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "class": "form-check-label inline-block text-white"
+}, " C'est mon planning ", -1
+/* HOISTED */
+);
+
+var _hoisted_10 = {
   "class": "absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0"
 };
-var _hoisted_8 = {
+var _hoisted_11 = {
   "class": "flex justify-center"
 };
-var _hoisted_9 = {
+var _hoisted_12 = {
   "class": "xl:w-96"
 };
-var _hoisted_10 = ["value", "selected"];
+var _hoisted_13 = ["value", "selected"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("header", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("nav", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, " Planning de " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.collaborateur.name), 1
   /* TEXT */
-  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
-    "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    onChange: _cache[0] || (_cache[0] = function ($event) {
+      return $options.updateFavori();
+    }),
+    checked: this.$page.props.auth.user.collaborateur_id === this.selected.id,
+    "class": "form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-right ml-2 cursor-pointer",
+    type: "checkbox"
+  }, null, 40
+  /* PROPS, HYDRATE_EVENTS */
+  , _hoisted_8), _hoisted_9]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
+    "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
       return $data.selected = $event;
     }),
-    onChange: _cache[1] || (_cache[1] = function ($event) {
+    onChange: _cache[2] || (_cache[2] = function ($event) {
       return $options.updateCollaborateur();
     }),
     "class": "block w-full text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600",
@@ -22631,7 +22672,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       selected: $data.selected.id === member.id
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(member.name), 9
     /* TEXT, PROPS */
-    , _hoisted_10);
+    , _hoisted_13);
   }), 128
   /* KEYED_FRAGMENT */
   ))], 544
@@ -24637,7 +24678,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         },
         collaborateur: $data.member,
         collaborateurs: $data.members,
-        onUpdateCollaborateur: _cache[0] || (_cache[0] = function (data) {
+        onNotificationUpdate: _cache[0] || (_cache[0] = function ($event) {
+          return $options.notificationUpdate();
+        }),
+        onUpdateCollaborateur: _cache[1] || (_cache[1] = function (data) {
           return $options.updateCollaborateur(data);
         })
       }, null, 8
@@ -24668,7 +24712,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         /* TEXT */
         )])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_14, " Fin : " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(planning.horaires.fin_journee), 1
         /* TEXT */
-        )])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(planning.type === 'CP' ? 'Congés payés' : 'Non planifié'), 1
+        )])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(planning.type === 'CP' ? 'Congés payés' : 'Repos'), 1
         /* TEXT */
         )]))], 8
         /* PROPS */
@@ -24679,7 +24723,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       /* KEYED_FRAGMENT */
       ))])]), $data.selectedPlanning.length > 0 && _ctx.$page.props.auth.user.coordinateur ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_SelectedDate, {
         key: 0,
-        onClick: _cache[1] || (_cache[1] = function ($event) {
+        onClick: _cache[2] || (_cache[2] = function ($event) {
           return $data.updatePlanning = true;
         }),
         selected: $data.selectedPlanning.length
@@ -24689,10 +24733,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         key: 2,
         showDates: $data.showDates,
         datePlanning: $data.datePlanning,
-        onRefreshViewDate: _cache[2] || (_cache[2] = function (data, index) {
+        onRefreshViewDate: _cache[3] || (_cache[3] = function (data, index) {
           return _this.viewDate(data, index);
         }),
-        onCloseModal: _cache[3] || (_cache[3] = function ($event) {
+        onCloseModal: _cache[4] || (_cache[4] = function ($event) {
           return _this.showPlanning = false;
         })
       }, null, 8
@@ -24701,7 +24745,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         key: 3,
         collaborateur: $data.member,
         selected: _this.selectedPlanning,
-        onCloseModal: _cache[4] || (_cache[4] = function (bool) {
+        onCloseModal: _cache[5] || (_cache[5] = function (bool) {
           _this.closeUpdate(bool);
         })
       }, null, 8

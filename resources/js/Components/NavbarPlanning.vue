@@ -8,6 +8,12 @@
                             Planning de {{ collaborateur.name }}
                         </div>
                     </div>
+                  <div class="form-check">
+                    <input @change="updateFavori()" :checked="this.$page.props.auth.user.collaborateur_id === this.selected.id" class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-right ml-2 cursor-pointer" type="checkbox">
+                    <label class="form-check-label inline-block text-white">
+                      C'est mon planning
+                    </label>
+                  </div>
                     <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                         <div class="flex justify-center">
                             <div class="xl:w-96">
@@ -40,7 +46,20 @@ export default {
     methods: {
         updateCollaborateur() {
             this.$emit('updateCollaborateur', this.selected)
-        }
+        },
+      updateFavori () {
+          axios.post('update/favori', {
+            user: this.$page.props.auth.user.id,
+            collaborateur: this.selected.id
+          })
+        .then(() => {
+          this.$page.props.auth.user.collaborateur_id = this.selected.id
+          this.$emit('notificationUpdate')
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      }
     }
 }
 </script>

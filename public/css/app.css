@@ -679,6 +679,9 @@ select {
 .z-10 {
   z-index: 10;
 }
+.float-right {
+  float: right;
+}
 .float-left {
   float: left;
 }
