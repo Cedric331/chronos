@@ -67,11 +67,19 @@
                                                     </option>
                                                 </select>
                                             </div>
-                                            <div class="form-check mt-6">
-                                                <input v-model="isTech" class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox">
-                                                <label class="form-check-label inline-block text-gray-800">
-                                                    Technicien
-                                                </label>
+                                            <div class="flex justify-start">
+                                                <div class="form-check mt-6">
+                                                    <input v-model="isTech" class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox">
+                                                    <label class="form-check-label inline-block text-gray-800">
+                                                        Technicien
+                                                    </label>
+                                                </div>
+                                                <div class="form-check mt-6 ml-4">
+                                                    <input v-model="teletravail" class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox">
+                                                    <label class="form-check-label inline-block text-gray-800">
+                                                        Télétravail
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -133,7 +141,8 @@ export default {
             debut_journee: null,
             debut_pause: 'Pas de pause',
             fin_pause: null,
-            fin_journee: null
+            fin_journee: null,
+            teletravail: false
         }
     },
     methods: {
@@ -151,6 +160,7 @@ export default {
                     debut_pause: this.debut_pause,
                     fin_pause: this.fin_pause,
                     fin_journee: this.fin_journee,
+                    teletravail: this.teletravail,
                 })
                 .then(() => {
                     this.closeModal(true)

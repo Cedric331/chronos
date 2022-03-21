@@ -19,6 +19,9 @@
                                     </div>
                                 </div>
                                 <div v-if="planning.horaires">
+                                    <p class="font-light text-red-500 text-justify line-clamp-3">
+                                       {{ planning.horaires.teletravail ? 'Télétravail' : 'Hub'}}
+                                    </p>
                                     <p class="font-light text-gray-700 text-justify line-clamp-3">
                                         Début : {{ planning.horaires.debut_journee }}
                                     </p>

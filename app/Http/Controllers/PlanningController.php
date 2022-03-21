@@ -8,6 +8,7 @@ use App\Models\CollaborateurDate;
 use App\Models\Date;
 use App\Models\Hub;
 use App\Models\Planning;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,33 +20,33 @@ class PlanningController extends Controller
 {
 
     private  $cells = [
-        'F' => '8h00',
-        'G' => '8h30',
-        'H' => '9h00',
-        'I' => '9h30',
-        'J' => '10h00',
-        'K' => '10h30',
-        'L' => '11h00',
-        'M' => '11h30',
-        'N' => '12h00',
-        'O' => '12h30',
-        'P' => '13h00',
-        'Q' => '13h30',
-        'R' => '14h00',
-        'S' => '14h30',
-        'T' => '15h00',
-        'U' => '15h30',
-        'V' => '16h00',
-        'W' => '16h30',
-        'X' => '17h00',
-        'Y' => '17h30',
-        'Z' => '18h00',
-        'AA' => '18h30',
-        'AB' => '19h00',
-        'AC' => '19h30',
-        'AD' =>'20h00',
-        'AE' => '20h30',
-        'AF' => '21h00'
+        'G' => '8h00',
+        'H' => '8h30',
+        'I' => '9h00',
+        'J' => '9h30',
+        'K' => '10h00',
+        'L' => '10h30',
+        'M' => '11h00',
+        'N' => '11h30',
+        'O' => '12h00',
+        'P' => '12h30',
+        'Q' => '13h00',
+        'R' => '13h30',
+        'S' => '14h00',
+        'T' => '14h30',
+        'U' => '15h00',
+        'V' => '15h30',
+        'W' => '16h00',
+        'X' => '16h30',
+        'Y' => '17h00',
+        'Z' => '17h30',
+        'AA' => '18h00',
+        'AB' => '18h30',
+        'AC' => '19h00',
+        'AD' => '19h30',
+        'AE' =>'20h00',
+        'AF' => '20h30',
+        'AG' => '21h00'
     ];
 
     public function __construct()
@@ -90,15 +91,24 @@ class PlanningController extends Controller
                 $excel_date = $sheet->getCell('B'. $i)->getCalculatedValue();
                 $unix_date = ($excel_date - 25569) * 86400;
 
+                $time = strtotime(date('l d F Y', strtotime(now()))) - strtotime(date('l d F Y', strtotime('- '.($this->getLundi() - 1).' days')));
+                $oldTime = strtotime(now()) - $time;
+
+                if  (strtotime(date('l d F Y', $oldTime)) === strtotime(date("l d F Y", $unix_date)) ||
+                    strtotime(date('l d F Y', $oldTime)) < strtotime(date("l d F Y", $unix_date))) {
+
+//                if (strtotime(date("l d F Y", $unix_date)) === strtotime(date('l d F Y', strtotime(now()))) ||
+//                    strtotime(date("l d F Y", $unix_date)) > strtotime(date('l d F Y', strtotime(now())))) {
+
                 $numberMembers = $i;
                 $members = collect();
 
-                while (($sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() !== null || $sheet->getCell('D'. $numberMembers)->getValue())
-                && ($sheet->getCell('E'. $numberMembers)->getOldCalculatedValue() !== null || $sheet->getCell('E'. $numberMembers)->getValue()))
+                while (($sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() !== null || $sheet->getCell('D'. $numberMembers)->getValue() !== null)
+                && ($sheet->getCell('F'. $numberMembers)->getOldCalculatedValue() !== null || $sheet->getCell('F'. $numberMembers)->getValue() !== null))
                 {
-                    $type = $sheet->getCell('E' . $numberMembers)->getOldCalculatedValue() ?
-                        $sheet->getCell('E' . $numberMembers)->getOldCalculatedValue() :
-                        $sheet->getCell('E' . $numberMembers)->getValue();
+                    $type = $sheet->getCell('F' . $numberMembers)->getOldCalculatedValue() ?
+                        $sheet->getCell('F' . $numberMembers)->getOldCalculatedValue() :
+                        $sheet->getCell('F' . $numberMembers)->getValue();
 
                     $member['collaborateur'] = $sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() ?
                         $sheet->getCell('D'. $numberMembers)->getOldCalculatedValue() :
@@ -108,8 +118,13 @@ class PlanningController extends Controller
                         $sheet->getCell('C'. $numberMembers)->getOldCalculatedValue() :
                         $sheet->getCell('C'. $numberMembers)->getValue();
 
+                    $teletravail = $sheet->getCell('E' . $numberMembers)->getOldCalculatedValue() ?
+                        $sheet->getCell('E'. $numberMembers)->getOldCalculatedValue() :
+                        $sheet->getCell('E'. $numberMembers)->getValue();
+
                     $debutJournee = 'OFF';
                     $finJournee = 'OFF';
+
                     if (strpos($horaires, '-') && !empty($horaires)) {
                         $horaire = explode('-', $horaires);
                         $debutJournee = $horaire[0];
@@ -138,6 +153,7 @@ class PlanningController extends Controller
                         'debut_pause' => $debutPause,
                         'fin_pause' => $finPause,
                         'fin_journee' => $finJournee,
+                        'teletravail' => $teletravail === 'TLT',
                         'type' => $type,
                     ];
                     $member['horaire'] = $horaires;
@@ -151,6 +167,8 @@ class PlanningController extends Controller
                 $collect->push($object);
             }
         }
+//    }
+}
         $spreadsheet->__destruct();
         $spreadsheet = null;
         unset($spreadsheet);
@@ -162,9 +180,16 @@ class PlanningController extends Controller
 
         $collaborateurs = Collaborateur::where('hub_id', Auth::user()->hub_id)->get();
         foreach ($collaborateurs as $item) {
+            $users = User::where('collaborateur_id', $item->id)->get();
+            foreach ($users as $user) {
+                $user->update([
+                    'collaborateur_id' => null
+                ]);
+            }
             $item->dates()->detach();
             $item->delete();
         }
+
         foreach ($allPlannings as $plannings) {
             foreach ($plannings as $key => $values) {
                 $date = Date::firstOrCreate([
@@ -197,19 +222,25 @@ class PlanningController extends Controller
         $hub = Hub::findOrFail(Auth::user()->hub_id);
 
         $collaborateurId = Auth::user()->collaborateur_id;
+
+        $collaborateur = null;
           if ($collaborateurId !== null && $request->id === null) {
             $collaborateur = Collaborateur::with('dates')
                 ->where('hub_id', $hub->id)
                 ->find($collaborateurId);
-            } else if ($request->id) {
-            $collaborateur = Collaborateur::with('dates')
-                ->where('hub_id', $hub->id)
-                ->find($request->id);
-            } else {
-                $collaborateur = Collaborateur::with('dates')
-                    ->where('hub_id', $hub->id)
-                    ->first();
             }
+
+          if ($collaborateur === null) {
+              if ($request->id) {
+                  $collaborateur = Collaborateur::with('dates')
+                      ->where('hub_id', $hub->id)
+                      ->find($request->id);
+              } else {
+                  $collaborateur = Collaborateur::with('dates')
+                      ->where('hub_id', $hub->id)
+                      ->first();
+              }
+          }
 
         $collaborateurs = Collaborateur::where('hub_id', $hub->id)->get();
 
@@ -410,6 +441,7 @@ class PlanningController extends Controller
                 'debut_pause' => $request->debut_pause,
                 'fin_pause' => $request->fin_pause,
                 'fin_journee' => $request->fin_journee,
+                'teletravail' => $request->teletravail,
                 'type' => $type,
             ];
 

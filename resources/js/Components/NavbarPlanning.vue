@@ -9,8 +9,17 @@
                         </div>
                     </div>
                   <div class="form-check">
-                    <input @change="updateFavori()" :checked="this.$page.props.auth.user.collaborateur_id === this.selected.id" class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-right ml-2 cursor-pointer" type="checkbox">
-                    <label class="form-check-label inline-block text-white">
+                    <input @change="updateFavori()"
+                           :checked="this.$page.props.auth.user.collaborateur_id === this.selected.id"
+                           class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-right ml-2 cursor-pointer"
+                           type="checkbox">
+                    <label class="form-check-label inline-block text-white flex justify-center">
+                      <button type="button" class="text-white inline-block cursor-default" style="margin-right: 6px; display: grid;"
+                              data-bs-toggle="tooltip" data-bs-placement="top" title="Si le fichier Excel est importé, il faudra une nouvelle fois indiquer votre planning.">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </button>
                       C'est mon planning
                     </label>
                   </div>
