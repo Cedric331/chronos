@@ -1,6 +1,6 @@
 <template>
     <notifications position="bottom right" />
-    <Head title="Gestion équipe" />
+    <Head title="Gestion Équipe" />
     <BreezeAuthenticatedLayout>
     <div class="mb-16">
             <div class="w-full bg-gray-100 px-10 pt-10 h-16 content-center">
@@ -9,29 +9,73 @@
                         <span>Ajouter un membre</span>
                     </button>
                 </div>
-                <div class="container mx-auto">
-                    <div role="list" aria-label="Behind the scenes People " class="lg:flex md:flex sm:flex items-center xl:justify-between flex-wrap md:justify-around sm:justify-around lg:justify-around">
 
-                        <div v-for="user in users" :key="user.id" class="xl:w-1/3 sm:w-3/4 md:w-2/5 relative mt-16 mb-32 sm:mb-24 xl:max-w-sm lg:w-2/5">
-                            <div class="rounded overflow-hidden shadow-md bg-white">
-                                <div class="px-2 mt-8">
-                                    <p class="text-gray-800 text-lg text-center">{{ user.name }}</p>
-                                    <p class="text-gray-800 text-lg text-center">{{ user.email }}</p>
-                                    <div class="w-full flex justify-around pt-5 pb-5">
-                                        <button @click="edit(user)" class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-full">
-                                            Éditer
-                                        </button>
-                                        <button @click="deleteConfirm(user)" class="bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-4 rounded-full">
-                                            Supprimer
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="max-w-2xl mx-auto sm:visible invisible">
+                    <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
+                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Nom
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Email
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    <span class="sr-only">Éditer</span>
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    <span class="sr-only">Supprimer</span>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="user in users" :key="user.id" class="border-b bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap">
+                                    {{ user.name }}
+                                </th>
+                                <td class="px-6 py-4 text-white">
+                                    {{ user.email }}
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <button @click="edit(user)" class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-full">
+                                        Modifier
+                                    </button>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <button @click="deleteConfirm(user)" class="bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-4 rounded-full">
+                                        Supprimer
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
+
+        <div class="w-screen my-5 bg-gray-200 flex items-center justify-center sm:invisible visible">
+                <div class="text-center md:text-left">
+                    <div v-for="user in users" :key="user.id" class="border-b bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 mt-2 p-4">
+                        <div class="font-medium text-white whitespace-nowrap">
+                            {{ user.name }}
+                        </div>
+                        <div class="font-medium text-white whitespace-nowrap">
+                            {{ user.email }}
+                        </div>
+                        <div class=" text-right flex justify-between mt-1">
+                            <button @click="edit(user)" class="bg-blue-700 text-white py-1 px-2 rounded-full">
+                                Modifier
+                            </button>
+                            <button @click="deleteConfirm(user)" class="bg-red-700 text-white py-1 px-2 rounded-full">
+                                Supprimer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+        </div>
     </div>
+
         <Dialog
             v-if="confirm"
             :user="user"
@@ -99,7 +143,7 @@ export default {
                 this.$notify({
                     title: "Succès",
                     text: "Modification effectuée avec succès !",
-                    type: 'info',
+                    type: 'success',
                 });
             } else {
                 this.$notify({

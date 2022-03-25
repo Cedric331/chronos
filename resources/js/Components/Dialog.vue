@@ -1,9 +1,8 @@
 <template>
 
-    <div class="overflow-y-auto w-full overflow-x-hidden z-50 flex justify-center items-center md:inset-0 h-modal sm:h-full" role="dialog">
+        <div class="fixed z-10 inset-0 w-full overflow-y-auto flex justify-center items-center" aria-labelledby="delete" role="dialog" aria-modal="true">
         <div class="relative px-4 w-full max-w-md h-full md:h-auto">
-            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-
+            <div @click="this.$emit('closeConfirm')" class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
             <div class="relative bg-white rounded-lg shadow">
 
                 <div class="flex justify-end p-2">

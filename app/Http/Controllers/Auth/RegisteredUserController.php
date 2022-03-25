@@ -28,7 +28,7 @@ class RegisteredUserController extends Controller
         return Inertia::render('Auth/Register', [
             'name' => $request->name,
             'email' => $request->email,
-            'hub' => $request->hub,
+            'hub_id' => $request->hub,
             'status' => $request->status,
             'signature' => $url,
         ]);
@@ -46,7 +46,7 @@ class RegisteredUserController extends Controller
     {
         $request['name'] = Crypt::decrypt($request->name);
         $request['email'] = Crypt::decrypt($request->email);
-        $request['hub'] = Crypt::decrypt($request->hub);
+        $request['hub'] = Crypt::decrypt($request->hub_id);
         if ($request->status) {
             $request['status'] = Crypt::decrypt($request->status);
         }
