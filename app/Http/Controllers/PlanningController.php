@@ -125,6 +125,7 @@ class PlanningController extends Controller
                     $debutJournee = 'OFF';
                     $finJournee = 'OFF';
 
+
                     if (strpos($horaires, '-') && !empty($horaires)) {
                         $horaire = explode('-', $horaires);
                         $debutJournee = $horaire[0];
@@ -178,9 +179,17 @@ class PlanningController extends Controller
 
         $allPlannings = $collect->toArray();
 
+        $saveCollaborateurs = collect();
         $collaborateurs = Collaborateur::where('hub_id', Auth::user()->hub_id)->get();
         foreach ($collaborateurs as $item) {
+
             $users = User::where('collaborateur_id', $item->id)->get();
+
+            $saveCollaborateurs->push([
+                'name' => $item->name,
+                'users' => $users
+            ]);
+
             foreach ($users as $user) {
                 $user->update([
                     'collaborateur_id' => null
@@ -189,6 +198,8 @@ class PlanningController extends Controller
             $item->dates()->detach();
             $item->delete();
         }
+
+        $hub = Hub::find(Auth::user()->hub_id);
 
         foreach ($allPlannings as $plannings) {
             foreach ($plannings as $key => $values) {
@@ -199,9 +210,8 @@ class PlanningController extends Controller
                 foreach ($values as $value) {
                     $collaborateur = Collaborateur::firstOrCreate([
                         'name' => $value['collaborateur'],
-                        'hub_id' => Auth::user()->hub_id,
+                        'hub_id' => $hub->id,
                     ]);
-                    $hub = Hub::find(Auth::user()->hub_id);
 
                     $hub->dates()->attach($date, [
                         'collaborateur_id' => $collaborateur->id,
@@ -211,7 +221,27 @@ class PlanningController extends Controller
             }
         }
 
-        return response()->json(true);
+        foreach ($saveCollaborateurs as $save) {
+
+            $collaborateur = Collaborateur::where('hub_id', Auth::user()->hub_id)
+                ->where('name', $save['name'])
+                ->first();
+
+            if ($collaborateur) {
+                foreach ($save['users'] as $user) {
+                    $user->update([
+                        'collaborateur_id' => $collaborateur->id
+                    ]);
+                }
+            }
+        }
+
+        date_default_timezone_set('Europe/Paris');
+        $hub->update([
+            'import_horodatage' => date('Y-m-d H:i:s', strtotime('now'))
+        ]);
+
+        return $hub->horodatage();
     }
 
     /**
@@ -308,7 +338,9 @@ class PlanningController extends Controller
            }
           }
         }
+
     $collect = $collect->unique();
+
             return response()->json([
                 'planning' => $collect->toArray(),
                 'date' => [
@@ -320,6 +352,50 @@ class PlanningController extends Controller
                 ]
             ]);
     }
+
+//    /**
+//     * @param Request $request
+//     * @return \Illuminate\Http\JsonResponse
+//     */
+//    public function loadPlanningSemaine (Request $request): \Illuminate\Http\JsonResponse
+//    {
+//        $collaborateurs = Collaborateur::with(['dates' => function ($query) use ($request) {
+//            $query->whereIn('dates.id', $request->date);
+//        }
+//        ])->where('hub_id', Auth::user()->hub_id)
+//          ->get();
+//
+//        $getDate = Date::select('date')->find($request->date);
+//        $showDate = $this->formatDateFr($getDate->date);
+//
+//        $collect = collect();
+//        if ($collaborateurs) {
+//            foreach ($collaborateurs as $collaborateur) {
+//                foreach ($collaborateur->dates as $date) {
+//                    $horaires = $this->getHoraire($date->pivot->horaire);
+//                    $object = [
+//                        'collaborateur' => $collaborateur->name,
+//                        'horaires' => $horaires,
+//                        'type' => $this->getType($date->pivot->horaire, $horaires)
+//                    ];
+//                    $collect->push($object);
+//                }
+//            }
+//        }
+//
+//        $collect = $collect->unique();
+//
+//        return response()->json([
+//            'planning' => $collect->toArray(),
+//            'date' => [
+//                'id' => $request->date,
+//                'format' => $showDate,
+//                'previous' => $request->previous,
+//                'next' => $request->next,
+//                'index' => $request->index
+//            ]
+//        ]);
+//    }
 
     /**
      * @param $data

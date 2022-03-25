@@ -1,8 +1,8 @@
 <template>
     <notifications position="bottom right" />
     <div>
-        <div class="min-h-screen bg-gray-50">
-            <nav class="bg-white border-b border-gray-100">
+        <div class="min-h-screen bg-white">
+            <nav class="bg-white border-b border-gray-400">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
@@ -17,7 +17,7 @@
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <BreezeNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Information sur le Hub
+                                    Gestion du Hub
                                 </BreezeNavLink>
                                 <BreezeNavLink :href="route('planning')" :active="route().current('planning')" as="button">
                                     Planning
@@ -32,10 +32,10 @@
                         </div>
 
                         <div class="flex">
-                            <div v-if="$page.props.auth.user.coordinateur" class="flex items-center sm:ml-6">
+                            <div v-if="this.$page.props.auth.user.coordinateur" class="flex items-center sm:ml-6">
                                 <div class="ml-3 relative">
-                                    <select @change="updateHub(hub.id)" v-model="hub" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0" style="border-width: 0">
-                                        <option v-for="hub in $page.props.hubs" :key="hub.id" :value="hub" :selected="$page.props.hub.id === hub.id">
+                                    <select v-model="selected" class="block w-full text-sm leading-4 font-medium rounded-md rounded transition ease-in-out m-0" style="border-width: 0">
+                                        <option v-for="hub in this.$page.props.hubs" :key="hub.id" :value="hub.id">
                                             {{ hub.ville }}
                                         </option>
                                     </select>
@@ -91,7 +91,7 @@
                 <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1">
                         <BreezeResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Information sur le Hub
+                            Gestion du Hub
                         </BreezeResponsiveNavLink>
                         <BreezeResponsiveNavLink :href="route('planning')" :active="route().current('planning')" as="button">
                             Planning
@@ -156,8 +156,13 @@ export default {
     data() {
         return {
             showingNavigationDropdown: false,
-            hub: this.$page.props.hub
+            selected: this.$page.props.hub.id
         }
+    },
+    watch: {
+      selected: function () {
+          this.updateHub(this.selected)
+      }
     },
     methods: {
         updateHub (id) {

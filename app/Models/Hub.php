@@ -16,8 +16,7 @@ class Hub extends Model
      */
     protected $fillable = [
         'ville',
-        'abonne_freebox',
-        'abonne_mobile',
+        'import_horodatage'
     ];
 
     public function dates (): \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -30,8 +29,13 @@ class Hub extends Model
         return $this->belongsToMany(Collaborateur::class, 'collaborateur_dates');
     }
 
-    public function members ()
+    public function members (): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(User::class, 'hub_id');
+    }
+
+    public function horodatage (): ?string
+    {
+            return $this->import_horodatage ? date('d/m/Y \à H\hi', strtotime($this->import_horodatage)) : null;
     }
 }

@@ -1,6 +1,6 @@
 <template>
     <notifications position="bottom right" />
-    <Head title="Tableau de bord" />
+    <Head title="Gestion du HUB" />
     <Loading
         :show="show"
         :loader-class="loadClass"
@@ -12,53 +12,26 @@
                 <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                     <div class="px-4 py-5 sm:px-6">
                         <h3 class="text-lg leading-6 font-medium text-gray-900">
-                            Information sur le HUB de <b>{{ $page.props.hub.ville }}</b>
+                            Gestion du Hub de <b>{{ $page.props.hub.ville }}</b>
                         </h3>
                     </div>
                     <div class="border-t border-gray-200">
                         <dl>
-                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-500">
-                                    Abonné Mobile
-                                </dt>
-                                <div v-if="$page.props.auth.user.coordinateur">
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                        <input type="number" maxlength="5" minlength="5" v-model="abonne_mobile" @change="update()">
-                                    </dd>
-                                </div>
-                                <div v-else>
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                        {{ abonne_mobile }}
-                                    </dd>
-                                </div>
-                            </div>
-                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-500">
-                                    Abonné Freebox
-                                </dt>
-                                <div v-if="$page.props.auth.user.coordinateur">
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                        <input type="number" maxlength="5" minlength="5" v-model="abonne_freebox" @change="update()">
-                                    </dd>
-                                </div>
-                                <div v-else>
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                        {{ abonne_freebox }}
-                                    </dd>
-                                </div>
-                            </div>
-                            <div v-if="$page.props.auth.user.coordinateur" class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <div v-if="$page.props.auth.user.coordinateur" class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
                                 <dt class="text-sm font-medium text-gray-500">
                                     Importé Planning (Excel)
                                 </dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                <dd class="text-sm text-gray-900 mt-3 sm:col-span-2">
                                     <form @submit.prevent="confirmImport" enctype="multipart/form-data">
-                                        <input type="file" @change="onChange" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150" required/>
-                                        <button type="submit" class="ml-5 bg-white sm:mt-5 py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        <input type="file" @change="onChange" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" class="inline-flex items-center w-full md:w-auto px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150" required/>
+                                        <button type="submit" class="ml-0 md:ml-5 mt-3 md:mt-0 w-full md:w-auto bg-black text-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium hover:bg-white hover:text-black">
                                             Importer
                                         </button>
                                     </form>
                                 </dd>
+                            </div>
+                            <div v-if="horodatage" class="text-sm italic font-light text-slate-400 flex justify-center w-auto">
+                                <p>Dernier import effectué le {{ horodatage }}</p>
                             </div>
                         </dl>
                     </div>
@@ -84,28 +57,24 @@ export default {
     },
     data() {
         return {
-            abonne_freebox: this.$page.props.hub.abonne_freebox,
-            abonne_mobile: this.$page.props.hub.abonne_mobile,
             file: null,
             show: false,
             confirModal: false,
-            label: 'Chargement en cours...',
+            label: 'Import du fichier en cours...',
             loadClass: 'load-class'
         }
     },
+    computed: {
+        horodatage: {
+            get () {
+                return this.$page.props.hub.horodatage
+            },
+            set (value) {
+                this.$page.props.hub.horodatage = value
+            }
+        }
+    },
     methods: {
-        update () {
-            axios.patch('hub/' + this.$page.props.hub.id, {
-                abonne_freebox: this.abonne_freebox,
-                abonne_mobile: this.abonne_mobile,
-            }).then(() => {
-                this.$notify({
-                    title: "Succès",
-                    text: "Modification du hub effectuée avec succès!",
-                    type: 'success',
-                });
-            })
-        },
         confirmImport () {
           this.confirModal = true
         },
@@ -128,8 +97,9 @@ export default {
             }
 
             axios.post('import/hub/' + this.$page.props.hub.id, data, config)
-                .then(() => {
+                .then(response => {
                     this.show = false
+                    this.horodatage = response.data
                     this.$notify({
                         title: "Succès",
                         text: "Le fichier est bien importé!",
