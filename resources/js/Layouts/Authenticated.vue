@@ -16,14 +16,14 @@
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <BreezeNavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                                <BreezeNavLink v-if="$page.props.auth.user.coordinateur" :href="route('dashboard')" :active="route().current('dashboard')">
                                     Gestion du Hub
-                                </BreezeNavLink>
-                                <BreezeNavLink :href="route('planning')" :active="route().current('planning')" as="button">
-                                    Planning
                                 </BreezeNavLink>
                                 <BreezeNavLink v-if="$page.props.auth.user.coordinateur" :href="route('equipe')" :active="route().current('equipe')" as="button">
                                     Gestion équipe
+                                </BreezeNavLink>
+                                <BreezeNavLink :href="route('planning')" :active="route().current('planning')" as="button">
+                                    Planning
                                 </BreezeNavLink>
                                 <BreezeNavLink v-if="$page.props.auth.user.admin" :href="route('administration')" :active="route().current('administration')" as="button">
                                     Administration
@@ -35,7 +35,7 @@
                             <div v-if="this.$page.props.auth.user.coordinateur" class="flex items-center sm:ml-6">
                                 <div class="ml-3 relative">
                                     <select v-model="selected" class="block w-full text-sm leading-4 font-medium rounded-md rounded transition ease-in-out m-0" style="border-width: 0">
-                                        <option v-for="hub in this.$page.props.hubs" :key="hub.id" :value="hub.id">
+                                        <option v-for="hub in this.$page.props.hubs" :key="hub.id" :value="hub.ville">
                                             {{ hub.ville }}
                                         </option>
                                     </select>
@@ -43,7 +43,7 @@
                             </div>
                             <div v-else class="flex items-center sm:ml-6">
                                 <p class="block w-full text-sm font-medium rounded-md text-gray-500 bg-white m-0">
-                                    {{ hub.ville }}
+                                    {{ selected }}
                                 </p>
                             </div>
 
@@ -90,14 +90,14 @@
                 <!-- Responsive Navigation Menu -->
                 <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1">
-                        <BreezeResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                        <BreezeResponsiveNavLink v-if="$page.props.auth.user.coordinateur" :href="route('dashboard')" :active="route().current('dashboard')">
                             Gestion du Hub
-                        </BreezeResponsiveNavLink>
-                        <BreezeResponsiveNavLink :href="route('planning')" :active="route().current('planning')" as="button">
-                            Planning
                         </BreezeResponsiveNavLink>
                         <BreezeResponsiveNavLink v-if="$page.props.auth.user.coordinateur" :href="route('equipe')" :active="route().current('equipe')" as="button">
                             Gestion équipe
+                        </BreezeResponsiveNavLink>
+                        <BreezeResponsiveNavLink :href="route('planning')" :active="route().current('planning')" as="button">
+                            Planning
                         </BreezeResponsiveNavLink>
                         <BreezeResponsiveNavLink v-if="$page.props.auth.user.admin" :href="route('administration')" :active="route().current('administration')" as="button">
                             Administration
@@ -156,12 +156,16 @@ export default {
     data() {
         return {
             showingNavigationDropdown: false,
-            selected: this.$page.props.hub.id
+            selected: this.$page.props.hub.ville
         }
     },
     watch: {
       selected: function () {
-          this.updateHub(this.selected)
+          this.$page.props.hubs.forEach(item => {
+                  if (item.ville === this.selected) {
+                      this.updateHub(item.id)
+                  }
+              })
       }
     },
     methods: {

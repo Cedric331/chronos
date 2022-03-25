@@ -19,7 +19,7 @@
                         <dl>
                             <div v-if="$page.props.auth.user.coordinateur" class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
                                 <dt class="text-sm font-medium text-gray-500">
-                                    Importé Planning (Excel)
+                                    Importer Planning (Excel)
                                 </dt>
                                 <dd class="text-sm text-gray-900 mt-3 sm:col-span-2">
                                     <form @submit.prevent="confirmImport" enctype="multipart/form-data">

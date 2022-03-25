@@ -48,7 +48,7 @@ export default {
     props: {
         name: String,
         email: String,
-        hub: String,
+        hub_id: String,
         status: String,
         signature: String,
     },
@@ -64,7 +64,7 @@ export default {
             axios.post(this.signature , {
                 name: this.name,
                 email: this.email,
-                hub: this.hub,
+                hub_id: this.hub_id,
                 status: this.status,
                 password: this.password,
                 password_confirmation: this.password_confirmation,
