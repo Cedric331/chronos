@@ -21285,10 +21285,11 @@ __webpack_require__.r(__webpack_exports__);
 
       this.refreshData();
     },
-    sendError: function sendError() {
+    sendError: function sendError(data) {
+      var error = data['errors']['email'][0] ? data['errors']['email'][0] : data['errors']['name'][0];
       this.$notify({
         title: "Erreur",
-        text: "Erreur lors de l\'envoi de l\'invitation !",
+        text: error,
         type: 'danger'
       });
     },
@@ -24684,8 +24685,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         onRefresh: _cache[2] || (_cache[2] = function ($event) {
           return $options.refreshData();
         }),
-        onError: _cache[3] || (_cache[3] = function ($event) {
-          return $options.sendError();
+        onError: _cache[3] || (_cache[3] = function (data) {
+          return $options.sendError(data);
         }),
         onUpdate: _cache[4] || (_cache[4] = function (data) {
           return $options.update(data);

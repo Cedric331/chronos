@@ -86,7 +86,7 @@
             :isUpdate="isUpdate"
             :userUpdate="user"
             @refresh="refreshData()"
-            @error="sendError()"
+            @error="data => sendError(data)"
             @update="data => update(data)"
             @closeModal="data => this.closeModal(data)">
         </ModalUser>
@@ -154,10 +154,11 @@ export default {
             }
             this.refreshData()
         },
-        sendError () {
+        sendError (data) {
+            const error = data['errors']['email'][0] ? data['errors']['email'][0] : data['errors']['name'][0]
             this.$notify({
                 title: "Erreur",
-                text: "Erreur lors de l\'envoi de l\'invitation !",
+                text: error,
                 type: 'danger',
             });
         },
