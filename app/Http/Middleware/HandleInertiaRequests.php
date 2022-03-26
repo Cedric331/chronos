@@ -36,7 +36,18 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'auth.user' => fn () => $request->user()
-                ? $request->user()->only('id', 'name', 'email', 'collaborateur_id')
+                ? $request->user()->only(
+                    'id',
+                    'name',
+                    'email',
+                    'collaborateur_id',
+                    'status',
+                    'color_travaille',
+                    'color_conge',
+                    'color_repos',
+                    'color_technicien',
+                    'color_texte',
+                    'hub_id')
                 : null,
             'auth.user.coordinateur' => fn () => $request->user()
                 ? $request->user()->isCoordinateur() || $request->user()->isAdmin()

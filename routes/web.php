@@ -26,3 +26,4 @@ require __DIR__.'/hub.php';
 require __DIR__.'/equipe.php';
 require __DIR__.'/admin.php';
 require __DIR__.'/planning.php';
+require __DIR__.'/parametre.php';

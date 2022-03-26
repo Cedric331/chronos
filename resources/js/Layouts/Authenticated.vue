@@ -63,6 +63,9 @@
                                     </template>
 
                                     <template #content>
+                                        <BreezeDropdownLink style="z-index: 9999" :href="route('parametre')" method="get" as="button">
+                                            Paramètres
+                                        </BreezeDropdownLink>
                                         <BreezeDropdownLink :href="route('user.update')" as="button">
                                             Modifier mon mot de passe
                                         </BreezeDropdownLink>

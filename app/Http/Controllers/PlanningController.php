@@ -97,8 +97,6 @@ class PlanningController extends Controller
                 if  (strtotime(date('l d F Y', $oldTime)) === strtotime(date("l d F Y", $unix_date)) ||
                     strtotime(date('l d F Y', $oldTime)) < strtotime(date("l d F Y", $unix_date))) {
 
-//                if (strtotime(date("l d F Y", $unix_date)) === strtotime(date('l d F Y', strtotime(now()))) ||
-//                    strtotime(date("l d F Y", $unix_date)) > strtotime(date('l d F Y', strtotime(now())))) {
 
                 $numberMembers = $i;
                 $members = collect();
@@ -168,7 +166,6 @@ class PlanningController extends Controller
                 $collect->push($object);
             }
         }
-//    }
 }
         $spreadsheet->__destruct();
         $spreadsheet = null;
