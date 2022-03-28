@@ -27,32 +27,35 @@
                             <div class="flex items-center justify-center">
                                 <div class="grid gap-8 mt-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 
-                                    <div v-for="planning in showDates" :key="planning.date" :class="[planning.type === 'CP' ? 'bg-blue-200' : '', planning.type === 'Iti' ? 'bg-red-200' : '',  planning.type !== 'Iti' &&  planning.type !== 'CP' ? 'bg-green-100' : '']" class="w-full rounded-md shadow-md shadow-dark">
+                                    <div v-for="planning in showDates" :key="planning.date" :style="colorPlanning(planning)" class="w-full rounded-md shadow-md shadow-dark">
                                         <div class="p-4">
                                             <div class="flex justify-between">
                                                 <div>
-                                                    <p class="font-semibold text-lg py-2">{{ planning.collaborateur }}</p>
+                                                    <p class="font-semibold text-sm py-1" :style="texte">{{ planning.collaborateur }}</p>
                                                 </div>
                                             </div>
                                             <div v-if="planning.horaires">
-                                                <p class="font-light text-gray-700 text-justify line-clamp-3">
+                                                <p class="font-light text-justify line-clamp-3" :style="texte">
+                                                    {{ planning.horaires.teletravail ? 'Télétravail' : 'Hub'}}
+                                                </p>
+                                                <p class="font-light text-justify line-clamp-3" :style="texte">
                                                     Début : {{ planning.horaires.debut_journee }}
                                                 </p>
                                                 <div v-if="planning.horaires.debut_pause">
-                                                    <p class="font-light text-gray-700 text-justify line-clamp-3">
+                                                    <p class="font-light text-justify line-clamp-3" :style="texte">
                                                         Pause Déj: {{ planning.horaires.debut_pause }}
                                                     </p>
-                                                    <p class="font-light text-gray-700 text-justify line-clamp-3">
+                                                    <p class="font-light text-justify line-clamp-3" :style="texte">
                                                         Fin Déj : {{ planning.horaires.fin_pause }}
                                                     </p>
                                                 </div>
-                                                <p class="font-light text-gray-700 text-justify line-clamp-3">
+                                                <p class="font-light text-justify line-clamp-3" :style="texte">
                                                     Fin : {{ planning.horaires.fin_journee }}
                                                 </p>
                                             </div>
                                             <div v-else>
-                                                <p class="font-light text-gray-700 text-justify line-clamp-3">
-                                                    {{planning.type === 'CP' ? 'Congés payés' : 'Non planifié'}}
+                                                <p class="font-light text-justify line-clamp-3" :style="texte">
+                                                    {{planning.type === 'CP' ? 'Congés payés' : 'Repos'}}
                                                 </p>
                                             </div>
                                         </div>
@@ -79,7 +82,36 @@ export default {
         showDates: Array,
         datePlanning: Object
     },
+    data () {
+        return {
+            texte: this.colorTexte()
+        }
+    },
     methods: {
+        colorTexte () {
+            return this.$page.props.auth.user.color_texte ? 'color: ' + this.$page.props.auth.user.color_texte : '#000000'
+        },
+        colorPlanning (planning) {
+            var colors = null
+
+            if (planning.type === 'CP') {
+                !this.$page.props.auth.user.color_conge ?  colors = 'background-color: #bfdbfe' : colors = 'background-color: ' + this.$page.props.auth.user.color_conge
+            }
+
+            if (planning.type === 'Iti') {
+                !this.$page.props.auth.user.color_technicien ? colors = 'background-color: #fecaca' : colors = 'background-color: ' + this.$page.props.auth.user.color_technicien
+            }
+
+            if (planning.type !== 'Iti' &&  planning.type !== 'CP' && !planning.today) {
+                !this.$page.props.auth.user.color_travaille ? colors = 'background-color: #dcfce7' : colors = 'background-color: ' + this.$page.props.auth.user.color_travaille
+            }
+
+            if (!planning.horaires && planning.type !== 'CP') {
+                !this.$page.props.auth.user.color_repos ? colors = 'background-color: #a5f3fc' : colors = 'background-color: ' + this.$page.props.auth.user.color_repos
+            }
+
+            return colors
+        },
         closeModal () {
             this.$emit('closeModal')
         },

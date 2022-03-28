@@ -757,6 +757,10 @@ select {
   margin-top: 2rem;
   margin-bottom: 2rem;
 }
+.my-12 {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
 .ml-3 {
   margin-left: 0.75rem;
 }
@@ -930,6 +934,9 @@ select {
 }
 .h-1 {
   height: 0.25rem;
+}
+.h-auto {
+  height: auto;
 }
 .min-h-screen {
   min-height: 100vh;
@@ -1200,6 +1207,10 @@ select {
 .rounded-r-md {
   border-top-right-radius: 0.375rem;
   border-bottom-right-radius: 0.375rem;
+}
+.rounded-l-lg {
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
 }
 .border {
   border-width: 1px;
@@ -1633,6 +1644,10 @@ select {
   padding-top: 4rem;
   padding-bottom: 4rem;
 }
+.px-8 {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
 .pt-8 {
   padding-top: 2rem;
 }
@@ -1699,6 +1714,9 @@ select {
 .text-justify {
   text-align: justify;
 }
+.align-baseline {
+  vertical-align: baseline;
+}
 .align-top {
   vertical-align: top;
 }
@@ -1707,6 +1725,9 @@ select {
 }
 .font-sans {
   font-family: Nunito, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+.font-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 .text-sm {
   font-size: 0.875rem;
@@ -1916,6 +1937,10 @@ select {
   --tw-text-opacity: 1;
   color: rgb(192 132 252 / var(--tw-text-opacity));
 }
+.text-blue-500 {
+  --tw-text-opacity: 1;
+  color: rgb(59 130 246 / var(--tw-text-opacity));
+}
 .underline {
   -webkit-text-decoration-line: underline;
           text-decoration-line: underline;
@@ -2112,6 +2137,10 @@ select {
   --tw-bg-opacity: 1;
   background-color: rgb(156 163 175 / var(--tw-bg-opacity));
 }
+.hover\:bg-red-700:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(185 28 28 / var(--tw-bg-opacity));
+}
 .hover\:from-pink-500:hover {
   --tw-gradient-from: #ec4899;
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgb(236 72 153 / 0));
@@ -2153,6 +2182,10 @@ select {
 .hover\:text-white:hover {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+.hover\:text-blue-800:hover {
+  --tw-text-opacity: 1;
+  color: rgb(30 64 175 / var(--tw-text-opacity));
 }
 .hover\:underline:hover {
   -webkit-text-decoration-line: underline;
@@ -2890,6 +2923,10 @@ select {
 }
 @media (min-width: 1024px) {
 
+  .lg\:block {
+    display: block;
+  }
+
   .lg\:flex {
     display: flex;
   }
@@ -2910,6 +2947,14 @@ select {
     width: 50%;
   }
 
+  .lg\:w-11\/12 {
+    width: 91.666667%;
+  }
+
+  .lg\:w-1\/2 {
+    width: 50%;
+  }
+
   .lg\:max-w-3xl {
     max-width: 48rem;
   }
@@ -2924,6 +2969,11 @@ select {
 
   .lg\:justify-around {
     justify-content: space-around;
+  }
+
+  .lg\:rounded-l-none {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
   }
 
   .lg\:bg-red-500 {
@@ -2992,6 +3042,10 @@ select {
 
   .xl\:w-1\/3 {
     width: 33.333333%;
+  }
+
+  .xl\:w-3\/4 {
+    width: 75%;
   }
 
   .xl\:max-w-sm {

@@ -11,7 +11,7 @@
                     <div class="sm:flex sm:items-start">
                         <section class="container p-6 mx-auto bg-white">
                             <h2 class="font-bold text-center text-3xl text-gray-800 md:text-2xl mb-5">
-                                Modification du planning de {{ collaborateur.name }}
+                                Modification du planning de {{ collaborateur.name }} {{radio === '1'}}
                             </h2>
                             <div v-if="errors" class="bg-red-100 rounded-lg py-5 px-6 mb-4 tex t-base text-red-700 mb-3" role="alert">
                                 {{ errors }}
@@ -150,10 +150,10 @@ export default {
             this.$emit('closeModal', bool)
         },
         submit () {
-            if (this.valideData()) {
                 this.debut_pause === 'Pas de pause' ? this.debut_pause = null : ''
                 axios.patch('planning/update', {
                     selected: this.selected,
+                    user: this.collaborateur,
                     planification: this.radio,
                     isTech: this.isTech,
                     debut_journee: this.debut_journee,
@@ -163,12 +163,18 @@ export default {
                     teletravail: this.teletravail,
                 })
                 .then(() => {
+                    this.radio = null
+                    this.isTech = false
+                    this.debut_journee = null
+                    this.debut_pause = 'Pas de pause'
+                    this.fin_pause = null
+                    this.fin_journee = null
+                    this.teletravail = false
                     this.closeModal(true)
                 })
                 .catch(error => {
                     console.log(error)
                 })
-            }
         },
         valideData () {
             this.errors = null

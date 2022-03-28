@@ -66,7 +66,7 @@
                                         <BreezeDropdownLink style="z-index: 9999" :href="route('parametre')" method="get" as="button">
                                             Paramètres
                                         </BreezeDropdownLink>
-                                        <BreezeDropdownLink :href="route('user.update')" as="button">
+                                        <BreezeDropdownLink style="z-index: 9999" :href="route('user.update')" method="get" as="button">
                                             Modifier mon mot de passe
                                         </BreezeDropdownLink>
                                         <BreezeDropdownLink style="z-index: 9999" :href="route('logout')" method="post" as="button">
@@ -115,6 +115,12 @@
                         </div>
 
                         <div class="mt-3 space-y-1">
+                            <BreezeResponsiveNavLink :href="route('parametre')" method="get" as="button">
+                                Paramètres
+                            </BreezeResponsiveNavLink>
+                            <BreezeResponsiveNavLink :href="route('user.update')" as="button">
+                                Modifier mon mot de passe
+                            </BreezeResponsiveNavLink>
                             <BreezeResponsiveNavLink :href="route('logout')" method="post" as="button">
                                 Déconnexion
                             </BreezeResponsiveNavLink>

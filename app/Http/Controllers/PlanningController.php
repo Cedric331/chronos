@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Planning\importHubRequest;
+use App\Mail\ModificationHoraire;
 use App\Models\Collaborateur;
 use App\Models\CollaborateurDate;
 use App\Models\Date;
@@ -12,6 +13,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -507,6 +509,7 @@ class PlanningController extends Controller
         if ($request->isTech) {
             $type = 'Iti1';
         }
+
         foreach ($request->selected as $selected) {
            $collaborateurDate = CollaborateurDate::find($selected['horaire_id']);
             $horaires = [
@@ -521,6 +524,43 @@ class PlanningController extends Controller
            $collaborateurDate->horaire = json_encode($horaires);
            $collaborateurDate->save();
         }
+
+        $data = $request;
+
+        $this->sendMailPlanningUpdate($data, $type);
+
         return response()->json(true);
+    }
+
+    /**
+     * @param $data
+     * @param $type
+     */
+    protected function sendMailPlanningUpdate ($data, $type)
+    {
+        $collect = collect();
+
+        foreach ($data->selected as $item) {
+
+            $collect->push([
+                'date_id' => $item['date_id'],
+                'date' => $item['date'],
+                'debut_journee' => $data->debut_journee,
+                'debut_pause' => $data->debut_pause,
+                'fin_pause' => $data->fin_pause,
+                'fin_journee' => $data->fin_journee,
+                'teletravail' => $data->teletravail,
+                'type' => $type
+            ]);
+        }
+
+        $user = User::where('name', $data->user['name'])
+        ->where('hub_id', $data->user['hub_id'])
+        ->first();
+
+        $collect = $collect->sortBy('date_id');
+
+        Mail::to($user->email)
+            ->send(new ModificationHoraire($collect->toArray()));
     }
 }

@@ -30,7 +30,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="user in users" :key="user.id" class="border-b bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <tr v-for="user in users" :key="user.id" class="border-b bg-gray-800">
                                 <th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap">
                                     {{ user.name }}
                                 </th>
