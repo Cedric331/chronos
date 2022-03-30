@@ -527,7 +527,9 @@ class PlanningController extends Controller
 
         $data = $request;
 
-        $this->sendMailPlanningUpdate($data, $type);
+        if ($request->sendMail) {
+            $this->sendMailPlanningUpdate($data, $type);
+        }
 
         return response()->json(true);
     }

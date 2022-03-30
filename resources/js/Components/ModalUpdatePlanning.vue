@@ -11,7 +11,7 @@
                     <div class="sm:flex sm:items-start">
                         <section class="container p-6 mx-auto bg-white">
                             <h2 class="font-bold text-center text-3xl text-gray-800 md:text-2xl mb-5">
-                                Modification du planning de {{ collaborateur.name }} {{radio === '1'}}
+                                Modification du planning de {{ collaborateur.name }}
                             </h2>
                             <div v-if="errors" class="bg-red-100 rounded-lg py-5 px-6 mb-4 tex t-base text-red-700 mb-3" role="alert">
                                 {{ errors }}
@@ -89,17 +89,26 @@
                     </div>
                 </div>
                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button @click="submit()" type="button" class="mt-3 w-full inline-flex justify-center bg-blue-500 rounded-md border shadow-sm px-4 py-2 text-base font-medium text-white sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Valider</button>
+                    <button @click="this.modalMail = true" type="button" class="mt-3 w-full inline-flex justify-center bg-blue-500 rounded-md border shadow-sm px-4 py-2 text-base font-medium text-white sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Valider</button>
                     <button @click="closeModal()" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Fermer</button>
                 </div>
             </div>
         </div>
     </div>
+    <ModalNotificationMail
+        v-if="modalMail"
+        :collaborateur="collaborateur"
+        @validated="submit(true)"
+        @closeConfirm="this.modalMail = false; submit(false)">
+    </ModalNotificationMail>
 </template>
 
 <script>
+import ModalNotificationMail from "@/Components/ModalNotificationMail";
 export default {
     name: "ModalUpdatePlanning",
+    components: {ModalNotificationMail},
+    emits: ["closeModal"],
     props: {
         selected: Array,
         collaborateur: Object
@@ -142,16 +151,19 @@ export default {
             debut_pause: 'Pas de pause',
             fin_pause: null,
             fin_journee: null,
-            teletravail: false
+            teletravail: false,
+            modalMail: false
         }
     },
     methods: {
         closeModal (bool = false) {
             this.$emit('closeModal', bool)
         },
-        submit () {
+        submit (sendMail) {
+            if (this.valideData) {
                 this.debut_pause === 'Pas de pause' ? this.debut_pause = null : ''
                 axios.patch('planning/update', {
+                    sendMail: sendMail,
                     selected: this.selected,
                     user: this.collaborateur,
                     planification: this.radio,
@@ -162,19 +174,20 @@ export default {
                     fin_journee: this.fin_journee,
                     teletravail: this.teletravail,
                 })
-                .then(() => {
-                    this.radio = null
-                    this.isTech = false
-                    this.debut_journee = null
-                    this.debut_pause = 'Pas de pause'
-                    this.fin_pause = null
-                    this.fin_journee = null
-                    this.teletravail = false
-                    this.closeModal(true)
-                })
-                .catch(error => {
-                    console.log(error)
-                })
+                    .then(() => {
+                        this.radio = null
+                        this.isTech = false
+                        this.debut_journee = null
+                        this.debut_pause = 'Pas de pause'
+                        this.fin_pause = null
+                        this.fin_journee = null
+                        this.teletravail = false
+                        this.closeModal(true)
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+            }
         },
         valideData () {
             this.errors = null

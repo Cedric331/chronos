@@ -21,7 +21,7 @@
             @if ($item['type'] !== 'CP' && $item['debut_journee'] !== null)
             <div>
                     @if($item['type'] !== 'Iti1')
-                    <p>{{ $item['teletravail'] ? 'Télétravail' : 'Hub'}}</p>
+                    <b>{{ $item['teletravail'] ? 'Télétravail' : 'Hub'}}</b>
                     @endif
                 <br>
                 <p>Début de Journée : {{ $item['debut_journee'] }}</p>

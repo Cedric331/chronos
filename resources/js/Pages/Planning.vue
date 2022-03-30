@@ -61,7 +61,11 @@
             @refreshViewDate="(data, index) => this.viewDate(data, index)"
             @closeModal="this.showPlanning = false">
         </ModalPlanning>
-        <ModalUpdatePlanning v-if="updatePlanning && $page.props.auth.user.coordinateur" :collaborateur="member" :selected="this.selectedPlanning" @closeModal="bool => { this.closeUpdate(bool) }"></ModalUpdatePlanning>
+        <ModalUpdatePlanning v-if="updatePlanning && $page.props.auth.user.coordinateur"
+                             :collaborateur="member"
+                             :selected="this.selectedPlanning"
+                             @closeModal="bool => { this.closeUpdate(bool) }">
+        </ModalUpdatePlanning>
     </BreezeAuthenticatedLayout>
 </template>
 
