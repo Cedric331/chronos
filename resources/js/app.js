@@ -4,6 +4,7 @@ import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 import Notifications from '@kyvg/vue3-notification';
+import VueTailwind from 'vue-tailwind/dist/full'
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
