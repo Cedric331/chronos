@@ -87,4 +87,20 @@ class AdminController extends Controller
 
         return response()->json(true);
     }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function checkUpdate (): \Illuminate\Http\JsonResponse
+    {
+        $users = User::where('check_update', true)->get();
+
+        foreach ($users as $user) {
+            $user->update([
+                'check_update' => false
+            ]);
+        }
+
+        return response()->json(true);
+    }
 }

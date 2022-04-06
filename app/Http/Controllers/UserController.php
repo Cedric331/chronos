@@ -62,4 +62,18 @@ class UserController extends Controller
 
         return ControllerResponse::update($update);
     }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function checkUpdate (): \Illuminate\Http\JsonResponse
+    {
+        $user = User::find(Auth::id());
+
+        $user->update([
+            'check_update' => true
+        ]);
+
+        return response()->json(true);
+    }
 }

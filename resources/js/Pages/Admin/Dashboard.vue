@@ -35,12 +35,20 @@
                             <div>
                                 <div class="px-4 py-4 overflow-x-auto">
                                     <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
-                                        <div class="w-full flex items-center justify-between m-5">
+                                        <div class="w-full flex items-center justify-around m-5">
+
                                             <button @click.prevent="createUser()" type="button" class="py-2 px-4 flex justify-center items-center  bg-blue-600 hover:bg-blue-700 text-white transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
-                                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
+                                                <svg width="20" height="20" class="mr-2" fill="currentColor" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
                                                     <path d="M1600 736v192q0 40-28 68t-68 28h-416v416q0 40-28 68t-68 28h-192q-40 0-68-28t-28-68v-416h-416q-40 0-68-28t-28-68v-192q0-40 28-68t68-28h416v-416q0-40 28-68t68-28h192q40 0 68 28t28 68v416h416q40 0 68 28t28 68z"></path>
                                                 </svg>
                                                 Ajouter un membre
+                                            </button>
+
+                                            <button @click.prevent="checkUpdate()" type="button" class="py-2 px-4 flex justify-center items-center  bg-blue-600 hover:bg-blue-700 text-white transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                                                </svg>
+                                                Nouvelle mise à jour
                                             </button>
 
                                         </div>
@@ -143,6 +151,19 @@ export default {
                 text: "Invitation envoyée avec succès !",
                 type: 'success',
             });
+        },
+        checkUpdate () {
+            axios.post('administration/check-update/user')
+            .then(() => {
+                this.$notify({
+                    title: "Succès",
+                    text: "Mise à jour effectuée avec succès !",
+                    type: 'success',
+                });
+            })
+            .catch(error => {
+                console.log(error)
+            })
         }
     },
     beforeMount() {

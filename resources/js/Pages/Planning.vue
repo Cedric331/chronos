@@ -66,6 +66,9 @@
                              :selected="this.selectedPlanning"
                              @closeModal="bool => { this.closeUpdate(bool) }">
         </ModalUpdatePlanning>
+        <CheckUpdate v-if="!$page.props.auth.user.check_update"
+                             @closeModal="this.closeCheck()">
+        </CheckUpdate>
     </BreezeAuthenticatedLayout>
 </template>
 
@@ -76,10 +79,14 @@ import NavbarPlanning from "@/Components/NavbarPlanning.vue";
 import ModalPlanning from "@/Components/ModalPlanning.vue";
 import ModalUpdatePlanning from "@/Components/ModalUpdatePlanning.vue";
 import SelectedDate from "@/Components/SelectedDate.vue";
+import Checkbox from "@/Components/Checkbox";
+import CheckUpdate from "@/Components/CheckUpdate";
 
 export default {
     name: "Planning",
     components: {
+        CheckUpdate,
+        Checkbox,
         ModalPlanning,
         NavbarPlanning,
         ModalUpdatePlanning,
@@ -175,6 +182,9 @@ export default {
                 this.members = response.data.collaborateurs
                 this.allPlannings = response.data.plannings
             })
+        },
+        closeCheck () {
+            this.$page.props.auth.user.check_update = true
         },
         colorTexte () {
             return this.$page.props.auth.user.color_texte ? 'color: ' + this.$page.props.auth.user.color_texte : '#000000'

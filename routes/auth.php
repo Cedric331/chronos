@@ -76,3 +76,6 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
 
 Route::post('/update/favori', [UserController::class, 'updateFavori'])
     ->middleware('auth');
+
+Route::post('/update/check', [UserController::class, 'checkUpdate'])
+    ->middleware('auth');

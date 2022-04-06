@@ -42,6 +42,7 @@ class HandleInertiaRequests extends Middleware
                     'email',
                     'collaborateur_id',
                     'status',
+                    'check_update',
                     'color_travaille',
                     'color_conge',
                     'color_repos',

@@ -18,3 +18,8 @@ Route::post('/administration/create/user', [AdminController::class, 'createUser'
     ->middleware('auth')
     ->middleware('role:Administrateur')
     ->name('administration.user');
+
+Route::post('/administration/check-update/user', [AdminController::class, 'checkUpdate'])
+    ->middleware('auth')
+    ->middleware('role:Administrateur')
+    ->name('administration.check');

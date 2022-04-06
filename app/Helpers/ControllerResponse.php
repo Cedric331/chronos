@@ -21,12 +21,16 @@ class ControllerResponse
      * @param $update
      * @return \Illuminate\Http\JsonResponse
      */
-    static function update($update): \Illuminate\Http\JsonResponse
+    static function update($update, $data = null, $return = false): \Illuminate\Http\JsonResponse
     {
         if ($update) {
-            return response()->json(true);
+            if ($return) {
+                return response()->json($data);
+            } else {
+                return response()->json(true);
+            }
         } else {
-            return response()->json(['error' => 'Erreur lors de la mise à jour des information'], 400);
+            return response()->json(['error' => 'Erreur lors de la mise à jour'], 400);
         }
     }
 

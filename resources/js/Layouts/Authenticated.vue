@@ -25,6 +25,9 @@
                                 <BreezeNavLink :href="route('planning')" :active="route().current('planning')" as="button">
                                     Planning
                                 </BreezeNavLink>
+                                <BreezeNavLink :href="route('lien')" :active="route().current('lien')" as="button">
+                                    Lien
+                                </BreezeNavLink>
                                 <BreezeNavLink v-if="$page.props.auth.user.admin" :href="route('administration')" :active="route().current('administration')" as="button">
                                     Administration
                                 </BreezeNavLink>
@@ -76,7 +79,7 @@
                                 </BreezeDropdown>
                             </div>
                         </div>
-                        </div>
+                    </div>
 
                         <!-- Hamburger -->
                         <div class="-mr-2 flex items-center sm:hidden">
@@ -101,6 +104,9 @@
                         </BreezeResponsiveNavLink>
                         <BreezeResponsiveNavLink :href="route('planning')" :active="route().current('planning')" as="button">
                             Planning
+                        </BreezeResponsiveNavLink>
+                        <BreezeResponsiveNavLink :href="route('lien')" :active="route().current('lien')" as="button">
+                            Lien
                         </BreezeResponsiveNavLink>
                         <BreezeResponsiveNavLink v-if="$page.props.auth.user.admin" :href="route('administration')" :active="route().current('administration')" as="button">
                             Administration
