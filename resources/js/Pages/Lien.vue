@@ -66,7 +66,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr v-for="lien in listeArray" :key="lien.id" class="border-b bg-gray-800">
+                                <tr v-for="lien in listeArray.data" :key="lien.id" class="border-b bg-gray-800">
                                     <th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap">
                                         {{ lien.name }}
                                     </th>
@@ -77,12 +77,12 @@
                                         <a :href="lien.url" target="_blank" class="text-blue-500 text-ellipsis overflow-hidden">Lien</a>
                                     </td>
                                     <td class="px-6 py-4 text-right">
-                                        <button @click="edit(lien)" :disabled="$page.props.auth.user.id != lien.user_id || !$page.props.auth.user.coordinateur" :class="$page.props.auth.user.id != lien.user_id || !$page.props.auth.user.coordinateur ? 'bg-gray-400 hover:bg-gray-400' : 'bg-blue-700 hover:bg-blue-800'" class="text-white font-bold py-2 px-4 rounded-full">
+                                        <button @click="edit(lien)" :disabled="$page.props.auth.user.id !== lien.user_id && !$page.props.auth.user.coordinateur" :class="$page.props.auth.user.id !== lien.user_id && !$page.props.auth.user.coordinateur ? 'bg-gray-400 hover:bg-gray-400' : 'bg-blue-700 hover:bg-blue-800'" class="text-white font-bold py-2 px-4 rounded-full">
                                             Modifier
                                         </button>
                                     </td>
                                     <td class="px-6 py-4 text-right">
-                                        <button @click="deleteLien(lien)" :disabled="$page.props.auth.user.id != lien.user_id || !$page.props.auth.user.coordinateur" :class="$page.props.auth.user.id != lien.user_id || !$page.props.auth.user.coordinateur ? 'bg-gray-400 hover:bg-gray-400' : 'bg-red-700 hover:bg-red-800'" class="text-white font-bold py-2 px-4 rounded-full">
+                                        <button @click="deleteLien(lien)" :disabled="$page.props.auth.user.id !== lien.user_id && !$page.props.auth.user.coordinateur" :class="$page.props.auth.user.id !== lien.user_id && !$page.props.auth.user.coordinateur ? 'bg-gray-400 hover:bg-gray-400' : 'bg-red-700 hover:bg-red-800'" class="text-white font-bold py-2 px-4 rounded-full">
                                             Supprimer
                                         </button>
                                     </td>
@@ -105,6 +105,7 @@
                                           clip-rule="evenodd"></path>
                                 </svg>
                             </div>
+
                             <input v-model="search" type="text" class="text-gray-900 text-sm block w-full pl-10 p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Recherche">
                         </div>
 
@@ -127,7 +128,7 @@
 
                     <div class="flex items-center justify-center">
                         <div class="text-center md:text-left">
-                            <div v-for="lien in listeArray" :key="lien.id" class="border-b bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 mt-2 p-4">
+                            <div v-for="lien in listeArray.data" :key="lien.id" class="border-b bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 mt-2 p-4">
                                 <div class="font-medium text-white whitespace-nowrap mt-2">
                                     {{ lien.name }}
                                 </div>
@@ -135,10 +136,10 @@
                                     <a :href="lien.url" target="_blank" class="text-blue-500 text-ellipsis overflow-hidden">Lien</a>
                                 </div>
                                 <div class=" text-right flex justify-center mt-2">
-                                    <button @click="edit(lien)" :disabled="$page.props.auth.user.id != lien.user_id || !$page.props.auth.user.coordinateur" :class="$page.props.auth.user.id != lien.user_id || !$page.props.auth.user.coordinateur ? 'bg-gray-400' : 'bg-blue-700'" class="text-white py-1 px-2 rounded-full">
+                                    <button @click="edit(lien)" :disabled="$page.props.auth.user.id !== lien.user_id && !$page.props.auth.user.coordinateur" :class="$page.props.auth.user.id != lien.user_id && !$page.props.auth.user.coordinateur ? 'bg-gray-400' : 'bg-blue-700'" class="text-white py-1 px-2 rounded-full">
                                         Modifier
                                     </button>
-                                    <button @click="deleteLien(lien)" :disabled="$page.props.auth.user.id != lien.user_id || !$page.props.auth.user.coordinateur" :class="$page.props.auth.user.id != lien.user_id || !$page.props.auth.user.coordinateur ? 'bg-gray-400' : 'bg-red-700'" class="text-white py-1 px-2 rounded-full ml-1">
+                                    <button @click="deleteLien(lien)" :disabled="$page.props.auth.user.id !== lien.user_id && !$page.props.auth.user.coordinateur" :class="$page.props.auth.user.id != lien.user_id && !$page.props.auth.user.coordinateur ? 'bg-gray-400' : 'bg-red-700'" class="text-white py-1 px-2 rounded-full ml-1">
                                         Supprimer
                                     </button>
                                 </div>
@@ -146,13 +147,13 @@
                         </div>
                     </div>
                 </div>
+                <Pagination class="mt-6 w-full flex justify-center" :links="listeArray.links"></Pagination>
             </div>
         <ModalLien
             v-show="showModal"
             :isUpdate="isUpdate"
             :selected="selected"
             @store="data => this.store(data)"
-            @error="data => sendError(data)"
             @update="data => update(data)"
             @closeModal="this.closeModal()">
         </ModalLien>
@@ -163,16 +164,18 @@
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue'
 import {Head} from "@inertiajs/inertia-vue3"
 import ModalLien from "@/Components/ModalLien.vue";
+import Pagination from "@/Components/Pagination.vue";
 
 export default {
     name: "Lien",
     components: {
         BreezeAuthenticatedLayout,
         ModalLien,
+        Pagination,
         Head
     },
     props: {
-        liens: Array
+        liens: Object
     },
     data () {
         return {
@@ -181,7 +184,8 @@ export default {
             listeArray: this.liens,
             showModal: false,
             isUpdate: false,
-            selected: null
+            selected: null,
+            error: null
         }
     },
     watch: {
@@ -217,7 +221,7 @@ export default {
                 text: "Lien ajouté avec succès !",
                 type: 'success',
             });
-            this.listeArray.push(data)
+            this.listeArray.data.push(data)
             this.closeModal()
         },
         update (data) {
@@ -227,9 +231,9 @@ export default {
                 type: 'success',
             });
 
-            this.listeArray.forEach((item, index) => {
+            this.listeArray.data.forEach((item, index) => {
                 if (item.id === data.id) {
-                    this.listeArray[index] = data
+                    this.listeArray.data[index] = data
                 }
             })
             this.closeModal()
@@ -242,7 +246,12 @@ export default {
         deleteLien (lien) {
             axios.delete('lien/' + lien.id)
             .then(() => {
-                this.listeArray = this.liens.filter(item => item.id !== lien.id);
+                this.listeArray.data = this.liens.data.filter(item => item.id !== lien.id);
+                this.$notify({
+                    title: "Succès",
+                    text: "Lien supprimé avec succès !",
+                    type: 'success',
+                });
             })
             .catch(error => {
                 console.log(error)

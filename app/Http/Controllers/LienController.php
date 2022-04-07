@@ -22,7 +22,7 @@ class LienController extends Controller
      */
     public function show (): \Inertia\Response
     {
-        $liens = Lien::where('hub_id', Auth::user()->hub_id)->get();
+        $liens = Lien::where('hub_id', Auth::user()->hub_id)->paginate(6);
 
         return Inertia::render('Lien', [
             'liens' => $liens
@@ -65,7 +65,6 @@ class LienController extends Controller
             'url' => 'required|url'
         ]);
 
-        $update = null;
         $user = User::find(Auth::id());
 
         if ($lien->user_id === $user->id || $lien->user_id === $user->isCoordinateur() || $lien->user_id === $user->isAdmin()) {
@@ -75,6 +74,8 @@ class LienController extends Controller
                 'url' => $request->url,
                 'hub_id' => Auth::user()->hub_id
             ]);
+        } else {
+            return response()->json('Action non autorisée', 401);
         }
 
         return ControllerResponse::update($update, $lien, true);
@@ -87,10 +88,11 @@ class LienController extends Controller
     public function delete (Request $request, Lien $lien): \Illuminate\Http\JsonResponse
     {
         $user = User::find(Auth::id());
-        $delete = false;
 
         if ($lien->user_id === $user->id || $lien->user_id === $user->isCoordinateur() || $lien->user_id === $user->isAdmin()) {
             $delete = $lien->delete();
+        } else {
+            return response()->json('Action non autorisée', 401);
         }
 
         return ControllerResponse::delete($delete);
@@ -123,7 +125,7 @@ class LienController extends Controller
                     return $query;
                 }
             })
-            ->get();
+            ->paginate(6);
 
         return response()->json($liens);
 

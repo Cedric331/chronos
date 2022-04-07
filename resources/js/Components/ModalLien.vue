@@ -58,6 +58,9 @@
                             />
                         </div>
                     </div>
+                    <div v-if="errors" class="mb-4 sm:align-middle font-medium text-sm text-red-600">
+                        {{ errors }}
+                    </div>
                 </div>
                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                     <button v-if="!isUpdate" @click="store()" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm">
@@ -69,9 +72,6 @@
                     <button @click="this.closeModal()" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                         Annuler
                     </button>
-                    <div v-if="errors" class="mb-4 sm:align-middle font-medium text-sm text-red-600">
-                        {{ errors }}
-                    </div>
                 </div>
             </div>
         </div>
@@ -109,7 +109,8 @@ export default {
     },
     methods: {
         store () {
-          axios.post('lien', {
+            this.errors = null
+            axios.post('lien', {
               name: this.name,
               description: this.description,
               url: this.url
@@ -118,10 +119,16 @@ export default {
               this.$emit('store', response.data)
           })
           .catch(error => {
+              let key = Object.keys(error.response.data['errors'])
+              if (key.length > 1) {
+                  key = key[0]
+              }
+              this.errors = error.response.data['errors'][key][0]
               console.log(error)
           })
         },
         update () {
+            this.errors = null
             axios.patch('lien/' + this.selected.id , {
                 name: this.name,
                 description: this.description,
@@ -131,6 +138,11 @@ export default {
                 this.$emit('update', response.data)
             })
             .catch(error => {
+                let key = Object.keys(error.response.data['errors'])
+                if (key.length > 1) {
+                    key = key[0]
+                }
+                this.errors = error.response.data['errors'][key][0]
                 console.log(error)
             })
         },
