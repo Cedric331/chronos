@@ -19,19 +19,10 @@
                                     </div>
                                     <div class="modal-body p-5 w-full h-full overflow-y-auto ">
                                         <h2 class="text-lg">
-                                            <b>1 - Modification des couleurs</b>
+                                            <b>1 - Partage des liens</b>
                                         </h2>
                                         <p class="text-justify">
-                                            Vous pouvez désormais personnaliser les couleurs du planning. <br>
-                                            Cliquer sur votre prénom en haut à droite puis paramètres pour modifier les couleurs.<br>
-                                        </p>
-                                        <hr class="my-1">
-                                        <h2 class="text-lg">
-                                            <b>2 - Notification par mail</b>
-                                        </h2>
-                                        <p class="text-justify">
-                                            Vous recevrez désormais une notification par mail lors d'une modification de votre planning depuis Chronos. <br>
-                                            Cette notification est envoyée par le coordinateur lors de la modification.<br>
+                                            Vous pouvez désormais partager des liens. <br>
                                         </p>
                                     </div>
                                     <div class="modal-footer py-3 px-5 border0-t text-right">

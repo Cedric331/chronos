@@ -15,7 +15,7 @@
                     <div class="w-4/6 mx-auto sm:visible invisible">
                         <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
 
-                            <div class="flex">
+                            <div class="flex mb-2">
                                 <div class="relative m-1 mb-1">
                                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                         <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20"
@@ -30,11 +30,11 @@
 
                                 <div class="flex items-center sm:ml-6">
                                     <div class="ml-3 relative">
-                                        <select v-model="filtre" class="bg-gray-700 text-white block w-full h-full text-sm leading-4 font-medium rounded-md rounded transition ease-in-out m-0 focus:border-blue-500" style="border-width: 0">
+                                        <select v-model="filtre" class="bg-gray-700 text-white block py-3.5 w-full h-full text-sm leading-4 font-medium rounded-md rounded transition ease-in-out m-0 focus:border-blue-500" style="border-width: 0">
                                             <option selected :value="1" class="text-white">
                                                 Voir tous les liens
                                             </option>
-                                            <option :value="2" class="text-white">
+                                            <option v-if="!$page.props.auth.user.coordinateur" :value="2" class="text-white">
                                                 Coordinateur
                                             </option>
                                             <option :value="3" class="text-white">

@@ -40,9 +40,11 @@
                                     m-0
                                     focus:shadow-outline
                                     focus:outline-none"
+                                    maxlength="100"
                                     id="description"
-                                    rows="3"
+                                    rows="2"
                                     placeholder="Description (facultatif)"
+                                    style="max-height: 160px"
                             ></textarea>
                         </div>
                         <div class="mb-4 md:ml-2 md:mb-0">
