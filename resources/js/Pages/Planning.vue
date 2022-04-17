@@ -6,11 +6,23 @@
                 <div class="min-h-screen">
                     <NavbarPlanning style="z-index: 1" :collaborateur="member" :collaborateurs="members" @notificationUpdate="notificationUpdate()" @updateCollaborateur="data => updateCollaborateur(data)"/>
                     <div class="p-4 gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 select-none">
-                        <div v-for="(planning, index) in allPlannings" :key="planning.date" :style="colorPlanning(planning)" :class="[planning.today ? ' shadow-blue-400/80 shadow-2xl bg-white' : '', this.isSelected(planning) ? ' border-2 border-green-500' : '', this.$page.props.auth.user.coordinateur ? ' cursor-pointer' : '']" class="w-full rounded-md shadow-md shadow-dark hover:shadow-blue-400/80 hover:shadow-2xl hover:bg-white">
-                            <div @click="viewDate(planning.date_id, index)" class="p-1 flex justify-end">
-                                <svg class="fill-current" :style="texte" height="16px" version="1.1" viewBox="0 0 24 24" width="16px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title/><g stroke-width="1">
-                                    <path d="M8,2 L8,5 L16,5 L16,2 L18,2 L18,5 L19.4361148,5 C20.3276335,5 20.6509198,5.09282561 20.9768457,5.2671327 C21.3027716,5.4414398 21.5585602,5.69722837 21.7328673,6.0231543 C21.9071744,6.34908022 22,6.67236646 22,7.5638852 L22,19.4361148 C22,20.3276335 21.9071744,20.6509198 21.7328673,20.9768457 C21.5585602,21.3027716 21.3027716,21.5585602 20.9768457,21.7328673 C20.6509198,21.9071744 20.3276335,22 19.4361148,22 L4.5638852,22 C3.67236646,22 3.34908022,21.9071744 3.0231543,21.7328673 C2.69722837,21.5585602 2.4414398,21.3027716 2.2671327,20.9768457 C2.10623385,20.675991 2.014763,20.3773855 2.00164263,19.6320228 L2,7.5638852 C2,6.67236646 2.09282561,6.34908022 2.2671327,6.0231543 C2.4414398,5.69722837 2.69722837,5.4414398 3.0231543,5.2671327 C3.324009,5.10623385 3.6226145,5.014763 4.36797723,5.00164263 L6,5 L6,2 L8,2 Z M13,18 L11,18 L11,20 L13,20 L13,18 Z M13.2,12 L10.8,12 L11,16.5 L13,16.5 L13.2,12 Z M19,7 L5,7 C4.44771525,7 4,7.44771525 4,8 L4,8 L4,10 L20,10 L20,8 C20,7.44771525 19.5522847,7 19,7 L19,7 Z" /></g>
-                                </svg>
+                        <div v-for="(planning, index) in allPlannings" :key="planning.date" :style="colorPlanning(planning)" :class="[planning.today ? ' shadow-blue-400/80 shadow-2xl bg-white' : '', this.isSelected(planning) ? ' border-2 border-green-500' : '', this.$page.props.auth.user.coordinateur ? ' cursor-pointer' : '']" class="relative w-full rounded-md shadow-md shadow-dark hover:shadow-blue-400/80 hover:shadow-2xl hover:bg-white">
+                            <div class="absolute top-0 right-0">
+                                <div @click="viewDate(planning.date_id, index)" class=" flex justify-end p-1">
+                                    <svg class="fill-current" :style="texte" height="16px" version="1.1" viewBox="0 0 24 24" width="16px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title/>
+                                        <g stroke-width="1">
+                                            <path d="M8,2 L8,5 L16,5 L16,2 L18,2 L18,5 L19.4361148,5 C20.3276335,5 20.6509198,5.09282561 20.9768457,5.2671327 C21.3027716,5.4414398 21.5585602,5.69722837 21.7328673,6.0231543 C21.9071744,6.34908022 22,6.67236646 22,7.5638852 L22,19.4361148 C22,20.3276335 21.9071744,20.6509198 21.7328673,20.9768457 C21.5585602,21.3027716 21.3027716,21.5585602 20.9768457,21.7328673 C20.6509198,21.9071744 20.3276335,22 19.4361148,22 L4.5638852,22 C3.67236646,22 3.34908022,21.9071744 3.0231543,21.7328673 C2.69722837,21.5585602 2.4414398,21.3027716 2.2671327,20.9768457 C2.10623385,20.675991 2.014763,20.3773855 2.00164263,19.6320228 L2,7.5638852 C2,6.67236646 2.09282561,6.34908022 2.2671327,6.0231543 C2.4414398,5.69722837 2.69722837,5.4414398 3.0231543,5.2671327 C3.324009,5.10623385 3.6226145,5.014763 4.36797723,5.00164263 L6,5 L6,2 L8,2 Z M13,18 L11,18 L11,20 L13,20 L13,18 Z M13.2,12 L10.8,12 L11,16.5 L13,16.5 L13.2,12 Z M19,7 L5,7 C4.44771525,7 4,7.44771525 4,8 L4,8 L4,10 L20,10 L20,8 C20,7.44771525 19.5522847,7 19,7 L19,7 Z" />
+                                        </g>
+                                    </svg>
+                                </div>
+                                <div v-if="$page.props.auth.user.coordinateur" @click="changeHome(planning, planning.horaires.teletravail, index)" class="flex justify-end p-1">
+                                    <svg class="fill-current" :style="texte" height="16px" version="1.1" viewBox="0 0 20 20" width="16px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title/>
+                                        <g stroke-width="1">
+                                            <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd" />
+                                            <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
+                                        </g>
+                                    </svg>
+                                </div>
                             </div>
                             <div @click="selectPlanning(planning)" class="p-2">
                                 <div>
@@ -143,12 +155,34 @@ export default {
           this.updatePlanning = false
           this.selectedPlanning = []
         },
-        notificationUpdate () {
-            this.$notify({
-                title: "Succès",
-                text: "Modification effectuée avec succès !",
-                type: 'success',
-            });
+        notificationUpdate (success = true) {
+            if (success) {
+                this.$notify({
+                    title: "Succès",
+                    text: "Modification effectuée avec succès !",
+                    type: 'success',
+                });
+            }  else {
+                this.$notify({
+                    title: "Erreur",
+                    text: "Erreur lors de la modification !",
+                    type: 'warn',
+                });
+            }
+        },
+        changeHome (data, home, index) {
+            axios.patch('planning/update/teletravail', {
+                date: data,
+                home: home
+            })
+            .then(() => {
+                this.updateCollaborateur(this.member)
+                this.notificationUpdate()
+            })
+            .catch(error => {
+                console.log(error)
+                this.notificationUpdate(false)
+            })
         },
         viewDate(data, index) {
             let previous = index === 0 ? null : this.allPlannings[index - 1].date_id

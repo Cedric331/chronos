@@ -21846,14 +21846,40 @@ __webpack_require__.r(__webpack_exports__);
       this.selectedPlanning = [];
     },
     notificationUpdate: function notificationUpdate() {
-      this.$notify({
-        title: "Succès",
-        text: "Modification effectuée avec succès !",
-        type: 'success'
+      var success = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
+      if (success) {
+        this.$notify({
+          title: "Succès",
+          text: "Modification effectuée avec succès !",
+          type: 'success'
+        });
+      } else {
+        this.$notify({
+          title: "Erreur",
+          text: "Erreur lors de la modification !",
+          type: 'warn'
+        });
+      }
+    },
+    changeHome: function changeHome(data, home, index) {
+      var _this = this;
+
+      axios.patch('planning/update/teletravail', {
+        date: data,
+        home: home
+      }).then(function () {
+        _this.updateCollaborateur(_this.member);
+
+        _this.notificationUpdate();
+      })["catch"](function (error) {
+        console.log(error);
+
+        _this.notificationUpdate(false);
       });
     },
     viewDate: function viewDate(data, index) {
-      var _this = this;
+      var _this2 = this;
 
       var previous = index === 0 ? null : this.allPlannings[index - 1].date_id;
       var next = index === this.allPlannings.length - 1 ? null : this.allPlannings[index + 1].date_id;
@@ -21865,15 +21891,15 @@ __webpack_require__.r(__webpack_exports__);
           index: index
         }
       }).then(function (response) {
-        _this.showDates = response.data.planning;
-        _this.datePlanning = response.data.date;
-        _this.showPlanning = true;
+        _this2.showDates = response.data.planning;
+        _this2.datePlanning = response.data.date;
+        _this2.showPlanning = true;
       })["catch"](function (error) {
         console.log(error);
       });
     },
     updateCollaborateur: function updateCollaborateur(data) {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get('planning', {
         params: {
@@ -21881,9 +21907,9 @@ __webpack_require__.r(__webpack_exports__);
           loadData: true
         }
       }).then(function (response) {
-        _this2.member = response.data.collaborateur;
-        _this2.members = response.data.collaborateurs;
-        _this2.allPlannings = response.data.plannings;
+        _this3.member = response.data.collaborateur;
+        _this3.members = response.data.collaborateurs;
+        _this3.allPlannings = response.data.plannings;
       });
     },
     closeCheck: function closeCheck() {
@@ -26203,13 +26229,16 @@ var _hoisted_2 = {
 var _hoisted_3 = {
   "class": "p-4 gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 select-none"
 };
-var _hoisted_4 = ["onClick"];
+var _hoisted_4 = {
+  "class": "absolute top-0 right-0"
+};
+var _hoisted_5 = ["onClick"];
 
-var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("title", null, null, -1
+var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("title", null, null, -1
 /* HOISTED */
 );
 
-var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("g", {
+var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("g", {
   "stroke-width": "1"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("path", {
   d: "M8,2 L8,5 L16,5 L16,2 L18,2 L18,5 L19.4361148,5 C20.3276335,5 20.6509198,5.09282561 20.9768457,5.2671327 C21.3027716,5.4414398 21.5585602,5.69722837 21.7328673,6.0231543 C21.9071744,6.34908022 22,6.67236646 22,7.5638852 L22,19.4361148 C22,20.3276335 21.9071744,20.6509198 21.7328673,20.9768457 C21.5585602,21.3027716 21.3027716,21.5585602 20.9768457,21.7328673 C20.6509198,21.9071744 20.3276335,22 19.4361148,22 L4.5638852,22 C3.67236646,22 3.34908022,21.9071744 3.0231543,21.7328673 C2.69722837,21.5585602 2.4414398,21.3027716 2.2671327,20.9768457 C2.10623385,20.675991 2.014763,20.3773855 2.00164263,19.6320228 L2,7.5638852 C2,6.67236646 2.09282561,6.34908022 2.2671327,6.0231543 C2.4414398,5.69722837 2.69722837,5.4414398 3.0231543,5.2671327 C3.324009,5.10623385 3.6226145,5.014763 4.36797723,5.00164263 L6,5 L6,2 L8,2 Z M13,18 L11,18 L11,20 L13,20 L13,18 Z M13.2,12 L10.8,12 L11,16.5 L13,16.5 L13.2,12 Z M19,7 L5,7 C4.44771525,7 4,7.44771525 4,8 L4,8 L4,10 L20,10 L20,8 C20,7.44771525 19.5522847,7 19,7 L19,7 Z"
@@ -26217,28 +26246,47 @@ var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 /* HOISTED */
 );
 
-var _hoisted_7 = [_hoisted_5, _hoisted_6];
-var _hoisted_8 = ["onClick"];
-var _hoisted_9 = {
+var _hoisted_8 = [_hoisted_6, _hoisted_7];
+var _hoisted_9 = ["onClick"];
+
+var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("title", null, null, -1
+/* HOISTED */
+);
+
+var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("g", {
+  "stroke-width": "1"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("path", {
+  "fill-rule": "evenodd",
+  d: "M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z",
+  "clip-rule": "evenodd"
+}), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("path", {
+  d: "M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z"
+})], -1
+/* HOISTED */
+);
+
+var _hoisted_12 = [_hoisted_10, _hoisted_11];
+var _hoisted_13 = ["onClick"];
+var _hoisted_14 = {
   key: 0
 };
-var _hoisted_10 = {
+var _hoisted_15 = {
   key: 0
 };
-var _hoisted_11 = {
+var _hoisted_16 = {
   key: 1
 };
-var _hoisted_12 = {
+var _hoisted_17 = {
   key: 1
 };
 
-var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
+var _hoisted_18 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
   "class": "text-3l text-center font-bold text-dark mt-8"
 }, " -- Aucun Planning -- ", -1
 /* HOISTED */
 );
 
-var _hoisted_14 = [_hoisted_13];
+var _hoisted_19 = [_hoisted_18];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _this = this;
 
@@ -26282,12 +26330,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
           key: planning.date,
           style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)($options.colorPlanning(planning)),
-          "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([[planning.today ? ' shadow-blue-400/80 shadow-2xl bg-white' : '', _this.isSelected(planning) ? ' border-2 border-green-500' : '', _this.$page.props.auth.user.coordinateur ? ' cursor-pointer' : ''], "w-full rounded-md shadow-md shadow-dark hover:shadow-blue-400/80 hover:shadow-2xl hover:bg-white"])
-        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+          "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([[planning.today ? ' shadow-blue-400/80 shadow-2xl bg-white' : '', _this.isSelected(planning) ? ' border-2 border-green-500' : '', _this.$page.props.auth.user.coordinateur ? ' cursor-pointer' : ''], "relative w-full rounded-md shadow-md shadow-dark hover:shadow-blue-400/80 hover:shadow-2xl hover:bg-white"])
+        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
           onClick: function onClick($event) {
             return $options.viewDate(planning.date_id, index);
           },
-          "class": "p-1 flex justify-end"
+          "class": "flex justify-end p-1"
         }, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("svg", {
           "class": "fill-current",
           style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)($data.texte),
@@ -26297,11 +26345,30 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           width: "16px",
           xmlns: "http://www.w3.org/2000/svg",
           "xmlns:xlink": "http://www.w3.org/1999/xlink"
-        }, _hoisted_7, 4
+        }, _hoisted_8, 4
         /* STYLE */
         ))], 8
         /* PROPS */
-        , _hoisted_4), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+        , _hoisted_5), _ctx.$page.props.auth.user.coordinateur ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+          key: 0,
+          onClick: function onClick($event) {
+            return $options.changeHome(planning, planning.horaires.teletravail, index);
+          },
+          "class": "flex justify-end p-1"
+        }, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("svg", {
+          "class": "fill-current",
+          style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)($data.texte),
+          height: "16px",
+          version: "1.1",
+          viewBox: "0 0 20 20",
+          width: "16px",
+          xmlns: "http://www.w3.org/2000/svg",
+          "xmlns:xlink": "http://www.w3.org/1999/xlink"
+        }, _hoisted_12, 4
+        /* STYLE */
+        ))], 8
+        /* PROPS */
+        , _hoisted_9)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
           onClick: function onClick($event) {
             return $options.selectPlanning(planning);
           },
@@ -26311,7 +26378,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)($data.texte)
         }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(planning.date), 5
         /* TEXT, STYLE */
-        )])]), planning.horaires ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+        )])]), planning.horaires ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
           "class": "font-light text-justify line-clamp-3",
           style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)($data.texte)
         }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(planning.horaires.teletravail ? 'Télétravail' : 'Hub'), 5
@@ -26321,7 +26388,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)($data.texte)
         }, " Début : " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(planning.horaires.debut_journee), 5
         /* TEXT, STYLE */
-        ), planning.horaires.debut_pause ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+        ), planning.horaires.debut_pause ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
           "class": "font-light text-justify line-clamp-3",
           style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)($data.texte)
         }, " Pause Déj: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(planning.horaires.debut_pause), 5
@@ -26336,14 +26403,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)($data.texte)
         }, " Fin : " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(planning.horaires.fin_journee), 5
         /* TEXT, STYLE */
-        )])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+        )])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
           "class": "font-light text-justify line-clamp-3",
           style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)($data.texte)
         }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(planning.type === 'CP' ? 'Congés payés' : 'Repos'), 5
         /* TEXT, STYLE */
         )]))], 8
         /* PROPS */
-        , _hoisted_8)], 6
+        , _hoisted_13)], 6
         /* CLASS, STYLE */
         );
       }), 128
@@ -26356,7 +26423,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         selected: $data.selectedPlanning.length
       }, null, 8
       /* PROPS */
-      , ["selected"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_12, _hoisted_14)), $data.showPlanning ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_ModalPlanning, {
+      , ["selected"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_17, _hoisted_19)), $data.showPlanning ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_ModalPlanning, {
         key: 2,
         showDates: $data.showDates,
         datePlanning: $data.datePlanning,

@@ -18,3 +18,7 @@ Route::get('/planning/date', [PlanningController::class, 'loadPlanningDate'])
 Route::patch('/planning/update', [PlanningController::class, 'updatePlanning'])
     ->middleware('auth')
     ->name('planning.update');
+
+Route::patch('/planning/update/teletravail', [PlanningController::class, 'updateTeletravail'])
+    ->middleware('auth')
+    ->name('planning.update.teletravail');

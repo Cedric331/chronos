@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ControllerResponse;
 use App\Http\Requests\Planning\importHubRequest;
 use App\Mail\ModificationHoraire;
 use App\Models\Collaborateur;
@@ -564,5 +565,21 @@ class PlanningController extends Controller
 
         Mail::to($user->email)
             ->send(new ModificationHoraire($collect->toArray()));
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateTeletravail (Request $request): \Illuminate\Http\JsonResponse
+    {
+        $collaborateurDate = CollaborateurDate::find($request->date['horaire_id']);
+        $horaires =  json_decode($collaborateurDate->horaire);
+        $horaires->teletravail = !$request->home;
+        $collaborateurDate->horaire = json_encode($horaires);
+
+        $update = $collaborateurDate->save();
+
+        return ControllerResponse::update($update);
     }
 }
