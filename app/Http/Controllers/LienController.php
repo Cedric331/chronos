@@ -41,7 +41,7 @@ class LienController extends Controller
             'url' => 'required|url'
         ]);
 
-        $store = Lien::create([
+        Lien::create([
             'name' => $request->name,
             'description' => $request->description,
             'url' => $request->url,
@@ -49,7 +49,9 @@ class LienController extends Controller
             'user_id' => Auth::id()
         ]);
 
-        return ControllerResponse::store($store);
+        $liens = Lien::where('hub_id', Auth::user()->hub_id)->paginate(6);
+
+        return response()->json($liens);
     }
 
     /**
@@ -67,7 +69,7 @@ class LienController extends Controller
 
         $user = User::find(Auth::id());
 
-        if ($lien->user_id === $user->id || $lien->user_id === $user->isCoordinateur() || $lien->user_id === $user->isAdmin()) {
+        if ($lien->user_id === $user->id || $user->isCoordinateur() || $user->isAdmin()) {
             $update = $lien->update([
                 'name' => $request->name,
                 'description' => $request->description,
@@ -89,13 +91,15 @@ class LienController extends Controller
     {
         $user = User::find(Auth::id());
 
-        if ($lien->user_id === $user->id || $lien->user_id === $user->isCoordinateur() || $lien->user_id === $user->isAdmin()) {
-            $delete = $lien->delete();
+        if ($lien->user_id === $user->id || $user->isCoordinateur() || $user->isAdmin()) {
+            $lien->delete();
         } else {
             return response()->json('Action non autorisée', 401);
         }
 
-        return ControllerResponse::delete($delete);
+        $liens = Lien::where('hub_id', Auth::user()->hub_id)->paginate(6);
+
+        return response()->json($liens);
     }
 
     /**

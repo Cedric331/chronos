@@ -55,7 +55,7 @@
                                             </div>
                                             <div v-else>
                                                 <p class="font-light text-justify line-clamp-3" :style="texte">
-                                                    {{planning.type === 'CP' ? 'Congés payés' : 'Repos'}}
+                                                    {{ getType(planning.type) }}
                                                 </p>
                                             </div>
                                         </div>
@@ -88,6 +88,24 @@ export default {
         }
     },
     methods: {
+        getType (data) {
+            switch (data) {
+                case 'CP':
+                    return 'Congés payés'
+                    break;
+                case 'FOR':
+                    return 'Formation'
+                    break;
+                case 'RJF':
+                    return 'Récup. jour férié'
+                    break;
+                case 'F':
+                    return 'Férié'
+                    break;
+                default:
+                    return 'Repos'
+            }
+        },
         colorTexte () {
             return this.$page.props.auth.user.color_texte ? 'color: ' + this.$page.props.auth.user.color_texte : '#000000'
         },

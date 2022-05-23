@@ -93,7 +93,7 @@
                     </div>
                 </div>
 
-                <div class="w-full my-5 bg-gray-200 sm:invisible visible">
+                <div class="w-full mt-5 bg-gray-200 sm:invisible visible">
 
                     <div class="flex my-2">
                         <div class="relative m-1 mb-1">
@@ -147,7 +147,7 @@
                         </div>
                     </div>
                 </div>
-                <Pagination class="mt-6 w-full flex justify-center" :links="listeArray.links"></Pagination>
+                <Pagination class="w-full flex justify-center" :key="listeArray.length" :links="listeArray.links"></Pagination>
             </div>
         <ModalLien
             v-show="showModal"
@@ -221,7 +221,7 @@ export default {
                 text: "Lien ajouté avec succès !",
                 type: 'success',
             });
-            this.listeArray.data.push(data)
+            this.listeArray = data
             this.closeModal()
         },
         update (data) {
@@ -245,13 +245,13 @@ export default {
         },
         deleteLien (lien) {
             axios.delete('lien/' + lien.id)
-            .then(() => {
-                this.listeArray.data = this.liens.data.filter(item => item.id !== lien.id);
+            .then(response => {
                 this.$notify({
                     title: "Succès",
                     text: "Lien supprimé avec succès !",
                     type: 'success',
                 });
+                this.listeArray = response.data
             })
             .catch(error => {
                 console.log(error)

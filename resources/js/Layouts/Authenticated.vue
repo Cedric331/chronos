@@ -20,13 +20,16 @@
                                     Gestion du Hub
                                 </BreezeNavLink>
                                 <BreezeNavLink v-if="$page.props.auth.user.coordinateur" :href="route('equipe')" :active="route().current('equipe')" as="button">
-                                    Gestion équipe
+                                    Gestion Équipe
+                                </BreezeNavLink>
+                                <BreezeNavLink :href="route('equipe.information')" :active="route().current('equipe.information')" as="button">
+                                    Information Équipe
                                 </BreezeNavLink>
                                 <BreezeNavLink :href="route('planning')" :active="route().current('planning')" as="button">
                                     Planning
                                 </BreezeNavLink>
                                 <BreezeNavLink :href="route('lien')" :active="route().current('lien')" as="button">
-                                    Lien
+                                    Partage de Lien
                                 </BreezeNavLink>
                                 <BreezeNavLink v-if="$page.props.auth.user.admin" :href="route('administration')" :active="route().current('administration')" as="button">
                                     Administration
@@ -37,7 +40,7 @@
                         <div class="flex">
                             <div v-if="this.$page.props.auth.user.coordinateur" class="flex items-center sm:ml-6">
                                 <div class="ml-3 relative">
-                                    <select v-model="selected" class="block w-full text-sm leading-4 font-medium rounded-md rounded transition ease-in-out m-0" style="border-width: 0">
+                                    <select v-model="selected" autocomplete class="block w-full overflow-y-auto text-sm leading-4 font-medium rounded-md rounded transition ease-in-out m-0" style="border-width: 0">
                                         <option v-for="hub in this.$page.props.hubs" :key="hub.id" :value="hub.ville">
                                             {{ hub.ville }}
                                         </option>
@@ -100,13 +103,16 @@
                             Gestion du Hub
                         </BreezeResponsiveNavLink>
                         <BreezeResponsiveNavLink v-if="$page.props.auth.user.coordinateur" :href="route('equipe')" :active="route().current('equipe')" as="button">
-                            Gestion équipe
+                            Gestion Équipe
+                        </BreezeResponsiveNavLink>
+                        <BreezeResponsiveNavLink :href="route('equipe.information')" :active="route().current('equipe.information')" as="button">
+                            Information Équipe
                         </BreezeResponsiveNavLink>
                         <BreezeResponsiveNavLink :href="route('planning')" :active="route().current('planning')" as="button">
                             Planning
                         </BreezeResponsiveNavLink>
                         <BreezeResponsiveNavLink :href="route('lien')" :active="route().current('lien')" as="button">
-                            Lien
+                            Partage de Lien
                         </BreezeResponsiveNavLink>
                         <BreezeResponsiveNavLink v-if="$page.props.auth.user.admin" :href="route('administration')" :active="route().current('administration')" as="button">
                             Administration
@@ -185,7 +191,7 @@ export default {
     },
     methods: {
         updateHub (id) {
-            axios.patch('hub/' + id + '/user')
+            axios.patch('/hub/' + id + '/user')
             .then(() => {
                 this.$inertia.visit(this.$page.url)
             })

@@ -58,7 +58,7 @@ class HandleInertiaRequests extends Middleware
                 : null,
             'hub' => $request->user() ? Hub::find($request->user()->hub_id) : null,
             'hub.horodatage' => $request->user() ? Hub::find($request->user()->hub_id)->horodatage() : null,
-            'hubs' => Hub::all()
+            'hubs' => Hub::orderBy('ville')->get()
         ]);
     }
 }

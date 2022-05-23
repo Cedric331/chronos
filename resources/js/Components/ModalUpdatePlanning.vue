@@ -26,7 +26,7 @@
                                                     Planifié
                                                 </option>
                                                 <option value="2">
-                                                    Non Planifié
+                                                    Repos
                                                 </option>
                                                 <option value="3">
                                                     Congés payés

@@ -22,6 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'status',
+        'phone',
+        'anniversaire',
         'check_update',
         'color_travaille',
         'color_conge',

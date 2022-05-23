@@ -15,13 +15,24 @@
                                         </g>
                                     </svg>
                                 </div>
-                                <div v-if="$page.props.auth.user.coordinateur" @click="changeHome(planning, planning.horaires.teletravail, index)" class="flex justify-end p-1">
-                                    <svg class="fill-current" :style="texte" height="16px" version="1.1" viewBox="0 0 20 20" width="16px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title/>
-                                        <g stroke-width="1">
-                                            <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd" />
-                                            <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
-                                        </g>
-                                    </svg>
+                                <div v-if="!planning.horaires.teletravail">
+                                    <div v-if="$page.props.auth.user.coordinateur && planning.horaires" @click="changeHome(planning, planning.horaires.teletravail, index)" class="flex justify-end p-1">
+                                        <svg class="fill-current" :style="texte" height="16px" version="1.1" viewBox="0 0 20 20" width="16px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title/>
+                                            <g stroke-width="1">
+                                                <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd" />
+                                                <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
+                                            </g>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div v-else>
+                                    <div v-if="$page.props.auth.user.coordinateur && planning.horaires" @click="changeHome(planning, planning.horaires.teletravail, index)" class="flex justify-end p-1">
+                                        <svg class="fill-current" :style="texte" height="16px" version="1.1" viewBox="0 0 20 20" width="16px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title/>
+                                            <g stroke-width="1">
+                                                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                                            </g>
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
                             <div @click="selectPlanning(planning)" class="p-2">
@@ -51,7 +62,7 @@
                                 </div>
                                 <div v-else>
                                     <p class="font-light text-justify line-clamp-3" :style="texte">
-                                     {{planning.type === 'CP' ? 'Congés payés' : 'Repos'}}
+                                     {{ getType(planning.type) }}
                                     </p>
                                 </div>
                             </div>
@@ -125,16 +136,36 @@ export default {
         }
     },
     methods: {
+        getType (data) {
+            switch (data) {
+                case 'CP':
+                    return 'Congés payés'
+                    break;
+                case 'FOR':
+                    return 'Formation'
+                    break;
+                case 'RJF':
+                    return 'Récup. jour férié'
+                    break;
+                case 'F':
+                    return 'Férié'
+                    break;
+                default:
+                   return 'Repos'
+            }
+        },
         selectPlanning (data) {
-            const inArray = this.selectedPlanning.filter(function (item) {
-                return item === data
-            })
-            if (inArray.length === 0) {
-                this.selectedPlanning.push(data)
-            } else {
-                this.selectedPlanning = this.selectedPlanning.filter(function (item) {
-                    return item !== data
+            if (this.$page.props.auth.user.coordinateur) {
+                const inArray = this.selectedPlanning.filter(function (item) {
+                    return item === data
                 })
+                if (inArray.length === 0) {
+                    this.selectedPlanning.push(data)
+                } else {
+                    this.selectedPlanning = this.selectedPlanning.filter(function (item) {
+                        return item !== data
+                    })
+                }
             }
         },
         isSelected (data) {
