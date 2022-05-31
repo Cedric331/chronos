@@ -52,6 +52,12 @@
                                 <BreezeNavLink :href="route('planning')" :active="route().current('planning')" as="button">
                                     Planning
                                 </BreezeNavLink>
+                                <BreezeNavLink v-if="$page.props.auth.user.volant" :href="route('planning')" :active="route().current('planning')" as="button">
+                                    Traitement Volant
+                                </BreezeNavLink>
+                                <BreezeNavLink v-if="$page.props.auth.user.responsable" :href="route('volant.list')" :active="route().current('volant.list')" as="button">
+                                    Gestion Volant
+                                </BreezeNavLink>
                                 <BreezeNavLink v-if="$page.props.auth.user.admin" :href="route('administration')" :active="route().current('administration')" as="button">
                                     Administration
                                 </BreezeNavLink>

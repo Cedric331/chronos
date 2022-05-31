@@ -18,7 +18,7 @@ class EquipeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('role:Coordinateur|Administrateur');
+        $this->middleware('role:Coordinateur|Administrateur|Responsable');
     }
 
     /**
@@ -71,6 +71,10 @@ class EquipeController extends Controller
      */
     public function update (Request $request, User $user): \Illuminate\Http\JsonResponse
     {
+        if ($user->isAdmin()) {
+            return response()->json('Action non autorisée', 401);
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
@@ -92,6 +96,10 @@ class EquipeController extends Controller
      */
     public function delete (User $user): \Illuminate\Http\JsonResponse
     {
+        if ($user->isAdmin()) {
+            return response()->json('Action non autorisée', 401);
+        }
+
        $delete = $user->delete();
 
        return ControllerResponse::delete($delete);

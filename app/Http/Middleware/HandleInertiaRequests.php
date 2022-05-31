@@ -51,10 +51,16 @@ class HandleInertiaRequests extends Middleware
                     'hub_id')
                 : null,
             'auth.user.coordinateur' => fn () => $request->user()
-                ? $request->user()->isCoordinateur() || $request->user()->isAdmin()
+                ? $request->user()->isCoordinateur()
+                : null,
+            'auth.user.responsable' => fn () => $request->user()
+                ? $request->user()->isResponsable()
                 : null,
             'auth.user.admin' => fn () => $request->user()
                 ? $request->user()->isAdmin()
+                : null,
+            'auth.user.volant' => fn () => $request->user()
+                ? $request->user()->isVolant()
                 : null,
             'hub' => $request->user() ? Hub::find($request->user()->hub_id) : null,
             'hub.horodatage' => $request->user() ? Hub::find($request->user()->hub_id)->horodatage() : null,
