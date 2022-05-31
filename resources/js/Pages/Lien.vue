@@ -4,7 +4,7 @@
         <title>Liens</title>
     </Head>
     <BreezeAuthenticatedLayout>
-            <div class="mb-16">
+            <div>
                 <div class="w-full bg-gray-100 px-10 pt-10 h-16 content-center">
                     <div class="flex justify-center my-auto">
                         <button @click.stop="showModal = true" class="inline-flex items-center flex justify-center h-10 px-5 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800">
@@ -91,6 +91,7 @@
                             </table>
                         </div>
                     </div>
+                    <Pagination class="w-full flex justify-center mt-6" :key="listeArray.length" :links="listeArray.links"></Pagination>
                 </div>
 
                 <div class="w-full mt-5 bg-gray-200 sm:invisible visible">
@@ -146,8 +147,8 @@
                             </div>
                         </div>
                     </div>
+                    <Pagination class="w-full flex justify-center mt-4" :key="listeArray.length" :links="listeArray.links"></Pagination>
                 </div>
-                <Pagination class="w-full flex justify-center" :key="listeArray.length" :links="listeArray.links"></Pagination>
             </div>
         <ModalLien
             v-show="showModal"

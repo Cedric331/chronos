@@ -15,21 +15,42 @@
                             </div>
 
                             <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <BreezeNavLink v-if="$page.props.auth.user.coordinateur" :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Gestion du Hub
-                                </BreezeNavLink>
-                                <BreezeNavLink v-if="$page.props.auth.user.coordinateur" :href="route('equipe')" :active="route().current('equipe')" as="button">
-                                    Gestion Équipe
-                                </BreezeNavLink>
-                                <BreezeNavLink :href="route('equipe.information')" :active="route().current('equipe.information')" as="button">
-                                    Information Équipe
-                                </BreezeNavLink>
+                            <div class="hidden sm:flex sm:items-center sm:ml-6">
+                                <div class="relative">
+                                    <BreezeDropdown align="left" width="48">
+                                        <template #trigger>
+                                        <span class="inline-flex rounded-md">
+                                            <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                                Gestion du Hub
+
+                                                <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </span>
+                                        </template>
+
+                                        <template #content>
+                                            <BreezeDropdownLink style="z-index: 9999" v-if="$page.props.auth.user.coordinateur" :href="route('dashboard')" method="get" as="button">
+                                                Import fichier
+                                            </BreezeDropdownLink>
+                                            <BreezeDropdownLink style="z-index: 9999" v-if="$page.props.auth.user.coordinateur" :href="route('equipe')" method="get" as="button">
+                                                Gestion Équipe
+                                            </BreezeDropdownLink>
+                                            <BreezeDropdownLink style="z-index: 9999" :href="route('equipe.information')" method="get" as="button">
+                                                Information Équipe
+                                            </BreezeDropdownLink>
+                                            <BreezeDropdownLink style="z-index: 9999" :href="route('lien')" method="get" as="button">
+                                                Partage de Lien
+                                            </BreezeDropdownLink>
+                                        </template>
+                                    </BreezeDropdown>
+                                </div>
+                            </div>
+
+                            <div class="hidden space-x-8 sm:-my-px sm:flex">
                                 <BreezeNavLink :href="route('planning')" :active="route().current('planning')" as="button">
                                     Planning
-                                </BreezeNavLink>
-                                <BreezeNavLink :href="route('lien')" :active="route().current('lien')" as="button">
-                                    Partage de Lien
                                 </BreezeNavLink>
                                 <BreezeNavLink v-if="$page.props.auth.user.admin" :href="route('administration')" :active="route().current('administration')" as="button">
                                     Administration
@@ -40,7 +61,7 @@
                         <div class="flex">
                             <div v-if="this.$page.props.auth.user.coordinateur" class="flex items-center sm:ml-6">
                                 <div class="ml-3 relative">
-                                    <select v-model="selected" autocomplete class="block w-full overflow-y-auto text-sm leading-4 font-medium rounded-md rounded transition ease-in-out m-0" style="border-width: 0">
+                                    <select v-model="selected" class="block w-full overflow-y-auto text-sm leading-4 font-medium rounded-md rounded transition ease-in-out m-0" style="border-width: 0">
                                         <option v-for="hub in this.$page.props.hubs" :key="hub.id" :value="hub.ville">
                                             {{ hub.ville }}
                                         </option>
@@ -53,7 +74,7 @@
                                 </p>
                             </div>
 
-                        <div class="hidden sm:flex sm:items-center sm:ml-6">
+                            <div class="hidden sm:flex sm:items-center sm:ml-6">
                             <div class="ml-3 relative">
                                 <BreezeDropdown align="right" width="48">
                                     <template #trigger>
@@ -98,21 +119,22 @@
 
                 <!-- Responsive Navigation Menu -->
                 <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="sm:hidden">
+
                     <div class="pt-2 pb-3 space-y-1">
-                        <BreezeResponsiveNavLink v-if="$page.props.auth.user.coordinateur" :href="route('dashboard')" :active="route().current('dashboard')">
-                            Gestion du Hub
+                        <BreezeResponsiveNavLink v-if="$page.props.auth.user.coordinateur" :href="route('dashboard')" method="get" as="button">
+                            Import fichier
                         </BreezeResponsiveNavLink>
-                        <BreezeResponsiveNavLink v-if="$page.props.auth.user.coordinateur" :href="route('equipe')" :active="route().current('equipe')" as="button">
+                        <BreezeResponsiveNavLink v-if="$page.props.auth.user.coordinateur" :href="route('equipe')" method="get" as="button">
                             Gestion Équipe
                         </BreezeResponsiveNavLink>
-                        <BreezeResponsiveNavLink :href="route('equipe.information')" :active="route().current('equipe.information')" as="button">
+                        <BreezeResponsiveNavLink :href="route('equipe.information')" :active="route().current('equipe.information')" method="get" as="button">
                             Information Équipe
+                        </BreezeResponsiveNavLink>
+                        <BreezeResponsiveNavLink :href="route('lien')" :active="route().current('lien')" method="get" as="button">
+                            Partage de Lien
                         </BreezeResponsiveNavLink>
                         <BreezeResponsiveNavLink :href="route('planning')" :active="route().current('planning')" as="button">
                             Planning
-                        </BreezeResponsiveNavLink>
-                        <BreezeResponsiveNavLink :href="route('lien')" :active="route().current('lien')" as="button">
-                            Partage de Lien
                         </BreezeResponsiveNavLink>
                         <BreezeResponsiveNavLink v-if="$page.props.auth.user.admin" :href="route('administration')" :active="route().current('administration')" as="button">
                             Administration
@@ -181,7 +203,7 @@ export default {
         }
     },
     watch: {
-      selected: function () {
+        selected: function () {
           this.$page.props.hubs.forEach(item => {
                   if (item.ville === this.selected) {
                       this.updateHub(item.id)

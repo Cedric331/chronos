@@ -36,7 +36,8 @@ class InformationEquipeController extends Controller
      */
     public function update (Request $request, User $user): \Illuminate\Http\JsonResponse
     {
-        if ($user->id === Auth::id() || $user->isCoordinateur()) {
+
+        if ($user->id === Auth::id() || Auth::user()->isCoordinateur()) {
 
             $request->validate([
                 'name' => 'required|string|max:255',
