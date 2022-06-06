@@ -11,7 +11,7 @@ class VolantController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['role:Responsable|Administrateur'], ['only' => ['addVolant', 'deleteVolant']]);
+        $this->middleware(['role:Responsable|Administrateur']);
     }
 
     /**
@@ -19,15 +19,11 @@ class VolantController extends Controller
      */
     public function listVolant (): \Illuminate\Http\JsonResponse|\Inertia\Response
     {
-        if (Auth::user()->isVolant()) {
-            return Inertia::render('GestionVolant', [
-                'users' => User::with('roles')
-                    ->orderBy('name')
-                    ->get()
-            ]);
-        } else {
-            return response()->json('Action non autorisée', 404);
-        }
+        return Inertia::render('GestionVolant', [
+            'users' => User::with('roles')
+                ->orderBy('name')
+                ->get()
+        ]);
     }
 
     /**

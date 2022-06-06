@@ -7,11 +7,16 @@
 
             <div class="flex  flex-row justify-between space-x-4 items-center mx-auto">
                 <div class="flex flex-col">
-                    <div class="items-center w-full">
+                    <div class="items-center flex justify-center w-full font-bold mb-2">
                         <h2>Volant</h2>
                     </div>
-                    <select v-model="volant" class="p-3 h-96 border-2 border-one w-56 capitalize" multiple>
-                        <option v-for="user in isVolant" :value="user.id">{{ user.name }}</option>
+                    <select v-model="volant" class="p-3 h-96 border-2 border-one w-auto" multiple>
+                        <option v-if="isVolant.length > 0" v-for="user in isVolant" :value="user.id">
+                            {{ user.name }} - {{ user.email }}
+                        </option>
+                        <option v-else>
+                            -- Aucun utilisateur --
+                        </option>
                     </select>
                 </div>
 
@@ -25,11 +30,16 @@
                 </div>
 
                 <div class="flex flex-col">
-                    <div class="items-center">
+                    <div class="items-center font-bold flex justify-center mb-2">
                         <h2>Non Volant</h2>
                     </div>
-                    <select v-model="notVolant" class="p-3 h-96 border-2 border-one w-56 capitalize" multiple>
-                        <option v-for="user in isNotVolant" :value="user.id">{{ user.name }}</option>
+                    <select v-model="notVolant" class="p-3 h-96 border-2 border-one w-auto" multiple>
+                        <option v-if="isNotVolant.length > 0" v-for="user in isNotVolant" :value="user.id">
+                            {{ user.name }} - {{ user.email }}
+                        </option>
+                        <option v-else>
+                            -- Aucun utilisateur --
+                        </option>
                     </select>
                 </div>
             </div>

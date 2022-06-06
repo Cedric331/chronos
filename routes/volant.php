@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TraitementVolantController;
 use App\Http\Controllers\VolantController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,3 +15,19 @@ Route::post('/volant/add', [VolantController::class, 'addVolant'])
 Route::delete('/volant/delete', [VolantController::class, 'deleteVolant'])
     ->middleware('auth')
     ->name('volant.delete');
+
+Route::get('/volant/traitement', [TraitementVolantController::class, 'show'])
+    ->middleware('auth')
+    ->name('volant.show');
+
+Route::post('/volant/traitement', [TraitementVolantController::class, 'store'])
+    ->middleware('auth')
+    ->name('volant.traitement.post');
+
+Route::patch('/volant/traitement/{traitement}', [TraitementVolantController::class, 'update'])
+    ->middleware('auth')
+    ->name('volant.traitement.update');
+
+Route::delete('/volant/traitement/{traitement}', [TraitementVolantController::class, 'delete'])
+    ->middleware('auth')
+    ->name('volant.traitement.delete');
