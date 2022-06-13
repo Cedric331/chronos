@@ -65,7 +65,7 @@
                         </div>
 
                         <div class="flex">
-                            <div v-if="this.$page.props.auth.user.coordinateur || this.$page.props.auth.user.volant" class="flex items-center sm:ml-6">
+                            <div v-if="this.$page.props.auth.user.coordinateur" class="flex items-center sm:ml-6">
                                 <div class="ml-3 relative">
                                     <select v-model="selected" class="block w-full overflow-y-auto text-sm leading-4 font-medium rounded-md rounded transition ease-in-out m-0" style="border-width: 0">
                                         <option v-for="hub in this.$page.props.hubs" :key="hub.id" :value="hub.ville">

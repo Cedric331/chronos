@@ -31,3 +31,8 @@ Route::patch('/volant/traitement/{traitement}', [TraitementVolantController::cla
 Route::delete('/volant/traitement/{traitement}', [TraitementVolantController::class, 'delete'])
     ->middleware('auth')
     ->name('volant.traitement.delete');
+
+Route::post('/volant/traitement/hub', [TraitementVolantController::class, 'changeHub'])
+    ->middleware('auth')
+    ->name('volant.traitement.hub');
+

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ControllerResponse;
+use App\Models\Hub;
 use App\Models\TraitementVolant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,8 +22,21 @@ class TraitementVolantController extends Controller
     public function show (): \Illuminate\Http\JsonResponse|\Inertia\Response
     {
         return Inertia::render('TraitementVolant', [
-            'traitements' => TraitementVolant::where('hub_id', Auth::user()->hub_id)->get()
+            'traitements' => TraitementVolant::where('hub_id', Auth::user()->hub_id)->get(),
+            'hubs' => Hub::all(),
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function changeHub (Request $request): \Illuminate\Http\JsonResponse
+    {
+        $traitements = TraitementVolant::where('hub_id', $request->hub)->get();
+
+        return response()->json($traitements);
+
     }
 
     /**

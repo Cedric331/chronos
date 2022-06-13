@@ -10,22 +10,38 @@
                     </button>
                 </div>
 
-                <div class="text-gray-600 flex justify-center w-full my-12">
-                    <input v-model="search" type="search" name="search" placeholder="Rechercher..." class="h-10 w-72 px-5 pr-10 rounded-full text-sm focus:outline-none">
+                <div class="flex justify-between">
+                <div class="shadow-lg rounded-xl w-full md:w-80 p-4 bg-white relative overflow-y-auto" style="height: 500px">
+                    <div class="w-full flex items-center justify-between mb-6">
+                        <p class="text-gray-800 text-xl font-medium">
+                            Liste des hubs
+                        </p>
+                    </div>
+                    <div @click="this.hub = item" v-for="item in hubs" :key="item.id" :class="[item.id === hub.id ? 'bg-green-100' :  '']" class="flex items-center mb-2 rounded justify-between p-3 bg-gray-100">
+                        <div class="flex w-full ml-2 items-center justify-between">
+                            <p>
+                                {{ item.ville }}
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
-            <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 mt-4">
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                    <div v-for="traitement in listTraitements" class="w-full overflow-y-auto bg-gray-900 rounded-lg sahdow-lg p-6 flex flex-col justify-center items-center">
+            <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 mt-4">
+                <div class="text-gray-600 flex justify-start w-full my-12">
+                    <input v-model="search" type="search" name="search" placeholder="Rechercher..." class="h-10 w-72 px-5 pr-10 rounded-full text-sm focus:outline-none">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 h-96">
+
+                    <div v-for="traitement in listTraitements" class="w-full p-6 h-96 overflow-x-auto bg-gray-900 rounded-lg sahdow-lg flex flex-col items-center break-all">
                         <div class="text-center">
                             <p class="text-xl text-white font-bold mb-2">{{ traitement.titre }}</p>
-                            <p class="text-base text-white font-normal">
-                                {{ traitement.description }}
+                            <p v-for="line in traitement.description.split('\n')" class="text-white font-normal w-full">
+                                {{ line }}<br>
                             </p>
                         </div>
                         <div>
-                            <button @click="this.showModal = true; this.selected = traitement" class="inline-flex mr-2 mt-2 items-center flex justify-center h-10 px-5 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800">
+                            <button @click="this.showModal = true; this.selected = traitement" class="inline-flex mr-6 mt-2 items-center flex justify-center h-10 px-5 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800">
                                 <span>Modifier</span>
                             </button>
                             <button @click="confirmDelete(traitement)" class="inline-flex items-center flex justify-center h-10 px-5 text-indigo-100 transition-colors duration-150 bg-red-700 rounded-lg focus:shadow-outline hover:bg-red-800">
@@ -36,6 +52,7 @@
 
                 </div>
             </section>
+            </div>
         </div>
     </div>
         <ModalConfirmDelete
@@ -68,12 +85,15 @@ export default {
         Head
     },
     props: {
-        traitements: Object
+        traitements: Object,
+        hubs: Object
     },
     data () {
         return {
             listTraitements: [],
+            saveTraitements: [],
             search: '',
+            hub: this.$page.props.hub,
             selected: null,
             showDelete: false,
             showModal: false
@@ -81,7 +101,7 @@ export default {
     },
     watch: {
         search ()  {
-            this.listTraitements = this.traitements
+            this.listTraitements = this.saveTraitements
             if (this.search.length > 0) {
                 this.listTraitements = this.listTraitements.filter(element => {
                    const titre = element.titre.toLowerCase()
@@ -91,9 +111,39 @@ export default {
                     }
                 })
             }
+        },
+        hub () {
+            axios.post('/volant/traitement/hub', {
+                hub: this.hub.id
+            })
+            .then(response => {
+                this.listTraitements = response.data
+                this.saveTraitements = response.data
+            })
+            .catch(error => {
+                console.log(error)
+            })
         }
     },
     methods: {
+        // ligne (data) {
+        //   if (data.includes('https')) {
+        //
+        //     let a = data.indexOf('https')
+        //
+        //     let href = ''
+        //       console.log(data)
+        //           data.forEach((element, index) => {
+        //           if (!data[a]) {
+        //               data[index] += '</a>'
+        //           } else {
+        //               href += data[a]
+        //               a++
+        //           }
+        //       })
+        //   }
+        //   return data
+        // },
         confirmDelete (data) {
             this.selected = data
             this.showDelete = true
@@ -139,6 +189,7 @@ export default {
     },
     mounted() {
         this.listTraitements = this.traitements
+        this.saveTraitements = this.traitements
     }
 }
 </script>
