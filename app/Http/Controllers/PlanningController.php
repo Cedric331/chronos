@@ -129,7 +129,15 @@ class PlanningController extends Controller
 
                     if (strpos($horaires, '-') && !empty($horaires)) {
                         $horaire = explode('-', $horaires);
+                        $array = str_split($horaire[0]);
+
                         $debutJournee = $horaire[0];
+                        if (!is_numeric($array[0]))
+                        {
+                            $string = explode(':', $horaire[0]);
+                            $debutJournee = trim($string[1]);
+                        }
+
                         $finJournee = $horaire[1];
                     }
                     $debutPause = null;
@@ -484,7 +492,7 @@ class PlanningController extends Controller
     {
         $value = json_decode($data);
 
-        if ($value->type === 'Iti1' || $value->type === 'Iti2' || $value->type === 'Iti3') {
+        if ($value->type === 'Iti1' || $value->type === 'Iti2' || $value->type === 'Iti3' || $value->type === 'TER') {
             if (!$horaires) {
                 return null;
             } else {
@@ -500,6 +508,7 @@ class PlanningController extends Controller
      */
     public function updatePlanning (Request $request): \Illuminate\Http\JsonResponse
     {
+        dd($request);
         $type = null;
         if ($request->planification === null) {
             return response()->json(false, 400);
@@ -531,7 +540,46 @@ class PlanningController extends Controller
         if ($request->sendMail) {
             $this->sendMailPlanningUpdate($data, $type);
         }
+        return response()->json(true);
+    }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function switchPlanning(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $type = null;
+        if ($request->planification === null) {
+            return response()->json(false, 400);
+        }
+        if ($request->planification === '3') {
+            $type = 'CP';
+        }
+        if ($request->isTech) {
+            $type = 'Iti1';
+        }
+
+        foreach ($request->selected as $selected) {
+            $collaborateurDate = CollaborateurDate::find($selected['horaire_id']);
+            $horaires = [
+                'debut_journee' => $request->debut_journee,
+                'debut_pause' => $request->debut_pause,
+                'fin_pause' => $request->fin_pause,
+                'fin_journee' => $request->fin_journee,
+                'teletravail' => $request->teletravail,
+                'type' => $type,
+            ];
+
+            $collaborateurDate->horaire = json_encode($horaires);
+            $collaborateurDate->save();
+        }
+
+        $data = $request;
+
+        if ($request->sendMail) {
+            $this->sendMailPlanningUpdate($data, $type);
+        }
         return response()->json(true);
     }
 

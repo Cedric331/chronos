@@ -20511,6 +20511,28 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/ModalSwitchPlanning.vue?vue&type=script&lang=js":
+/*!*************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/ModalSwitchPlanning.vue?vue&type=script&lang=js ***!
+  \*************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: "ModalSwitchPlanning",
+  props: {
+    collaborateurs: Object,
+    collaborateur: Object,
+    selected: Array
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/ModalTraitementVolant.vue?vue&type=script&lang=js":
 /*!***************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/ModalTraitementVolant.vue?vue&type=script&lang=js ***!
@@ -20948,7 +20970,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "SelectedDate",
   props: {
-    selected: Number
+    selected: Number,
+    classCss: String,
+    value: String
   }
 });
 
@@ -22149,6 +22173,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_SelectedDate_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/Components/SelectedDate.vue */ "./resources/js/Components/SelectedDate.vue");
 /* harmony import */ var _Components_Checkbox__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/Components/Checkbox */ "./resources/js/Components/Checkbox.vue");
 /* harmony import */ var _Components_CheckUpdate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/Components/CheckUpdate */ "./resources/js/Components/CheckUpdate.vue");
+/* harmony import */ var _Components_ModalSwitchPlanning_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/Components/ModalSwitchPlanning.vue */ "./resources/js/Components/ModalSwitchPlanning.vue");
+
 
 
 
@@ -22160,6 +22186,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Planning",
   components: {
+    ModalSwitchPlanning: _Components_ModalSwitchPlanning_vue__WEBPACK_IMPORTED_MODULE_8__["default"],
     CheckUpdate: _Components_CheckUpdate__WEBPACK_IMPORTED_MODULE_7__["default"],
     Checkbox: _Components_Checkbox__WEBPACK_IMPORTED_MODULE_6__["default"],
     ModalPlanning: _Components_ModalPlanning_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
@@ -22184,6 +22211,7 @@ __webpack_require__.r(__webpack_exports__);
       datePlanning: null,
       showPlanning: false,
       updatePlanning: false,
+      updateSwitch: false,
       texte: this.colorTexte()
     };
   },
@@ -23808,6 +23836,132 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/ModalSwitchPlanning.vue?vue&type=template&id=59f26dc3":
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/ModalSwitchPlanning.vue?vue&type=template&id=59f26dc3 ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+var _hoisted_1 = {
+  "class": "fixed fade z-10 inset-0 max-w-2xl h-full mx-auto outline-none overflow-x-hidden overflow-y-hidden",
+  "aria-labelledby": "modification planning",
+  role: "dialog",
+  "aria-modal": "true"
+};
+var _hoisted_2 = {
+  "class": "flex items-end justify-center pt-4 px-4 pb-20 text-center sm:block sm:p-0 w-10/12 mb-6 mx-auto"
+};
+
+var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  "class": "hidden sm:inline-block sm:align-middle sm:h-screen",
+  "aria-hidden": "true"
+}, "​", -1
+/* HOISTED */
+);
+
+var _hoisted_4 = {
+  "class": "inline-block align-bottom bg-white rounded-lg text-left shadow-xl transform transition-all sm:my-4 sm:align-middle w-full"
+};
+var _hoisted_5 = {
+  "class": "bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4"
+};
+var _hoisted_6 = {
+  "class": "sm:flex sm:items-start"
+};
+var _hoisted_7 = {
+  "class": "container p-6 mx-auto bg-white"
+};
+var _hoisted_8 = {
+  "class": "font-bold text-center text-3xl text-gray-800 md:text-2xl mb-5"
+};
+
+var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", null, null, -1
+/* HOISTED */
+);
+
+var _hoisted_10 = {
+  "class": "max-w-2xl mx-auto"
+};
+var _hoisted_11 = {
+  "class": "flex flex-col"
+};
+var _hoisted_12 = {
+  "class": "overflow-x-auto shadow-md sm:rounded-lg"
+};
+var _hoisted_13 = {
+  "class": "inline-block min-w-full align-middle"
+};
+var _hoisted_14 = {
+  "class": "overflow-hidden"
+};
+var _hoisted_15 = {
+  "class": "min-w-full divide-y divide-gray-200 table-fixed bg-gray-700 dark:divide-gray-700"
+};
+
+var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", {
+  "class": "bg-gray-700"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+  "class": "font-bold bg-gray-700 text-center text-lg text-white md:text-lg mb-5"
+}, " Veuillez indiquer avec qui switch le planning ")]), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+  scope: "col",
+  "class": "py-3 px-6 text-xs text-center font-medium tracking-wider text-gray-700 uppercase dark:text-gray-400"
+}, " Collaborateur ")])], -1
+/* HOISTED */
+);
+
+var _hoisted_17 = {
+  "class": "bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
+};
+var _hoisted_18 = {
+  "class": "hover:bg-gray-100 dark:hover:bg-gray-700"
+};
+var _hoisted_19 = {
+  "class": "py-4 px-6 text-sm font-medium text-center text-gray-900 whitespace-nowrap dark:text-white"
+};
+var _hoisted_20 = {
+  "class": "bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
+};
+
+var _hoisted_21 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  type: "button",
+  "class": "mt-3 w-full inline-flex justify-center bg-blue-500 rounded-md border shadow-sm px-4 py-2 text-base font-medium text-white sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+}, "Valider", -1
+/* HOISTED */
+);
+
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    onClick: _cache[0] || (_cache[0] = function ($event) {
+      return _ctx.closeModal();
+    }),
+    "class": "fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity",
+    "aria-hidden": "true"
+  }), _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("section", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_8, " Switch du planning de " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.collaborateur.name), 1
+  /* TEXT */
+  ), _hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_15, [_hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", _hoisted_17, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.collaborateurs, function (member) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(member.name), 1
+    /* TEXT */
+    )]);
+  }), 256
+  /* UNKEYED_FRAGMENT */
+  ))])])])])])])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, [_hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    onClick: _cache[1] || (_cache[1] = function ($event) {
+      return _ctx.closeModal();
+    }),
+    type: "button",
+    "class": "mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+  }, "Fermer")])])])]);
+}
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/ModalTraitementVolant.vue?vue&type=template&id=7fd749ca":
 /*!*******************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/ModalTraitementVolant.vue?vue&type=template&id=7fd749ca ***!
@@ -24617,21 +24771,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 var _hoisted_1 = {
-  "class": "fixed bottom-3 right-6"
+  "class": "relative text-white p-3 rounded-lg text-sm uppercase font-semibold tracking-tight overflow-visible"
 };
 var _hoisted_2 = {
-  "class": "relative bg-blue-500 text-white p-3 rounded-lg text-sm uppercase font-semibold tracking-tight overflow-visible"
-};
-
-var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Modifier horaires ");
-
-var _hoisted_4 = {
-  "class": "absolute -top-3 -right-3 px-2.5 py-0.5 bg-green-500 rounded-full text-xs"
+  "class": "absolute -top-2 -right-2 px-2.5 py-0.5 bg-red-500 rounded-full text-xs"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.selected), 1
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($props.classCss)
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.value) + " ", 1
   /* TEXT */
-  )])]);
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.selected), 1
+  /* TEXT */
+  )])], 2
+  /* CLASS */
+  );
 }
 
 /***/ }),
@@ -27702,7 +27856,7 @@ var _hoisted_20 = {
   key: 0
 };
 var _hoisted_21 = {
-  key: 0
+  key: 2
 };
 var _hoisted_22 = {
   key: 1
@@ -27732,6 +27886,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_ModalPlanning = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("ModalPlanning");
 
   var _component_ModalUpdatePlanning = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("ModalUpdatePlanning");
+
+  var _component_ModalSwitchPlanning = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("ModalSwitchPlanning");
 
   var _component_CheckUpdate = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("CheckUpdate");
 
@@ -27828,12 +27984,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)($data.texte)
         }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(planning.date), 5
         /* TEXT, STYLE */
-        )])]), planning.horaires ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+        )])]), planning.horaires ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_20, [planning.type !== 'Iti' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
+          key: 0,
           "class": "font-light text-justify line-clamp-3",
           style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)($data.texte)
         }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(planning.horaires.teletravail ? 'Télétravail' : 'Hub'), 5
         /* TEXT, STYLE */
-        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+        )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
+          key: 1,
+          "class": "font-light text-justify line-clamp-3",
+          style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)($data.texte)
+        }, " Technicien ", 4
+        /* STYLE */
+        )), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
           "class": "font-light text-justify line-clamp-3",
           style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)($data.texte)
         }, " Début : " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(planning.horaires.debut_journee), 5
@@ -27868,8 +28031,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       ))])]), $data.selectedPlanning.length > 0 && _ctx.$page.props.auth.user.coordinateur ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_SelectedDate, {
         key: 0,
         onClick: _cache[2] || (_cache[2] = function ($event) {
+          return $data.updateSwitch = true;
+        }),
+        classCss: 'fixed bottom-20 right-9 bg-purple-500 rounded-full',
+        value: 'Switch horaires',
+        selected: $data.selectedPlanning.length
+      }, null, 8
+      /* PROPS */
+      , ["selected"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.selectedPlanning.length > 0 && _ctx.$page.props.auth.user.coordinateur ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_SelectedDate, {
+        key: 1,
+        onClick: _cache[3] || (_cache[3] = function ($event) {
           return $data.updatePlanning = true;
         }),
+        classCss: 'fixed bottom-3 right-6 bg-blue-500 rounded-full',
+        value: 'Modifier horaires',
         selected: $data.selectedPlanning.length
       }, null, 8
       /* PROPS */
@@ -27877,10 +28052,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         key: 2,
         showDates: $data.showDates,
         datePlanning: $data.datePlanning,
-        onRefreshViewDate: _cache[3] || (_cache[3] = function (data, index) {
+        onRefreshViewDate: _cache[4] || (_cache[4] = function (data, index) {
           return _this.viewDate(data, index);
         }),
-        onCloseModal: _cache[4] || (_cache[4] = function ($event) {
+        onCloseModal: _cache[5] || (_cache[5] = function ($event) {
           return _this.showPlanning = false;
         })
       }, null, 8
@@ -27889,14 +28064,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         key: 3,
         collaborateur: $data.member,
         selected: _this.selectedPlanning,
-        onCloseModal: _cache[5] || (_cache[5] = function (bool) {
+        onCloseModal: _cache[6] || (_cache[6] = function (bool) {
           _this.closeUpdate(bool);
         })
       }, null, 8
       /* PROPS */
-      , ["collaborateur", "selected"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !_ctx.$page.props.auth.user.check_update ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_CheckUpdate, {
+      , ["collaborateur", "selected"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.updateSwitch && _ctx.$page.props.auth.user.coordinateur ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_ModalSwitchPlanning, {
         key: 4,
-        onCloseModal: _cache[6] || (_cache[6] = function ($event) {
+        collaborateurs: $data.members,
+        collaborateur: $data.member,
+        selected: _this.selectedPlanning
+      }, null, 8
+      /* PROPS */
+      , ["collaborateurs", "collaborateur", "selected"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !_ctx.$page.props.auth.user.check_update ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_CheckUpdate, {
+        key: 5,
+        onCloseModal: _cache[7] || (_cache[7] = function ($event) {
           return _this.closeCheck();
         })
       })) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
@@ -53247,6 +53429,34 @@ if (false) {}
 
 /***/ }),
 
+/***/ "./resources/js/Components/ModalSwitchPlanning.vue":
+/*!*********************************************************!*\
+  !*** ./resources/js/Components/ModalSwitchPlanning.vue ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _ModalSwitchPlanning_vue_vue_type_template_id_59f26dc3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ModalSwitchPlanning.vue?vue&type=template&id=59f26dc3 */ "./resources/js/Components/ModalSwitchPlanning.vue?vue&type=template&id=59f26dc3");
+/* harmony import */ var _ModalSwitchPlanning_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ModalSwitchPlanning.vue?vue&type=script&lang=js */ "./resources/js/Components/ModalSwitchPlanning.vue?vue&type=script&lang=js");
+/* harmony import */ var C_wamp64_www_developpement_application_chronos_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+
+
+
+
+;
+const __exports__ = /*#__PURE__*/(0,C_wamp64_www_developpement_application_chronos_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_ModalSwitchPlanning_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_ModalSwitchPlanning_vue_vue_type_template_id_59f26dc3__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/Components/ModalSwitchPlanning.vue"]])
+/* hot reload */
+if (false) {}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
+
+/***/ }),
+
 /***/ "./resources/js/Components/ModalTraitementVolant.vue":
 /*!***********************************************************!*\
   !*** ./resources/js/Components/ModalTraitementVolant.vue ***!
@@ -54252,6 +54462,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/Components/ModalSwitchPlanning.vue?vue&type=script&lang=js":
+/*!*********************************************************************************!*\
+  !*** ./resources/js/Components/ModalSwitchPlanning.vue?vue&type=script&lang=js ***!
+  \*********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ModalSwitchPlanning_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ModalSwitchPlanning_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./ModalSwitchPlanning.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/ModalSwitchPlanning.vue?vue&type=script&lang=js");
+ 
+
+/***/ }),
+
 /***/ "./resources/js/Components/ModalTraitementVolant.vue?vue&type=script&lang=js":
 /*!***********************************************************************************!*\
   !*** ./resources/js/Components/ModalTraitementVolant.vue?vue&type=script&lang=js ***!
@@ -54936,6 +55162,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ModalPlanning_vue_vue_type_template_id_41d75822__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ModalPlanning_vue_vue_type_template_id_41d75822__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./ModalPlanning.vue?vue&type=template&id=41d75822 */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/ModalPlanning.vue?vue&type=template&id=41d75822");
+
+
+/***/ }),
+
+/***/ "./resources/js/Components/ModalSwitchPlanning.vue?vue&type=template&id=59f26dc3":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/Components/ModalSwitchPlanning.vue?vue&type=template&id=59f26dc3 ***!
+  \***************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ModalSwitchPlanning_vue_vue_type_template_id_59f26dc3__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ModalSwitchPlanning_vue_vue_type_template_id_59f26dc3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./ModalSwitchPlanning.vue?vue&type=template&id=59f26dc3 */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/ModalSwitchPlanning.vue?vue&type=template&id=59f26dc3");
 
 
 /***/ }),

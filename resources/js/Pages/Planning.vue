@@ -42,8 +42,11 @@
                                     </div>
                                 </div>
                                 <div v-if="planning.horaires">
-                                    <p class="font-light text-justify line-clamp-3" :style="texte">
+                                    <p v-if="planning.type !== 'Iti'" class="font-light text-justify line-clamp-3" :style="texte">
                                        {{ planning.horaires.teletravail ? 'Télétravail' : 'Hub'}}
+                                    </p>
+                                    <p v-else class="font-light text-justify line-clamp-3" :style="texte">
+                                        Technicien
                                     </p>
                                     <p class="font-light text-justify line-clamp-3" :style="texte">
                                         Début : {{ planning.horaires.debut_journee }}
@@ -70,7 +73,8 @@
                         </div>
                     </div>
                 </div>
-            <SelectedDate @click="updatePlanning = true" v-if="selectedPlanning.length > 0 && $page.props.auth.user.coordinateur" :selected="selectedPlanning.length"></SelectedDate>
+            <SelectedDate @click="updateSwitch = true" v-if="selectedPlanning.length > 0 && $page.props.auth.user.coordinateur" :classCss="'fixed bottom-20 right-9 bg-purple-500 rounded-full'" :value="'Switch horaires'" :selected="selectedPlanning.length"></SelectedDate>
+            <SelectedDate @click="updatePlanning = true" v-if="selectedPlanning.length > 0 && $page.props.auth.user.coordinateur" :classCss="'fixed bottom-3 right-6 bg-blue-500 rounded-full'" :value="'Modifier horaires'" :selected="selectedPlanning.length"></SelectedDate>
         </div>
         <div v-else>
             <h1 class="text-3l text-center font-bold text-dark mt-8">
@@ -89,6 +93,11 @@
                              :selected="this.selectedPlanning"
                              @closeModal="bool => { this.closeUpdate(bool) }">
         </ModalUpdatePlanning>
+        <ModalSwitchPlanning v-if="updateSwitch && $page.props.auth.user.coordinateur"
+                             :collaborateurs="members"
+                             :collaborateur="member"
+                             :selected="this.selectedPlanning">
+        </ModalSwitchPlanning>
         <CheckUpdate v-if="!$page.props.auth.user.check_update"
                              @closeModal="this.closeCheck()">
         </CheckUpdate>
@@ -104,10 +113,12 @@ import ModalUpdatePlanning from "@/Components/ModalUpdatePlanning.vue";
 import SelectedDate from "@/Components/SelectedDate.vue";
 import Checkbox from "@/Components/Checkbox";
 import CheckUpdate from "@/Components/CheckUpdate";
+import ModalSwitchPlanning from "@/Components/ModalSwitchPlanning.vue";
 
 export default {
     name: "Planning",
     components: {
+        ModalSwitchPlanning,
         CheckUpdate,
         Checkbox,
         ModalPlanning,
@@ -132,6 +143,7 @@ export default {
             datePlanning: null,
             showPlanning: false,
             updatePlanning: false,
+            updateSwitch: false,
             texte: this.colorTexte()
         }
     },
