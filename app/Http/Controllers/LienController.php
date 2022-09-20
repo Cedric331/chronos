@@ -22,7 +22,7 @@ class LienController extends Controller
      */
     public function show (): \Inertia\Response
     {
-        $liens = Lien::where('hub_id', Auth::user()->hub_id)->paginate(6);
+        $liens = Lien::where('hub_id', Auth::user()->hub_id)->paginate(12);
 
         return Inertia::render('Lien', [
             'liens' => $liens
@@ -49,7 +49,7 @@ class LienController extends Controller
             'user_id' => Auth::id()
         ]);
 
-        $liens = Lien::where('hub_id', Auth::user()->hub_id)->paginate(6);
+        $liens = Lien::where('hub_id', Auth::user()->hub_id)->paginate(12);
 
         return response()->json($liens);
     }
@@ -97,7 +97,7 @@ class LienController extends Controller
             return response()->json('Action non autorisée', 401);
         }
 
-        $liens = Lien::where('hub_id', Auth::user()->hub_id)->paginate(6);
+        $liens = Lien::where('hub_id', Auth::user()->hub_id)->paginate(12);
 
         return response()->json($liens);
     }
@@ -129,7 +129,7 @@ class LienController extends Controller
                     return $query;
                 }
             })
-            ->paginate(6);
+            ->paginate(12);
 
         return response()->json($liens);
 
