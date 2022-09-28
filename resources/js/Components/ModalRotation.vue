@@ -1,0 +1,216 @@
+<template>
+    <div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="utilisateur" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div @click="closeModal()" class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle w-auto">
+
+                    <div class="mx-auto w-full border bg-white p-4">
+
+                        <div class="mt-6">
+                            <div class="font-bold">*Nom de la Rotation</div>
+                            <div>
+                                <input class="mt-1 w-full rounded-[4px] border border-[#A0ABBB] p-2" type="text" placeholder="3 caractères max" maxlength="3" />
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <div class="block w-full overflow-x-auto">
+                                <table class="items-center bg-transparent w-full border-collapse ">
+                                    <thead>
+                                    <tr>
+                                        <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                                            Jour de la semaine
+                                        </th>
+                                        <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                                            Jour OFF
+                                        </th>
+                                        <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                                           Début Journée
+                                        </th>
+                                        <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                                            Début Pause Déjeuner
+                                        </th>
+                                        <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                                            Fin Pause Déjeuner
+                                        </th>
+                                        <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                                            Fin Journée
+                                        </th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                    <tr v-for="(jour, days) in jours" :key="days">
+                                        <th class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">
+                                            {{ days }}
+                                        </th>
+                                        <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                           <checkbox v-model="jours[days]['is_off']" :checked="jours[days]['is_off']"></checkbox>
+                                        </td>
+                                        <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                            <select v-model="jours[days]['debut_journee']" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
+                                                <option v-for="(horaire, index) in horaires" :key="index" :value="horaire">
+                                                    {{ horaire }}
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                            <select v-model="jours[days]['debut_pause']" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
+                                                <option v-for="(horaire, index) in horaires" :key="index" :value="horaire">
+                                                    {{ horaire }}
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                            <select v-model="jours[days]['fin_pause']" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
+                                                <option v-for="(horaire, index) in horaires" :key="index" :value="horaire">
+                                                    {{ horaire }}
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                            <select v-model="jours[days]['fin_journee']" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
+                                                <option v-for="(horaire, index) in horaires" :key="index" :value="horaire">
+                                                    {{ horaire }}
+                                                </option>
+                                            </select>
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <button @click="store()" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm">
+                            {{ isUpdate ? 'Modifier' : 'Créer' }}
+                        </button>
+                        <button @click="closeModal()" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                            Annuler
+                        </button>
+                        <div v-if="errors" class="mb-4 sm:align-middle font-medium text-sm text-red-600">
+                            {{ errors }}
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import Checkbox from "@/Components/Checkbox";
+export default {
+    name: "ModalRotation",
+    components: {Checkbox},
+    props: {
+        isUpdate: Boolean,
+    },
+    data () {
+        return {
+            jours: {
+                lundi: {
+                    'is_off': false,
+                    'debut_journee': null,
+                    'debut_pause': null,
+                    'fin_pause': null,
+                    'fin_journee': null,
+                 },
+                mardi: {
+                    'is_off': false,
+                    'debut_journee': null,
+                    'debut_pause': null,
+                    'fin_pause': null,
+                    'fin_journee': null,
+                },
+                mercredi: {
+                    'is_off': false,
+                    'debut_journee': null,
+                    'debut_pause': null,
+                    'fin_pause': null,
+                    'fin_journee': null,
+                },
+                jeudi: {
+                    'is_off': false,
+                    'debut_journee': null,
+                    'debut_pause': null,
+                    'fin_pause': null,
+                    'fin_journee': null,
+                },
+                vendredi: {
+                    'is_off': false,
+                    'debut_journee': null,
+                    'debut_pause': null,
+                    'fin_pause': null,
+                    'fin_journee': null,
+                },
+                samedi: {
+                    'is_off': true,
+                    'debut_journee': null,
+                    'debut_pause': null,
+                    'fin_pause': null,
+                    'fin_journee': null,
+                },
+                dimanche: {
+                    'is_off': true,
+                    'debut_journee': null,
+                    'debut_pause': null,
+                    'fin_pause': null,
+                    'fin_journee': null,
+                },
+    },
+            horaires: [
+                'Rien',
+                '8h00',
+                '8h30',
+                '9h00',
+                '9h30',
+                '10h00',
+                '10h30',
+                '11h00',
+                '11h30',
+                '12h00',
+                '12h30',
+                '13h00',
+                '13h30',
+                '14h00',
+                '14h30',
+                '15h00',
+                '15h30',
+                '16h00',
+                '16h30',
+                '17h00',
+                '17h30',
+                '18h00',
+                '18h30',
+                '19h00',
+                '19h30',
+                '20h00',
+                '20h30',
+                '21h00'
+            ],
+            type: null,
+            errors: null
+        }
+    },
+    methods: {
+        store () {
+            console.log(this.jours)
+        },
+        closeModal () {
+            this.type = null
+            this.errors = null
+            this.$emit('closeModal', false)
+        },
+    }
+}
+</script>
+
+<style scoped>
+
+</style>

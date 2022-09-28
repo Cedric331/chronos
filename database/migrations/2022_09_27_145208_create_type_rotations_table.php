@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\TypeRotation;
+use App\Models\Hub;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRotationsTable extends Migration
+class CreateTypeRotationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,11 +14,11 @@ class CreateRotationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('rotations', function (Blueprint $table) {
+        Schema::create('type_rotations', function (Blueprint $table) {
             $table->id();
-            $table->string('day');
-            $table->json('horaire');
-            $table->foreignIdFor(TypeRotation::class)->onDelete('cascade');
+            $table->string('type', 3);
+            $table->foreignId('hub_id')->constrained('hubs');
+            $table->unique(['type', 'hub_id']);
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateRotationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rotations');
+        Schema::dropIfExists('type_rotations');
     }
 }

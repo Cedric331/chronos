@@ -6,7 +6,7 @@
                 <div class="min-h-screen bg-gray-700">
                     <NavbarPlanning style="z-index: 1" :collaborateur="member" :collaborateurs="members" @notificationUpdate="notificationUpdate()" @updateCollaborateur="data => updateCollaborateur(data)"/>
                     <div class="p-4 gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 select-none">
-                        <div v-for="(planning, index) in allPlannings" :key="planning.date" :style="colorPlanning(planning)" :class="[planning.today ? ' shadow-blue-400/80 shadow-2xl bg-white border-solid border-4 border-blue-500' : '', this.isSelected(planning) ? ' border-4 border-red-500' : '', this.$page.props.auth.user.coordinateur ? ' cursor-pointer' : '']" class="hover:scale-105 relative w-full rounded-md shadow-md shadow-dark hover:shadow-red-400/80 hover:shadow-2xl hover:bg-white">
+                        <div v-for="(planning, index) in allPlannings" :key="planning.date" :style="colorPlanning(planning)" :class="[planning.today && !this.isSelected(planning) ? ' shadow-blue-400/80 shadow-2xl bg-white border-solid border-4 border-blue-500' : '', planning.today && this.isSelected(planning) ? ' shadow-blue-400/80 shadow-2xl bg-white': '', this.isSelected(planning) ? ' border-4 border-red-500' : '', this.$page.props.auth.user.coordinateur ? ' cursor-pointer' : '']" class="hover:scale-105 relative w-full rounded-md shadow-md shadow-dark hover:shadow-red-400/80 hover:shadow-2xl hover:bg-white">
                             <div class="absolute top-0 right-0">
                                 <div @click="viewDate(planning.date_id, index)" class=" flex justify-end p-1">
                                     <svg class="fill-current" :style="texte" height="16px" version="1.1" viewBox="0 0 24 24" width="16px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title/>
@@ -38,7 +38,7 @@
                             <div @click="selectPlanning(planning)" class="p-2">
                                 <div>
                                     <div>
-                                        <p class="font-bold text-sm py-1" :style="texte">{{ planning.date }}</p>
+                                        <p class="font-bold text-sm py-1 underline" :style="texte">{{ planning.date }}</p>
                                     </div>
                                 </div>
                                 <div v-if="planning.horaires">

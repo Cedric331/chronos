@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Rotation extends Model
+class TypeRotation extends Model
 {
     use HasFactory;
 
@@ -15,8 +15,7 @@ class Rotation extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'day',
-        'horaire',
-        'type_rotation_id'
+        'type',
+        'hub_id'
     ];
 }
