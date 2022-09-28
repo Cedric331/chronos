@@ -1,28 +1,25 @@
 <template>
     <notifications position="bottom right" />
     <div>
-        <div class="min-h-screen bg-white">
+        <div class="h-screen bg-gray-700">
             <nav class="bg-white border-b border-gray-400">
                 <!-- Primary Navigation Menu -->
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="w-full mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
-                        <div class="flex">
-                            <!-- Logo -->
-                            <div class="shrink-0 flex items-center">
-                                <Link :href="route('planning')">
-                                    <BreezeApplicationLogo class="block h-9 w-auto" />
-                                </Link>
-                            </div>
-
+                        <!-- Logo -->
+                        <div class="shrink-0 flex items-center">
+                            <Link :href="route('planning')">
+                                <BreezeApplicationLogo class="block h-9 w-auto" />
+                            </Link>
+                        </div>
                             <!-- Navigation Links -->
-                            <div class="hidden sm:flex sm:items-center sm:ml-6">
+                            <div class="flex hidden sm:flex sm:items-center sm:ml-6">
                                 <div class="relative">
                                     <BreezeDropdown align="left" width="48">
                                         <template #trigger>
                                         <span class="inline-flex rounded-md">
-                                            <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                            <button type="button" class="hover:bg-black hover:text-white font-bold rounded-full inline-flex items-center p-2 mr-1 border border-transparent leading-4 font-medium rounded-md bg-white focus:outline-none transition ease-in-out duration-150">
                                                 Gestion du Hub
-
                                                 <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                                 </svg>
@@ -31,34 +28,30 @@
                                         </template>
 
                                         <template #content>
-                                            <BreezeDropdownLink style="z-index: 9999" v-if="$page.props.auth.user.coordinateur" :href="route('dashboard')" method="get" as="button">
+                                            <BreezeDropdownLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" style="z-index: 9999" v-if="$page.props.auth.user.coordinateur" :href="route('dashboard')" method="get" as="button">
                                                 Import fichier
                                             </BreezeDropdownLink>
-                                            <BreezeDropdownLink style="z-index: 9999" v-if="$page.props.auth.user.coordinateur" :href="route('equipe')" method="get" as="button">
+                                            <BreezeDropdownLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" style="z-index: 9999" v-if="$page.props.auth.user.coordinateur" :href="route('equipe')" method="get" as="button">
                                                 Gestion Équipe
                                             </BreezeDropdownLink>
-                                            <BreezeDropdownLink style="z-index: 9999" :href="route('equipe.information')" method="get" as="button">
+                                            <BreezeDropdownLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" style="z-index: 9999" :href="route('equipe.information')" method="get" as="button">
                                                 Information Équipe
                                             </BreezeDropdownLink>
-                                            <BreezeDropdownLink style="z-index: 9999" :href="route('lien')" method="get" as="button">
+                                            <BreezeDropdownLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" style="z-index: 9999" :href="route('lien')" method="get" as="button">
                                                 Partage de Lien
                                             </BreezeDropdownLink>
                                         </template>
                                     </BreezeDropdown>
                                 </div>
-                            </div>
 
                             <div class="hidden space-x-8 sm:-my-px sm:flex">
-                                <BreezeNavLink :href="route('planning')" :active="route().current('planning')" as="button">
+                                <BreezeNavLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" v-if="$page.props.auth.user.coordinateur" :href="route('rotation')" :active="route().current('rotation')" as="button">
+                                    Gestion des rotations
+                                </BreezeNavLink>
+                                <BreezeNavLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" :href="route('planning')" :active="route().current('planning')" as="button">
                                     Planning
                                 </BreezeNavLink>
-                                <BreezeNavLink v-if="$page.props.auth.user.volant" :href="route('volant.show')" :active="route().current('planning')" as="button">
-                                    Traitement Volant
-                                </BreezeNavLink>
-                                <BreezeNavLink v-if="$page.props.auth.user.responsable" :href="route('volant.list')" :active="route().current('volant.list')" as="button">
-                                    Gestion Volant
-                                </BreezeNavLink>
-                                <BreezeNavLink v-if="$page.props.auth.user.admin" :href="route('administration')" :active="route().current('administration')" as="button">
+                                <BreezeNavLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" v-if="$page.props.auth.user.admin" :href="route('administration')" :active="route().current('administration')" as="button">
                                     Administration
                                 </BreezeNavLink>
                             </div>
@@ -67,7 +60,7 @@
                         <div class="flex">
                             <div v-if="this.$page.props.auth.user.coordinateur" class="flex items-center sm:ml-6">
                                 <div class="ml-3 relative">
-                                    <select v-model="selected" class="block w-full overflow-y-auto text-sm leading-4 font-medium rounded-md rounded transition ease-in-out m-0" style="border-width: 0">
+                                    <select v-model="selected" class="p-2 hover:bg-black hover:text-white font-bold rounded-full block w-full overflow-y-auto text-sm leading-4 font-medium rounded-md rounded transition ease-in-out m-0" style="border-width: 0">
                                         <option v-for="hub in this.$page.props.hubs" :key="hub.id" :value="hub.ville">
                                             {{ hub.ville }}
                                         </option>
@@ -85,7 +78,7 @@
                                 <BreezeDropdown align="right" width="48">
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
-                                            <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                            <button type="button" class="hover:bg-black hover:text-white font-bold rounded-full inline-flex items-center px-3 py-2 border border-transparent leading-4 font-medium rounded-md bg-white focus:outline-none transition ease-in-out duration-150">
                                                 {{ $page.props.auth.user.name }}
 
                                                 <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -96,13 +89,13 @@
                                     </template>
 
                                     <template #content>
-                                        <BreezeDropdownLink style="z-index: 9999" :href="route('parametre')" method="get" as="button">
+                                        <BreezeDropdownLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" style="z-index: 9999" :href="route('parametre')" method="get" as="button">
                                             Paramètres
                                         </BreezeDropdownLink>
-                                        <BreezeDropdownLink style="z-index: 9999" :href="route('user.update')" method="get" as="button">
+                                        <BreezeDropdownLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" style="z-index: 9999" :href="route('user.update')" method="get" as="button">
                                             Modifier mon mot de passe
                                         </BreezeDropdownLink>
-                                        <BreezeDropdownLink style="z-index: 9999" :href="route('logout')" method="post" as="button">
+                                        <BreezeDropdownLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" style="z-index: 9999" :href="route('logout')" method="post" as="button">
                                             Déconnexion
                                         </BreezeDropdownLink>
                                     </template>
@@ -177,7 +170,7 @@
             </header>
 
             <!-- Page Content -->
-            <main>
+            <main class="bg-gray-700">
                 <slot ref="ChildComponent" />
             </main>
         </div>

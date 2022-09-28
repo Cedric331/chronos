@@ -25,19 +25,19 @@
                                                   clip-rule="evenodd"></path>
                                         </svg>
                                     </div>
-                                    <input v-model="search" type="text" class="text-gray-900 text-sm block w-80 pl-10 p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rechercher un lien par son nom">
+                                    <input v-model="search" type="text" class="text-black text-sm block w-80 pl-10 p-2.5 bg-white" placeholder="Rechercher un lien par son nom">
                                 </div>
 
                                 <div class="flex items-center sm:ml-6">
                                     <div class="ml-3 relative">
-                                        <select v-model="filtre" class="bg-gray-700 text-white block py-3.5 w-full h-full text-sm leading-4 font-medium rounded-md rounded transition ease-in-out m-0 focus:border-blue-500" style="border-width: 0">
-                                            <option selected :value="1" class="text-white">
+                                        <select v-model="filtre" class="p-3 hover:bg-black hover:text-white font-bold rounded-full bg-white block w-full h-full text-sm leading-4 font-medium rounded-md rounded transition ease-in-out m-0 focus:border-blue-500" style="border-width: 0">
+                                            <option selected :value="1">
                                                 Voir tous les liens
                                             </option>
-                                            <option v-if="!$page.props.auth.user.coordinateur" :value="2" class="text-white">
+                                            <option v-if="!$page.props.auth.user.coordinateur" :value="2">
                                                 Coordinateur
                                             </option>
-                                            <option :value="3" class="text-white">
+                                            <option :value="3">
                                                  Mes liens
                                             </option>
                                         </select>
@@ -45,8 +45,8 @@
                                 </div>
                             </div>
 
-                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <table class="w-full text-sm text-left text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-white">
                                 <tr>
                                     <th scope="col" class="px-6 py-3">
                                         Nom

@@ -1,14 +1,14 @@
 <template>
     <notifications position="bottom right" />
-    <Head title="Information Équipe" />
+    <Head>
+        <title>Information Équipe</title>
+    </Head>
     <BreezeAuthenticatedLayout>
-        <div class="mb-16">
-            <div class="w-full bg-gray-100 px-10 pt-10 h-16 content-center">
-
+            <div>
                 <div class="w-9/12 mx-auto sm:visible invisible">
                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
-                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <table class="w-full font-bold text-left">
+                            <thead class="text-xs uppercase bg-white">
                             <tr>
                                 <th scope="col" class="px-6 py-3">
                                     Nom
@@ -86,7 +86,6 @@
                     </div>
                 </div>
             </div>
-        </div>
 
         <ModalInformation
             v-show="showModal"

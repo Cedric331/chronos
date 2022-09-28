@@ -361,50 +361,6 @@ class PlanningController extends Controller
             ]);
     }
 
-//    /**
-//     * @param Request $request
-//     * @return \Illuminate\Http\JsonResponse
-//     */
-//    public function loadPlanningSemaine (Request $request): \Illuminate\Http\JsonResponse
-//    {
-//        $collaborateurs = Collaborateur::with(['dates' => function ($query) use ($request) {
-//            $query->whereIn('dates.id', $request->date);
-//        }
-//        ])->where('hub_id', Auth::user()->hub_id)
-//          ->get();
-//
-//        $getDate = Date::select('date')->find($request->date);
-//        $showDate = $this->formatDateFr($getDate->date);
-//
-//        $collect = collect();
-//        if ($collaborateurs) {
-//            foreach ($collaborateurs as $collaborateur) {
-//                foreach ($collaborateur->dates as $date) {
-//                    $horaires = $this->getHoraire($date->pivot->horaire);
-//                    $object = [
-//                        'collaborateur' => $collaborateur->name,
-//                        'horaires' => $horaires,
-//                        'type' => $this->getType($date->pivot->horaire, $horaires)
-//                    ];
-//                    $collect->push($object);
-//                }
-//            }
-//        }
-//
-//        $collect = $collect->unique();
-//
-//        return response()->json([
-//            'planning' => $collect->toArray(),
-//            'date' => [
-//                'id' => $request->date,
-//                'format' => $showDate,
-//                'previous' => $request->previous,
-//                'next' => $request->next,
-//                'index' => $request->index
-//            ]
-//        ]);
-//    }
-
     /**
      * @param $data
      * @return mixed

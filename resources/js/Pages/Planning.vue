@@ -3,10 +3,10 @@
     <Head title="Planning" />
     <BreezeAuthenticatedLayout>
         <div v-if="allPlannings && members && member">
-                <div class="min-h-screen">
+                <div class="min-h-screen bg-gray-700">
                     <NavbarPlanning style="z-index: 1" :collaborateur="member" :collaborateurs="members" @notificationUpdate="notificationUpdate()" @updateCollaborateur="data => updateCollaborateur(data)"/>
                     <div class="p-4 gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 select-none">
-                        <div v-for="(planning, index) in allPlannings" :key="planning.date" :style="colorPlanning(planning)" :class="[planning.today ? ' shadow-blue-400/80 shadow-2xl bg-white' : '', this.isSelected(planning) ? ' border-2 border-green-500' : '', this.$page.props.auth.user.coordinateur ? ' cursor-pointer' : '']" class="relative w-full rounded-md shadow-md shadow-dark hover:shadow-blue-400/80 hover:shadow-2xl hover:bg-white">
+                        <div v-for="(planning, index) in allPlannings" :key="planning.date" :style="colorPlanning(planning)" :class="[planning.today ? ' shadow-blue-400/80 shadow-2xl bg-white border-solid border-4 border-blue-500' : '', this.isSelected(planning) ? ' border-4 border-red-500' : '', this.$page.props.auth.user.coordinateur ? ' cursor-pointer' : '']" class="hover:scale-105 relative w-full rounded-md shadow-md shadow-dark hover:shadow-red-400/80 hover:shadow-2xl hover:bg-white">
                             <div class="absolute top-0 right-0">
                                 <div @click="viewDate(planning.date_id, index)" class=" flex justify-end p-1">
                                     <svg class="fill-current" :style="texte" height="16px" version="1.1" viewBox="0 0 24 24" width="16px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title/>
@@ -38,33 +38,33 @@
                             <div @click="selectPlanning(planning)" class="p-2">
                                 <div>
                                     <div>
-                                        <p class="font-semibold text-sm py-1" :style="texte">{{ planning.date }}</p>
+                                        <p class="font-bold text-sm py-1" :style="texte">{{ planning.date }}</p>
                                     </div>
                                 </div>
                                 <div v-if="planning.horaires">
-                                    <p v-if="planning.type !== 'Iti'" class="font-light text-justify line-clamp-3" :style="texte">
+                                    <p v-if="planning.type !== 'Iti'" class="font-bold text-justify line-clamp-3" :style="texte">
                                        {{ planning.horaires.teletravail ? 'Télétravail' : 'Hub'}}
                                     </p>
-                                    <p v-else class="font-light text-justify line-clamp-3" :style="texte">
+                                    <p v-else class="font-bold text-justify line-clamp-3" :style="texte">
                                         Technicien
                                     </p>
-                                    <p class="font-light text-justify line-clamp-3" :style="texte">
-                                        Début : {{ planning.horaires.debut_journee }}
+                                    <p class="font-semibold text-justify line-clamp-3" :style="texte">
+                                        Début :  <span class="font-bold">{{ planning.horaires.debut_journee }}</span>
                                     </p>
                                     <div v-if="planning.horaires.debut_pause">
-                                        <p class="font-light text-justify line-clamp-3" :style="texte">
-                                            Pause Déj: {{ planning.horaires.debut_pause }}
+                                        <p class="font-semibold text-justify line-clamp-3" :style="texte">
+                                            Pause Déj:  <span class="font-bold">{{ planning.horaires.debut_pause }}</span>
                                         </p>
-                                        <p class="font-light text-justify line-clamp-3" :style="texte">
-                                            Fin Déj : {{ planning.horaires.fin_pause }}
+                                        <p class="font-semibold text-justify line-clamp-3" :style="texte">
+                                            Fin Déj :  <span class="font-bold">{{ planning.horaires.fin_pause }}</span>
                                         </p>
                                     </div>
-                                    <p class="font-light text-justify line-clamp-3" :style="texte">
-                                        Fin : {{ planning.horaires.fin_journee }}
+                                    <p class="font-semibold text-justify line-clamp-3" :style="texte">
+                                        Fin : <span class="font-bold">{{ planning.horaires.fin_journee }}</span>
                                     </p>
                                 </div>
                                 <div v-else>
-                                    <p class="font-light text-justify line-clamp-3" :style="texte">
+                                    <p class="font-bold text-justify line-clamp-3" :style="texte">
                                      {{ getType(planning.type) }}
                                     </p>
                                 </div>
@@ -73,7 +73,6 @@
                         </div>
                     </div>
                 </div>
-            <SelectedDate @click="updateSwitch = true" v-if="selectedPlanning.length > 0 && $page.props.auth.user.coordinateur" :classCss="'fixed bottom-20 right-9 bg-purple-500 rounded-full'" :value="'Switch horaires'" :selected="selectedPlanning.length"></SelectedDate>
             <SelectedDate @click="updatePlanning = true" v-if="selectedPlanning.length > 0 && $page.props.auth.user.coordinateur" :classCss="'fixed bottom-3 right-6 bg-blue-500 rounded-full'" :value="'Modifier horaires'" :selected="selectedPlanning.length"></SelectedDate>
         </div>
         <div v-else>
