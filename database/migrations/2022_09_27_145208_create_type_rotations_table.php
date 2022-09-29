@@ -17,6 +17,7 @@ class CreateTypeRotationsTable extends Migration
         Schema::create('type_rotations', function (Blueprint $table) {
             $table->id();
             $table->string('type', 3);
+            $table->string('hours', 5)->nullable();
             $table->foreignId('hub_id')->constrained('hubs');
             $table->unique(['type', 'hub_id']);
             $table->timestamps();

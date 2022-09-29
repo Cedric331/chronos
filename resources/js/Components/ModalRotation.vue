@@ -10,7 +10,7 @@
                         <div class="mt-6">
                             <div class="font-bold">*Nom de la Rotation</div>
                             <div>
-                                <input class="mt-1 w-full rounded-[4px] border border-[#A0ABBB] p-2" type="text" placeholder="3 caractères max" maxlength="3" />
+                                <input v-model="type" class="mt-1 w-full rounded-[4px] border border-[#A0ABBB] p-2" type="text" placeholder="3 caractères max" maxlength="3" />
                             </div>
                         </div>
 
@@ -43,8 +43,8 @@
                                     <tbody>
 
                                     <tr v-for="(jour, days) in jours" :key="days">
-                                        <th class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">
-                                            {{ days }}
+                                        <th class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-left font-bold">
+                                            {{ days.charAt(0).toUpperCase() + days.slice(1) }}
                                         </th>
                                         <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                                            <checkbox v-model="jours[days]['is_off']" :checked="jours[days]['is_off']"></checkbox>
@@ -165,7 +165,7 @@ export default {
                 },
     },
             horaires: [
-                'Rien',
+                null,
                 '8h00',
                 '8h30',
                 '9h00',
@@ -200,7 +200,13 @@ export default {
     },
     methods: {
         store () {
-            console.log(this.jours)
+            axios.post('rotation', {
+                type: this.type,
+                jours: this.jours,
+            })
+            .then(res => {
+                this.$emit('storeRotation', res.data)
+            })
         },
         closeModal () {
             this.type = null

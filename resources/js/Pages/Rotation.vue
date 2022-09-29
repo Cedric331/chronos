@@ -45,89 +45,17 @@
                                                                 Nom de la Rotation
                                                             </th>
                                                             <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                Jour de la semaine défini
-                                                            </th>
-                                                            <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                                 Nombres d'heures sur la rotation
                                                             </th>
                                                         </tr>
                                                         </thead>
                                                         <tbody class="bg-white">
-                                                        <tr>
-                                                            <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                                                Payment from <span class="font-semibold">Bonnie Green</span>
-                                                            </td>
-                                                            <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                                                Apr 23 ,2021
+                                                        <tr v-for="rotation in indexRotation">
+                                                            <td class="p-4 whitespace-nowrap text-lg font-bold">
+                                                                {{ rotation.type }}
                                                             </td>
                                                             <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                                                $2300
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="bg-gray-50">
-                                                            <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-900 rounded-lg rounded-left">
-                                                                Payment refund to <span class="font-semibold">#00910</span>
-                                                            </td>
-                                                            <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                                                Apr 23 ,2021
-                                                            </td>
-                                                            <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                                                -$670
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                                                Payment failed from <span class="font-semibold">#087651</span>
-                                                            </td>
-                                                            <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                                                Apr 18 ,2021
-                                                            </td>
-                                                            <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                                                $234
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="bg-gray-50">
-                                                            <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-900 rounded-lg rounded-left">
-                                                                Payment from <span class="font-semibold">Lana Byrd</span>
-                                                            </td>
-                                                            <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                                                Apr 15 ,2021
-                                                            </td>
-                                                            <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                                                $5000
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                                                Payment from <span class="font-semibold">Jese Leos</span>
-                                                            </td>
-                                                            <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                                                Apr 15 ,2021
-                                                            </td>
-                                                            <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                                                $2300
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="bg-gray-50">
-                                                            <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-900 rounded-lg rounded-left">
-                                                                Payment from <span class="font-semibold">THEMESBERG LLC</span>
-                                                            </td>
-                                                            <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                                                Apr 11 ,2021
-                                                            </td>
-                                                            <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                                                $560
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                                                Payment from <span class="font-semibold">Lana Lysle</span>
-                                                            </td>
-                                                            <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                                                Apr 6 ,2021
-                                                            </td>
-                                                            <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                                                $1437
+                                                                {{ rotation.hours }}
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -190,6 +118,7 @@
     <ModalRotation
         v-if="showModalRotation"
         :isUpdate="isUpdate"
+        @storeRotation="(data) => this.postRotation(data)"
         @closeModal="this.showModalRotation = false"
     />
 </template>
@@ -206,17 +135,27 @@ export default {
         BreezeAuthenticatedLayout,
         Head
     },
+    props: {
+      rotations: Object
+    },
     data () {
         return {
             showModalRotation: false,
+            indexRotation: null,
             isUpdate: false
         }
     },
     methods: {
+        postRotation (data) {
+
+        },
         showModal (isUpdated = false) {
             this.isUpdate = isUpdated
             this.showModalRotation = true
         }
+    },
+    mounted() {
+        this.indexRotation = this.rotations
     }
 }
 </script>

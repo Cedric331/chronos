@@ -16,6 +16,12 @@ class TypeRotation extends Model
      */
     protected $fillable = [
         'type',
+        'hours',
         'hub_id'
     ];
+
+    public function rotations (): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Rotation::class);
+    }
 }
