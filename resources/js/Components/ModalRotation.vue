@@ -88,7 +88,7 @@
 
                     </div>
                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <button @click="store()" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm">
+                        <button @click="submit()" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm">
                             {{ isUpdate ? 'Modifier' : 'Créer' }}
                         </button>
                         <button @click="closeModal()" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
@@ -105,11 +105,13 @@
 
 <script>
 import Checkbox from "@/Components/Checkbox";
+
 export default {
     name: "ModalRotation",
     components: {Checkbox},
     props: {
         isUpdate: Boolean,
+        rotation: Object,
     },
     data () {
         return {
@@ -199,6 +201,13 @@ export default {
         }
     },
     methods: {
+        submit () {
+          if (this.isUpdate) {
+              this.update()
+        } else {
+              this.store()
+          }
+        },
         store () {
             axios.post('rotation', {
                 type: this.type,
@@ -206,13 +215,34 @@ export default {
             })
             .then(res => {
                 this.$emit('storeRotation', res.data)
+                this.closeModal()
             })
+        },
+        update () {
+            axios.patch('rotation', {
+                id: this.rotation.id,
+                type: this.type,
+                jours: this.jours,
+            })
+                .then(res => {
+                    this.$emit('storeRotation', res.data, true)
+                    this.closeModal()
+                })
         },
         closeModal () {
             this.type = null
             this.errors = null
             this.$emit('closeModal', false)
         },
+    },
+    mounted () {
+        if (this.isUpdate) {
+            this.rotation.rotations.forEach(item => {
+                this.type = this.rotation.type
+                this.jours[item.day] = JSON.parse(item.horaire)
+                this.jours[item.day]['id'] = item.id
+            })
+        }
     }
 }
 </script>

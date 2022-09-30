@@ -11,3 +11,7 @@ Route::get('/rotation', [RotationController::class, 'index'])
 Route::post('/rotation', [RotationController::class, 'store'])
     ->middleware('auth')
     ->middleware('role:Coordinateur|Administrateur|Responsable');
+
+Route::patch('/rotation', [RotationController::class, 'update'])
+    ->middleware('auth')
+    ->middleware('role:Coordinateur|Administrateur|Responsable');

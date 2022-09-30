@@ -20,8 +20,8 @@ class TypeRotation extends Model
         'hub_id'
     ];
 
-    public function rotations (): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function rotations (): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->belongsTo(Rotation::class);
+        return $this->hasMany(Rotation::class);
     }
 }
