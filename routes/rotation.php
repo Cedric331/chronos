@@ -15,3 +15,11 @@ Route::post('/rotation', [RotationController::class, 'store'])
 Route::patch('/rotation', [RotationController::class, 'update'])
     ->middleware('auth')
     ->middleware('role:Coordinateur|Administrateur|Responsable');
+
+Route::delete('/rotation/{rotation}', [RotationController::class, 'delete'])
+    ->middleware('auth')
+    ->middleware('role:Coordinateur|Administrateur|Responsable');
+
+Route::post('/generate', [RotationController::class, 'generatePlanning'])
+    ->middleware('auth')
+    ->middleware('role:Coordinateur|Administrateur|Responsable');

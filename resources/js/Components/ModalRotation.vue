@@ -6,11 +6,10 @@
             <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle w-auto">
 
                     <div class="mx-auto w-full border bg-white p-4">
-
                         <div class="mt-6 flex justify-between">
                             <div>
                                 <label for="type" class="block mb-2 text-lg font-medium text-gray-700">*Nom de la Rotation</label>
-                                <input v-model="type" type="text" id="type" class="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                                <input v-model="type" type="text" id="type" class="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="3 caractères maximum" required>
                             </div>
                             <div class="border-t-0 px-6 align-middle border-l-0 border-r-0 flex justify-between p-4">
                                 <label class="inline-flex items-center mt-3">
@@ -53,28 +52,28 @@
                                                <checkbox v-model="jours[days]['is_off']" :checked="jours[days]['is_off']"></checkbox>
                                             </td>
                                             <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                                <select @change="checkHours(jours[days], days)" :disabled="jours[days]['is_off']" v-model="jours[days]['debut_journee']" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
+                                                <select @change="checkHours(jours[days], days); synchroniseValue(jours[days], 'debut_journee')" :disabled="jours[days]['is_off']" v-model="jours[days]['debut_journee']" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
                                                     <option v-for="(horaire, index) in horaires" :key="index" :value="horaire">
                                                         {{ horaire }}
                                                     </option>
                                                 </select>
                                             </td>
                                             <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                                <select @change="checkHours(jours[days], days)" :disabled="jours[days]['is_off']" v-model="jours[days]['debut_pause']" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
+                                                <select @change="checkHours(jours[days], days); synchroniseValue(jours[days], 'debut_pause')" :disabled="jours[days]['is_off']" v-model="jours[days]['debut_pause']" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
                                                     <option v-for="(horaire, index) in horaires" :key="index" :value="horaire">
                                                         {{ horaire }}
                                                     </option>
                                                 </select>
                                             </td>
                                             <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                                <select @change="checkHours(jours[days], days)" :disabled="jours[days]['is_off'] || !jours[days]['debut_journee'] || !jours[days]['debut_pause']" v-model="jours[days]['fin_pause']" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
+                                                <select @change="checkHours(jours[days], days); synchroniseValue(jours[days], 'fin_pause')" :disabled="jours[days]['is_off'] || !jours[days]['debut_journee'] || !jours[days]['debut_pause']" v-model="jours[days]['fin_pause']" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
                                                     <option v-for="(horaire, index) in horaires" :key="index" :value="horaire">
                                                         {{ horaire }}
                                                     </option>
                                                 </select>
                                             </td>
                                             <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                                <select @change="checkHours(jours[days], days)" :disabled="jours[days]['is_off'] || !jours[days]['debut_journee']" v-model="jours[days]['fin_journee']" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
+                                                <select @change="checkHours(jours[days], days); synchroniseValue(jours[days], 'fin_journee')" :disabled="jours[days]['is_off'] || !jours[days]['debut_journee']" v-model="jours[days]['fin_journee']" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
                                                     <option v-for="(horaire, index) in horaires" :key="index" :value="horaire">
                                                         {{ horaire }}
                                                     </option>
@@ -206,15 +205,16 @@ export default {
         }
     },
     methods: {
-        checkHours (data, days) {
-            // TODO Synchroniser
+        synchroniseValue (data, element) {
             if (this.synchronise) {
                 Object.keys(this.jours).forEach((item, key) => {
                     if (!this.jours[item]['is_off']) {
-                        this.jours[item]['debut_journee'] = data['debut_journee']
+                        this.jours[item][element] = data[element]
                     }
                 })
             }
+        },
+        checkHours (data, days) {
             var debut_journee = data['debut_journee'] ? data['debut_journee'].split('h') : null
             var debut_pause =  data['debut_pause'] ? data['debut_pause'].split('h') : null
             var fin_pause = data['fin_pause'] ? data['fin_pause'].split('h') : null

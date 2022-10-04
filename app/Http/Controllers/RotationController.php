@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Rotation\StoreRotationRequest;
 use App\Http\Requests\Rotation\UpdateRotationRequest;
+use App\Models\Collaborateur;
 use App\Models\Rotation;
 use App\Models\TypeRotation;
 use DateTime;
@@ -30,8 +31,19 @@ class RotationController extends Controller
                         ->where('hub_id', Auth::user()->hub_id)
                         ->get();
 
+        $collaborateurs = Collaborateur::where('hub_id', Auth::user()->hub_id)->get();
+
+        date_default_timezone_set('Europe/Paris');
+        $time = strtotime(date('l d F Y', strtotime('- '.($this->getLundi() - 1).' days')));
+
+        $dateStart = date('Y-m-d', $time);
+        $dateEnd = date('Y-m-d', strtotime('+1 year') + strtotime($time));
+
         return Inertia::render('Rotation', [
-            'rotations' => $rotations
+            'rotations' => $rotations,
+            'collaborateurs' => $collaborateurs,
+            'dateStart' => $dateStart,
+            'dateEnd' => $dateEnd,
         ]);
     }
 
@@ -108,6 +120,37 @@ class RotationController extends Controller
     }
 
     /**
+     * @param TypeRotation $rotation
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete (TypeRotation $rotation): \Illuminate\Http\JsonResponse
+    {
+        $rotation->rotations()->delete();
+
+       $delete = $rotation->delete();
+
+        return response()->json($delete);
+    }
+
+    public function generatePlanning (Request $request)
+    {
+        // TODO vérif date
+        date_default_timezone_set('Europe/Paris');
+        $time = strtotime('- '.($this->getLundi() - 1).' days');
+        $selectTimeStart = strtotime($request->dateStart);
+        $selectTimeEnd = strtotime('+1 year') + strtotime($request->dateEnd);
+        $dateLimited = strtotime('+1 year') + strtotime($time);
+dd($selectTimeEnd > $dateLimited);
+        if ($time > $selectTimeStart ||
+            $selectTimeEnd <= $selectTimeStart ||
+            $selectTimeEnd > $dateLimited) {
+            return response()->json('Erreur dans la sélection des dates', 422);
+        }
+
+
+    }
+
+    /**
      * @param $request
      * @return array|string|null
      * @throws \Exception
@@ -176,5 +219,25 @@ class RotationController extends Controller
     {
         $t = explode(':', $hours);
         return $t[0] * 60 + $t[1];
+    }
+
+    /**
+     * @return int
+     */
+    private function getLundi (): int
+    {
+        $today = date('l', strtotime('now'));
+
+        $return_value = match ($today) {
+            'Monday' => 1,
+            'Tuesday' => 2,
+            'Wednesday' => 3,
+            'Thursday' => 4,
+            'Friday' => 5,
+            'Saturday' => 6,
+            'Sunday' => 7
+        };
+
+        return $return_value;
     }
 }
