@@ -42,8 +42,8 @@ class RotationController extends Controller
         return Inertia::render('Rotation', [
             'rotations' => $rotations,
             'collaborateurs' => $collaborateurs,
-            'dateStart' => $dateStart,
-            'dateEnd' => $dateEnd,
+            'dateLimitStart' => $dateStart,
+            'dateLimitEnd' => $dateEnd,
         ]);
     }
 
@@ -134,20 +134,19 @@ class RotationController extends Controller
 
     public function generatePlanning (Request $request)
     {
-        // TODO vérif date
         date_default_timezone_set('Europe/Paris');
-        $time = strtotime('- '.($this->getLundi() - 1).' days');
-        $selectTimeStart = strtotime($request->dateStart);
-        $selectTimeEnd = strtotime('+1 year') + strtotime($request->dateEnd);
-        $dateLimited = strtotime('+1 year') + strtotime($time);
-dd($selectTimeEnd > $dateLimited);
-        if ($time > $selectTimeStart ||
-            $selectTimeEnd <= $selectTimeStart ||
-            $selectTimeEnd > $dateLimited) {
+
+        $selectTimeStart = date('Y-m-d',strtotime($request->dateStart));
+        $selectTimeEnd = date('Y-m-d',strtotime($request->dateEnd));
+        $dateLimitedStart = date('Y-m-d',strtotime('- '.($this->getLundi() - 1).' days'));
+        $dateLimitedEnd = date('Y-m-d',strtotime('+1 year'));
+
+        if (strtotime($dateLimitedStart) > strtotime($selectTimeStart) ||
+            strtotime($selectTimeStart) > strtotime($dateLimitedEnd) ||
+            strtotime($dateLimitedEnd) < strtotime($selectTimeEnd) ||
+            strtotime($selectTimeEnd) < strtotime($dateLimitedStart)) {
             return response()->json('Erreur dans la sélection des dates', 422);
         }
-
-
     }
 
     /**

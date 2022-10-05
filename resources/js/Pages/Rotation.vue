@@ -5,71 +5,71 @@
     </Head>
     <BreezeAuthenticatedLayout>
             <div class="flex overflow-hidden">
-                <div class="h-full w-full bg-gray-50 relative overflow-y-auto lg:m-24 m-auto p-5">
+                <div class="h-full w-full bg-white relative overflow-y-auto lg:m-24 m-auto p-5">
                     <div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">Les Rotations</h3>
                     </div>
-                    <div class="flex-shrink-0">
-                        <button @click="generatePlanning()" class="text-sm font-medium hover:bg-gray-700 bg-black text-white rounded-lg p-2">Créer une rotation</button>
-                    </div>
                     <main>
                         <div class="pt-6 px-4">
-                            <div class="w-full gap-4">
-                                <div class="">
-                                    <label for="start">Date de début:</label>
-                                    <input type="date" id="start" name="trip-start"
-                                           v-model="dateStart"
-                                           :min="dateStart" :max="dateEnd">
-                                </div>
-                                <div class="">
-                                    <label for="end">Date de Fin :</label>
-                                    <input type="date" id="end" name="trip-start"
-                                           v-model="dateEnd"
-                                           :min="dateStart" :max="dateEnd">
-                                </div>
-                                <div class="w-11/12 mx-auto rounded-md p-16 flex flex-col sm:flex-row sm:justify-evenly">
-                                    <div class="p-16 flex flex-col border-2 bg-white rounded-lg  border-red-50">
-                                        <h1 class="font-semibold tracking-wide mb-2">Choisir le collaborateur</h1>
-
-                                        <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                                            <div class="flex justify-center">
-                                                <div class="w-auto">
-                                                    <select v-model="collaborateur" class=" block w-full text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600" aria-label="Voir le planning">
-                                                        <option v-for="member in collaborateurs" :key="member.id" :value="member">
-                                                            {{ member.name }}
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
+                            <div class="w-full gap-4 flex justify-between">
+                                <div>
+                                    <div class="flex flex-col justify-between">
+                                        <label for="start">Date de début:</label>
+                                        <input type="date" id="start" name="trip-start"
+                                               v-model="dateStart"
+                                               :min="dateLimitStart" :max="dateLimitEnd">
+                                        <label for="end">Date de Fin :</label>
+                                        <input type="date" id="end" name="trip-end"
+                                               v-model="dateEnd"
+                                               :min="dateLimitStart" :max="dateLimitEnd">
                                     </div>
+                                    <div class="w-full mx-auto rounded-md p-16 flex flex-col sm:flex-row sm:justify-evenly">
+                                        <div class="p-16 flex flex-col bg-white rounded-lg">
+                                            <h1 class="font-semibold tracking-wide mb-2">Choisir le collaborateur</h1>
 
-                                    <!-- address start -->
-                                    <div class="p-16 flex flex-col bg-white rounded-lg">
-                                        <h1 class="font-semibold tracking-wide mb-2">Ordre des rotations</h1>
-                                        <draggable v-if="listRotation.length > 0" class="dragArea list-group w-full" :list="listRotation">
-                                            <div
-                                                class="list-group-item bg-gray-700 m-1 p-3 rounded-md text-center text-white"
-                                                v-for="(rotation, index) in listRotation"
-                                                :key="index">
-                                                <div class="flex justify-between">
-                                                    <div class="mr-5">
-                                                        {{ rotation.type }} - ordre : {{ index + 1 }}
-                                                    </div>
-                                                    <div @click="deleteListRotation(index)">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                                        </svg>
+                                            <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                                                <div class="flex justify-center">
+                                                    <div class="w-auto">
+                                                        <select v-model="collaborateur" class=" block w-full text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600" aria-label="Voir le planning">
+                                                            <option v-for="member in collaborateurs" :key="member.id" :value="member">
+                                                                {{ member.name }}
+                                                            </option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </draggable>
-                                        <div v-else class="w-full">
-                                            <p>-- Ajouter des rotations --</p>
+                                        </div>
+
+                                        <div class="p-16 flex flex-col bg-white rounded-lg">
+                                            <h1 class="font-semibold tracking-wide mb-2">Ordre des rotations</h1>
+                                            <draggable v-if="listRotation.length > 0" class="dragArea list-group w-full" :list="listRotation">
+                                                <div
+                                                    class="list-group-item bg-gray-700 m-1 p-3 rounded-md text-center text-white"
+                                                    v-for="(rotation, index) in listRotation"
+                                                    :key="index">
+                                                    <div class="flex justify-between">
+                                                        <div class="mr-5">
+                                                            {{ rotation.type }}
+                                                        </div>
+                                                        <div @click="deleteListRotation(index)">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </draggable>
+                                            <div v-else class="w-full">
+                                                <p>-- Ajouter des rotations --</p>
+                                            </div>
                                         </div>
                                     </div>
+                                    <div class="flex justify-center">
+                                        <button @click="generatePlanning()" class="text-sm font-medium hover:bg-gray-700 bg-black text-white rounded-lg p-2">Confirmer le Planning</button>
+                                    </div>
                                 </div>
-                                <div class="shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+
+                                <div class="rounded-lg p-4 sm:p-6 xl:p-8 ">
                                     <div class="mb-4 flex items-center justify-between">
                                         <div>
                                             <h3 class="text-xl font-bold text-gray-900 mb-2">Les Rotations</h3>
@@ -79,8 +79,8 @@
                                         </div>
                                     </div>
                                     <div class="flex flex-col mt-8">
-                                        <div class="overflow-x-auto rounded-lg">
-                                            <div class="align-middle inline-block min-w-full">
+                                        <div class="overflow-x-auto drop-shadow-xl rounded-lg">
+                                            <div class=" drop-shadow-xl align-middle inline-block min-w-full">
                                                 <div class="shadow overflow-hidden sm:rounded-lg">
                                                     <table class="min-w-full divide-y divide-gray-200">
                                                         <thead class="bg-gray-50">
@@ -100,7 +100,7 @@
                                                         </thead>
                                                         <tbody class="bg-white">
                                                         <tr v-for="rotation in indexRotation">
-                                                            <td @click="this.listRotation.push(rotation)" class="p-4 whitespace-nowrap text-sm font-bold">
+                                                            <td @click="this.listRotation.push(rotation)" class="p-4 cursor-pointer bg-black text-white whitespace-nowrap text-sm font-bold">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75" />
                                                                 </svg>
@@ -168,8 +168,8 @@ export default {
         Head
     },
     props: {
-        dateStart: Date,
-        dateEnd: Date,
+        dateLimitStart: Date,
+        dateLimitEnd: Date,
         rotations: Object,
         collaborateurs: Object
     },
@@ -180,6 +180,8 @@ export default {
             showModalRotation: false,
             listRotation: [],
             indexRotation: null,
+            dateStart: null,
+            dateEnd: null,
             rotation: null,
             isUpdate: false
         }
@@ -244,6 +246,8 @@ export default {
         }
     },
     mounted () {
+        this.dateStart = this.dateLimitStart
+        this.dateEnd = this.dateLimitEnd
         this.indexRotation = this.rotations
     }
 }
