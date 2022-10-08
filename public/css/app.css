@@ -2179,6 +2179,10 @@ select {
   --tw-shadow-color: rgb(96 165 250 / 0.8);
   --tw-shadow: var(--tw-shadow-colored);
 }
+.shadow-indigo-500\/40 {
+  --tw-shadow-color: rgb(99 102 241 / 0.4);
+  --tw-shadow: var(--tw-shadow-colored);
+}
 .outline-none {
   outline: 2px solid transparent;
   outline-offset: 2px;

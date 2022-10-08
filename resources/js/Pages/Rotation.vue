@@ -15,11 +15,11 @@
                                 <div>
                                     <div class="flex flex-col justify-between">
                                         <label for="start">Date de début:</label>
-                                        <input type="date" id="start" name="trip-start"
+                                        <input type="week" id="start" name="trip-start"
                                                v-model="dateStart"
                                                :min="dateLimitStart" :max="dateLimitEnd">
                                         <label for="end">Date de Fin :</label>
-                                        <input type="date" id="end" name="trip-end"
+                                        <input type="week" id="end" name="trip-end"
                                                v-model="dateEnd"
                                                :min="dateLimitStart" :max="dateLimitEnd">
                                     </div>
@@ -83,17 +83,17 @@
                                             <div class=" drop-shadow-xl align-middle inline-block min-w-full">
                                                 <div class="shadow overflow-hidden sm:rounded-lg">
                                                     <table class="min-w-full divide-y divide-gray-200">
-                                                        <thead class="bg-gray-50">
+                                                        <thead class="bg-black">
                                                         <tr>
-                                                            <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                            <th scope="col" class="p-4 text-left text-xs font-medium text-white uppercase tracking-wider">
                                                             </th>
-                                                            <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                            <th scope="col" class="p-4 text-left text-xs font-medium text-white uppercase tracking-wider">
                                                                 Nom de la Rotation
                                                             </th>
-                                                            <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                            <th scope="col" class="p-4 text-left text-xs font-medium text-white uppercase tracking-wider">
                                                                 Nombres d'heures sur la rotation
                                                             </th>
-                                                            <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                            <th scope="col" class="p-4 text-left text-xs font-medium text-white uppercase tracking-wider">
                                                                 Actions
                                                             </th>
                                                         </tr>
@@ -216,7 +216,6 @@ export default {
             })
         },
         confirmDelete (data) {
-            console.log('ok')
             this.rotation = data
             this.confirmDel = true
         },

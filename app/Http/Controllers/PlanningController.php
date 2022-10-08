@@ -455,6 +455,7 @@ class PlanningController extends Controller
                 $value->type = 'Iti';
             }
         }
+
         return $value->type;
     }
 
@@ -464,7 +465,6 @@ class PlanningController extends Controller
      */
     public function updatePlanning (Request $request): \Illuminate\Http\JsonResponse
     {
-        dd($request);
         $type = null;
         if ($request->planification === null) {
             return response()->json(false, 400);

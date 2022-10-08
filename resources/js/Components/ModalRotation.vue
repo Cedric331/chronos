@@ -9,7 +9,7 @@
                         <div class="mt-6 flex justify-between">
                             <div>
                                 <label for="type" class="block mb-2 text-lg font-medium text-gray-700">*Nom de la Rotation</label>
-                                <input v-model="type" type="text" id="type" class="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="3 caractères maximum" required>
+                                <input v-model="type" type="text" id="type" max="3" class="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="3 caractères maximum" required>
                             </div>
                             <div class="border-t-0 px-6 align-middle border-l-0 border-r-0 flex justify-between p-4">
                                 <label class="inline-flex items-center mt-3">
@@ -25,6 +25,9 @@
                                     <tr>
                                         <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                                             Jour de la semaine
+                                        </th>
+                                        <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                                            Technicien
                                         </th>
                                         <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                                             Jour OFF
@@ -48,6 +51,9 @@
                                             <th class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-left font-bold">
                                                 {{ days.charAt(0).toUpperCase() + days.slice(1) }}
                                             </th>
+                                            <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                                <checkbox v-model="jours[days]['technicien']" :checked="jours[days]['technicien']"></checkbox>
+                                            </td>
                                             <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                                                <checkbox v-model="jours[days]['is_off']" :checked="jours[days]['is_off']"></checkbox>
                                             </td>
@@ -121,6 +127,7 @@ export default {
             synchronise: false,
             jours: {
                 lundi: {
+                    'technicien': false,
                     'is_off': false,
                     'debut_journee': null,
                     'debut_pause': null,
@@ -128,6 +135,7 @@ export default {
                     'fin_journee': null,
                  },
                 mardi: {
+                    'technicien': false,
                     'is_off': false,
                     'debut_journee': null,
                     'debut_pause': null,
@@ -135,6 +143,7 @@ export default {
                     'fin_journee': null,
                 },
                 mercredi: {
+                    'technicien': false,
                     'is_off': false,
                     'debut_journee': null,
                     'debut_pause': null,
@@ -142,6 +151,7 @@ export default {
                     'fin_journee': null,
                 },
                 jeudi: {
+                    'technicien': false,
                     'is_off': false,
                     'debut_journee': null,
                     'debut_pause': null,
@@ -149,6 +159,7 @@ export default {
                     'fin_journee': null,
                 },
                 vendredi: {
+                    'technicien': false,
                     'is_off': false,
                     'debut_journee': null,
                     'debut_pause': null,
@@ -156,6 +167,7 @@ export default {
                     'fin_journee': null,
                 },
                 samedi: {
+                    'technicien': false,
                     'is_off': true,
                     'debut_journee': null,
                     'debut_pause': null,
@@ -163,6 +175,7 @@ export default {
                     'fin_journee': null,
                 },
                 dimanche: {
+                    'technicien': false,
                     'is_off': true,
                     'debut_journee': null,
                     'debut_pause': null,

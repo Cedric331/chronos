@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Rotation\StoreRotationRequest;
 use App\Http\Requests\Rotation\UpdateRotationRequest;
 use App\Models\Collaborateur;
+use App\Models\Date;
+use App\Models\Hub;
 use App\Models\Rotation;
 use App\Models\TypeRotation;
+use App\Models\User;
 use DateTime;
 use DateTimeImmutable;
 use Illuminate\Http\Request;
@@ -36,8 +39,8 @@ class RotationController extends Controller
         date_default_timezone_set('Europe/Paris');
         $time = strtotime(date('l d F Y', strtotime('- '.($this->getLundi() - 1).' days')));
 
-        $dateStart = date('Y-m-d', $time);
-        $dateEnd = date('Y-m-d', strtotime('+1 year') + strtotime($time));
+        $dateStart = str_replace('-', '-W', date('Y-W', $time));
+        $dateEnd = str_replace('-', '-W', date('Y-W', strtotime('+1 year') + strtotime($time)));
 
         return Inertia::render('Rotation', [
             'rotations' => $rotations,
@@ -136,10 +139,10 @@ class RotationController extends Controller
     {
         date_default_timezone_set('Europe/Paris');
 
-        $selectTimeStart = date('Y-m-d',strtotime($request->dateStart));
-        $selectTimeEnd = date('Y-m-d',strtotime($request->dateEnd));
-        $dateLimitedStart = date('Y-m-d',strtotime('- '.($this->getLundi() - 1).' days'));
-        $dateLimitedEnd = date('Y-m-d',strtotime('+1 year'));
+        $selectTimeStart = date('l d F Y',strtotime($request->dateStart));
+        $selectTimeEnd = date('l d F Y',strtotime($request->dateEnd));
+        $dateLimitedStart = date('l d F Y',strtotime('- '.($this->getLundi() - 1).' days'));
+        $dateLimitedEnd = date('l d F Y',strtotime('+1 year'));
 
         if (strtotime($dateLimitedStart) > strtotime($selectTimeStart) ||
             strtotime($selectTimeStart) > strtotime($dateLimitedEnd) ||
@@ -147,6 +150,77 @@ class RotationController extends Controller
             strtotime($selectTimeEnd) < strtotime($dateLimitedStart)) {
             return response()->json('Erreur dans la sélection des dates', 422);
         }
+
+        $hub = Hub::find(Auth::user()->hub_id);
+
+        if ($request->collaborateur) {
+        $collaborateur = Collaborateur::find($request->collaborateur['id']);
+
+        $users = User::where('collaborateur_id', $collaborateur->id)->get();
+        $saveCollaborateurs = collect();
+
+        $saveCollaborateurs->push([
+            'name' => $collaborateur->name,
+            'users' => $users
+        ]);
+
+        foreach ($users as $user) {
+            $user->update([
+                'collaborateur_id' => null
+            ]);
+        }
+        $collaborateur->dates()->detach();
+        $collaborateur->delete();
+        }
+
+        $i = 0;
+        while ($selectTimeStart !== $selectTimeEnd) {
+
+             $day = $this->formatDateFr($selectTimeStart);
+
+            foreach ($request->rotations[$i]['rotations'] as $rotation) {
+
+                if ($rotation['day'] === $day) {
+                    $horaire = json_decode($rotation['horaire']);
+                    $horaires = [
+                        'debut_journee' => $horaire->debut_journee,
+                        'debut_pause' => $horaire->debut_pause,
+                        'fin_pause' => $horaire->fin_pause,
+                        'fin_journee' => $horaire->fin_journee,
+                        'teletravail' => false,
+                        'type' => $horaire->technicien ? 'Iti1' : null,
+                        'rotation' => $request->rotations[$i]['type'],
+                    ];
+                }
+            }
+
+                $date = Date::firstOrCreate([
+                    'date' => date('Y-m-d', strtotime($selectTimeStart))
+                ]);
+
+                $collaborateur = Collaborateur::firstOrCreate([
+                    'name' => $request->collaborateur['name'],
+                    'hub_id' => $hub->id,
+                ]);
+
+                $hub->dates()->attach($date, [
+                    'collaborateur_id' => $collaborateur->id,
+                    'horaire' => json_encode($horaires)
+                ]);
+
+            $selectTimeStart = date('l d F Y',(strtotime('+1 days', strtotime($selectTimeStart))));
+
+            $day = $this->formatDateFr($selectTimeStart);
+
+            if ($day === 'lundi') {
+                if (array_key_exists($i + 1, $request->rotations)) {
+                    $i++;
+                } else {
+                    $i = 0;
+                }
+            }
+        }
+        return 'ok';
     }
 
     /**
@@ -238,5 +312,30 @@ class RotationController extends Controller
         };
 
         return $return_value;
+    }
+
+    /**
+     * @param $data
+     * @return string
+     */
+    private function formatDateFr($data): string
+    {
+        $format = date('l', strtotime($data));
+        $date = null;
+        $days = [
+            'Monday' => 'lundi',
+            'Tuesday' => 'mardi',
+            'Wednesday' => 'mercredi',
+            'Thursday' => 'jeudi',
+            'Friday' => 'vendredi',
+            'Saturday' => 'samedi',
+            'Sunday' => 'dimanche'
+        ];
+        foreach ($days as $key => $value) {
+            if ($key === $format) {
+                $date = $value;
+            }
+        }
+        return $date;
     }
 }

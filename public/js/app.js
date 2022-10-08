@@ -20538,6 +20538,7 @@ __webpack_require__.r(__webpack_exports__);
       synchronise: false,
       jours: {
         lundi: {
+          'technicien': false,
           'is_off': false,
           'debut_journee': null,
           'debut_pause': null,
@@ -20545,6 +20546,7 @@ __webpack_require__.r(__webpack_exports__);
           'fin_journee': null
         },
         mardi: {
+          'technicien': false,
           'is_off': false,
           'debut_journee': null,
           'debut_pause': null,
@@ -20552,6 +20554,7 @@ __webpack_require__.r(__webpack_exports__);
           'fin_journee': null
         },
         mercredi: {
+          'technicien': false,
           'is_off': false,
           'debut_journee': null,
           'debut_pause': null,
@@ -20559,6 +20562,7 @@ __webpack_require__.r(__webpack_exports__);
           'fin_journee': null
         },
         jeudi: {
+          'technicien': false,
           'is_off': false,
           'debut_journee': null,
           'debut_pause': null,
@@ -20566,6 +20570,7 @@ __webpack_require__.r(__webpack_exports__);
           'fin_journee': null
         },
         vendredi: {
+          'technicien': false,
           'is_off': false,
           'debut_journee': null,
           'debut_pause': null,
@@ -20573,6 +20578,7 @@ __webpack_require__.r(__webpack_exports__);
           'fin_journee': null
         },
         samedi: {
+          'technicien': false,
           'is_off': true,
           'debut_journee': null,
           'debut_pause': null,
@@ -20580,6 +20586,7 @@ __webpack_require__.r(__webpack_exports__);
           'fin_journee': null
         },
         dimanche: {
+          'technicien': false,
           'is_off': true,
           'debut_journee': null,
           'debut_pause': null,
@@ -22456,7 +22463,6 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     confirmDelete: function confirmDelete(data) {
-      console.log('ok');
       this.rotation = data;
       this.confirmDel = true;
     },
@@ -23895,6 +23901,8 @@ var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
   "class": "px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
 }, " Jour de la semaine "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   "class": "px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+}, " Technicien "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+  "class": "px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
 }, " Jour OFF "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   "class": "px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
 }, " Début Journée "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
@@ -23916,28 +23924,31 @@ var _hoisted_17 = {
 var _hoisted_18 = {
   "class": "border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
 };
-var _hoisted_19 = ["onChange", "disabled", "onUpdate:modelValue"];
-var _hoisted_20 = ["value"];
-var _hoisted_21 = {
+var _hoisted_19 = {
   "class": "border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
 };
-var _hoisted_22 = ["onChange", "disabled", "onUpdate:modelValue"];
-var _hoisted_23 = ["value"];
-var _hoisted_24 = {
+var _hoisted_20 = ["onChange", "disabled", "onUpdate:modelValue"];
+var _hoisted_21 = ["value"];
+var _hoisted_22 = {
   "class": "border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
 };
-var _hoisted_25 = ["onChange", "disabled", "onUpdate:modelValue"];
-var _hoisted_26 = ["value"];
-var _hoisted_27 = {
+var _hoisted_23 = ["onChange", "disabled", "onUpdate:modelValue"];
+var _hoisted_24 = ["value"];
+var _hoisted_25 = {
   "class": "border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
 };
-var _hoisted_28 = ["onChange", "disabled", "onUpdate:modelValue"];
-var _hoisted_29 = ["value"];
-var _hoisted_30 = {
+var _hoisted_26 = ["onChange", "disabled", "onUpdate:modelValue"];
+var _hoisted_27 = ["value"];
+var _hoisted_28 = {
+  "class": "border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+};
+var _hoisted_29 = ["onChange", "disabled", "onUpdate:modelValue"];
+var _hoisted_30 = ["value"];
+var _hoisted_31 = {
   "class": "bg-gray-50 px-4 py-3 sm:px-6 flex justify-between sm:flex sm:flex-row-reverse"
 };
-var _hoisted_31 = ["disabled"];
-var _hoisted_32 = {
+var _hoisted_32 = ["disabled"];
+var _hoisted_33 = {
   key: 0,
   "class": "sm:align-middle font-medium text-lg text-red-600"
 };
@@ -23956,6 +23967,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     type: "text",
     id: "type",
+    max: "3",
     "class": "border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5",
     placeholder: "3 caractères maximum",
     required: ""
@@ -23976,6 +23988,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(days.charAt(0).toUpperCase() + days.slice(1)), 1
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_checkbox, {
+      modelValue: $data.jours[days]['technicien'],
+      "onUpdate:modelValue": function onUpdateModelValue($event) {
+        return $data.jours[days]['technicien'] = $event;
+      },
+      checked: $data.jours[days]['technicien']
+    }, null, 8
+    /* PROPS */
+    , ["modelValue", "onUpdate:modelValue", "checked"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_checkbox, {
       modelValue: $data.jours[days]['is_off'],
       "onUpdate:modelValue": function onUpdateModelValue($event) {
         return $data.jours[days]['is_off'] = $event;
@@ -23983,7 +24003,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       checked: $data.jours[days]['is_off']
     }, null, 8
     /* PROPS */
-    , ["modelValue", "onUpdate:modelValue", "checked"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
+    , ["modelValue", "onUpdate:modelValue", "checked"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
       onChange: function onChange($event) {
         $options.checkHours($data.jours[days], days);
         $options.synchroniseValue($data.jours[days], 'debut_journee');
@@ -23999,12 +24019,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         value: horaire
       }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(horaire), 9
       /* TEXT, PROPS */
-      , _hoisted_20);
+      , _hoisted_21);
     }), 128
     /* KEYED_FRAGMENT */
     ))], 40
     /* PROPS, HYDRATE_EVENTS */
-    , _hoisted_19), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.jours[days]['debut_journee']]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
+    , _hoisted_20), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.jours[days]['debut_journee']]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
       onChange: function onChange($event) {
         $options.checkHours($data.jours[days], days);
         $options.synchroniseValue($data.jours[days], 'debut_pause');
@@ -24020,12 +24040,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         value: horaire
       }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(horaire), 9
       /* TEXT, PROPS */
-      , _hoisted_23);
+      , _hoisted_24);
     }), 128
     /* KEYED_FRAGMENT */
     ))], 40
     /* PROPS, HYDRATE_EVENTS */
-    , _hoisted_22), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.jours[days]['debut_pause']]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
+    , _hoisted_23), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.jours[days]['debut_pause']]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
       onChange: function onChange($event) {
         $options.checkHours($data.jours[days], days);
         $options.synchroniseValue($data.jours[days], 'fin_pause');
@@ -24041,12 +24061,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         value: horaire
       }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(horaire), 9
       /* TEXT, PROPS */
-      , _hoisted_26);
+      , _hoisted_27);
     }), 128
     /* KEYED_FRAGMENT */
     ))], 40
     /* PROPS, HYDRATE_EVENTS */
-    , _hoisted_25), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.jours[days]['fin_pause']]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
+    , _hoisted_26), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.jours[days]['fin_pause']]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
       onChange: function onChange($event) {
         $options.checkHours($data.jours[days], days);
         $options.synchroniseValue($data.jours[days], 'fin_journee');
@@ -24062,15 +24082,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         value: horaire
       }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(horaire), 9
       /* TEXT, PROPS */
-      , _hoisted_29);
+      , _hoisted_30);
     }), 128
     /* KEYED_FRAGMENT */
     ))], 40
     /* PROPS, HYDRATE_EVENTS */
-    , _hoisted_28), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.jours[days]['fin_journee']]])])]);
+    , _hoisted_29), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.jours[days]['fin_journee']]])])]);
   }), 128
   /* KEYED_FRAGMENT */
-  ))])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_30, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  ))])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_31, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     onClick: _cache[3] || (_cache[3] = function ($event) {
       return $options.closeModal();
     }),
@@ -24085,7 +24105,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
   }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.isUpdate ? 'Modifier' : 'Créer'), 9
   /* TEXT, PROPS */
-  , _hoisted_31)]), $data.errors ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_32, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.errors), 1
+  , _hoisted_32)]), $data.errors ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.errors), 1
   /* TEXT */
   )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])])]);
 }
@@ -27936,7 +27956,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         /* STYLE */
         ))], 8
         /* PROPS */
-        , _hoisted_5), !planning.horaires.teletravail ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_9, [_ctx.$page.props.auth.user.coordinateur && planning.horaires ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+        , _hoisted_5), !planning.horaires.teletravail ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_9, [_ctx.$page.props.auth.user.coordinateur && planning.horaires && planning.type !== 'Iti' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
           key: 0,
           onClick: function onClick($event) {
             return $options.changeHome(planning, planning.horaires.teletravail, index);
@@ -27955,7 +27975,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         /* STYLE */
         ))], 8
         /* PROPS */
-        , _hoisted_10)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_14, [_ctx.$page.props.auth.user.coordinateur && planning.horaires ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+        , _hoisted_10)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_14, [_ctx.$page.props.auth.user.coordinateur && planning.horaires && planning.type !== 'Iti' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
           key: 0,
           onClick: function onClick($event) {
             return $options.changeHome(planning, planning.horaires.teletravail, index);
@@ -27988,14 +28008,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           key: 0,
           "class": "font-bold text-justify line-clamp-3",
           style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)($data.texte)
-        }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(planning.horaires.teletravail ? 'Télétravail' : 'Hub'), 5
+        }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(planning.horaires.teletravail ? 'Télétravail' : 'Hub') + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(planning.horaires.rotation ? ' - ' + planning.horaires.rotation : ''), 5
         /* TEXT, STYLE */
         )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
           key: 1,
           "class": "font-bold text-justify line-clamp-3",
           style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)($data.texte)
-        }, " Technicien ", 4
-        /* STYLE */
+        }, " Technicien " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(planning.horaires.rotation ? ' - ' + planning.horaires.rotation : ''), 5
+        /* TEXT, STYLE */
         )), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
           "class": "font-semibold text-justify line-clamp-3",
           style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)($data.texte)
@@ -28250,19 +28270,19 @@ var _hoisted_38 = {
 };
 
 var _hoisted_39 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", {
-  "class": "bg-gray-50"
+  "class": "bg-black"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   scope: "col",
-  "class": "p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+  "class": "p-4 text-left text-xs font-medium text-white uppercase tracking-wider"
 }), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   scope: "col",
-  "class": "p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+  "class": "p-4 text-left text-xs font-medium text-white uppercase tracking-wider"
 }, " Nom de la Rotation "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   scope: "col",
-  "class": "p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+  "class": "p-4 text-left text-xs font-medium text-white uppercase tracking-wider"
 }, " Nombres d'heures sur la rotation "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   scope: "col",
-  "class": "p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+  "class": "p-4 text-left text-xs font-medium text-white uppercase tracking-wider"
 }, " Actions ")])], -1
 /* HOISTED */
 );
@@ -28360,7 +28380,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeAuthenticatedLayout, null, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("main", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [_hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-        type: "date",
+        type: "week",
         id: "start",
         name: "trip-start",
         "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
@@ -28371,7 +28391,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, null, 8
       /* PROPS */
       , _hoisted_9), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.dateStart]]), _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-        type: "date",
+        type: "week",
         id: "end",
         name: "trip-end",
         "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
