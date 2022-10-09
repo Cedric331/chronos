@@ -12,6 +12,7 @@ use App\Models\TypeRotation;
 use App\Models\User;
 use DateTime;
 use DateTimeImmutable;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -48,6 +49,18 @@ class RotationController extends Controller
             'dateLimitStart' => $dateStart,
             'dateLimitEnd' => $dateEnd,
         ]);
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show (): \Illuminate\Http\JsonResponse
+    {
+        $rotations = TypeRotation::with('rotations')
+            ->where('hub_id', Auth::user()->hub_id)
+            ->get();
+
+        return response()->json($rotations);
     }
 
     /**
@@ -135,7 +148,11 @@ class RotationController extends Controller
         return response()->json($delete);
     }
 
-    public function generatePlanning (Request $request)
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function generatePlanning (Request $request): \Illuminate\Http\JsonResponse
     {
         date_default_timezone_set('Europe/Paris');
 
@@ -153,7 +170,6 @@ class RotationController extends Controller
 
         $hub = Hub::find(Auth::user()->hub_id);
 
-        if ($request->collaborateur) {
         $collaborateur = Collaborateur::find($request->collaborateur['id']);
 
         $users = User::where('collaborateur_id', $collaborateur->id)->get();
@@ -169,9 +185,10 @@ class RotationController extends Controller
                 'collaborateur_id' => null
             ]);
         }
+
         $collaborateur->dates()->detach();
         $collaborateur->delete();
-        }
+
 
         $i = 0;
         while ($selectTimeStart !== $selectTimeEnd) {
@@ -220,7 +237,23 @@ class RotationController extends Controller
                 }
             }
         }
-        return 'ok';
+
+        foreach ($saveCollaborateurs as $save) {
+
+            $collaborateur = Collaborateur::where('hub_id', Auth::user()->hub_id)
+                ->where('name', $save['name'])
+                ->first();
+
+            if ($collaborateur) {
+                foreach ($save['users'] as $user) {
+                    $user->update([
+                        'collaborateur_id' => $collaborateur->id
+                    ]);
+                }
+            }
+        }
+
+       return response()->json($collaborateur);
     }
 
     /**

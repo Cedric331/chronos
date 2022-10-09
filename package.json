@@ -28,6 +28,7 @@
     "dependencies": {
         "@kyvg/vue3-notification": "^2.3.4",
         "vue-draggable-next": "^2.1.1",
-        "vue-full-loading": "^1.2.1"
+        "vue-full-loading": "^1.2.1",
+        "vue3-popper": "^1.5.0"
     }
 }

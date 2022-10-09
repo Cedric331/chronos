@@ -78,7 +78,6 @@
 
         <Dialog
             v-if="confirm"
-            :user="user"
             @closeConfirm="data => this.closeDialogue(data)">
         </Dialog>
         <ModalUser
@@ -130,11 +129,17 @@ export default {
         closeDialogue (data) {
             this.confirm = false
             if (data) {
-                this.$notify({
-                    title: "Succès",
-                    text: "Membre supprimé avec succès !",
-                    type: 'success',
-                });
+                axios.delete('equipe/' + this.user.id)
+                    .then(() => {
+                        this.$notify({
+                            title: "Succès",
+                            text: "Membre supprimé avec succès !",
+                            type: 'success',
+                        });
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
             }
             this.refreshData()
         },

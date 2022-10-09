@@ -472,6 +472,9 @@ class PlanningController extends Controller
         if ($request->planification === '3') {
             $type = 'CP';
         }
+        if ($request->planification === '4') {
+            $type = 'FOR';
+        }
         if ($request->isTech) {
             $type = 'Iti1';
         }

@@ -8,6 +8,10 @@ Route::get('/rotation', [RotationController::class, 'index'])
     ->middleware('role:Coordinateur|Administrateur|Responsable')
     ->name('rotation');
 
+Route::get('/rotation/show', [RotationController::class, 'show'])
+    ->middleware('auth')
+    ->name('rotation.show');
+
 Route::post('/rotation', [RotationController::class, 'store'])
     ->middleware('auth')
     ->middleware('role:Coordinateur|Administrateur|Responsable');

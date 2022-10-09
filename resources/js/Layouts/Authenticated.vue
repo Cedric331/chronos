@@ -34,6 +34,9 @@
                                             <BreezeDropdownLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" style="z-index: 9999" v-if="$page.props.auth.user.coordinateur" :href="route('equipe')" method="get" as="button">
                                                 Gestion Équipe
                                             </BreezeDropdownLink>
+                                            <BreezeDropdownLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" style="z-index: 9999" v-if="$page.props.auth.user.coordinateur" :href="route('collaborateur')" method="get" as="button">
+                                                Gestion Collaborateur
+                                            </BreezeDropdownLink>
                                             <BreezeDropdownLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" style="z-index: 9999" :href="route('equipe.information')" method="get" as="button">
                                                 Information Équipe
                                             </BreezeDropdownLink>
@@ -125,6 +128,9 @@
                         </BreezeResponsiveNavLink>
                         <BreezeResponsiveNavLink v-if="$page.props.auth.user.coordinateur" :href="route('equipe')" method="get" as="button">
                             Gestion Équipe
+                        </BreezeResponsiveNavLink>
+                        <BreezeResponsiveNavLink v-if="$page.props.auth.user.coordinateur" :href="route('collaborateur')" method="get" as="button">
+                            Gestion Collaborateur
                         </BreezeResponsiveNavLink>
                         <BreezeResponsiveNavLink :href="route('equipe.information')" :active="route().current('equipe.information')" method="get" as="button">
                             Information Équipe

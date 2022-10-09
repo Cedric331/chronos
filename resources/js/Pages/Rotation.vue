@@ -3,27 +3,32 @@
     <Head>
         <title>Rotations</title>
     </Head>
+    <Loading
+        :show="show"
+        :loader-class="loadClass"
+        :label="label">
+    </Loading>
     <BreezeAuthenticatedLayout>
             <div class="flex overflow-hidden">
                 <div class="h-full w-full bg-white relative overflow-y-auto lg:m-24 m-auto p-5">
                     <div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Les Rotations</h3>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Création du Planning</h3>
                     </div>
                     <main>
                         <div class="pt-6 px-4">
                             <div class="w-full gap-4 flex justify-between">
                                 <div>
                                     <div class="flex flex-col justify-between">
-                                        <label for="start">Date de début:</label>
+                                        <label for="start">Semaine de début:</label>
                                         <input type="week" id="start" name="trip-start"
                                                v-model="dateStart"
                                                :min="dateLimitStart" :max="dateLimitEnd">
-                                        <label for="end">Date de Fin :</label>
+                                        <label for="end">Semaine de Fin :</label>
                                         <input type="week" id="end" name="trip-end"
                                                v-model="dateEnd"
                                                :min="dateLimitStart" :max="dateLimitEnd">
                                     </div>
-                                    <div class="w-full mx-auto rounded-md p-16 flex flex-col sm:flex-row sm:justify-evenly">
+                                    <div class="border border-4 shadow-2xl my-5 w-full mx-auto rounded-md p-16 flex flex-col sm:flex-row sm:justify-evenly">
                                         <div class="p-16 flex flex-col bg-white rounded-lg">
                                             <h1 class="font-semibold tracking-wide mb-2">Choisir le collaborateur</h1>
 
@@ -157,12 +162,14 @@ import {Head} from "@inertiajs/inertia-vue3"
 import ModalRotation from "@/Components/ModalRotation";
 import ModalConfirmDelete from "@/Components/ModalConfirmDelete";
 import { VueDraggableNext } from 'vue-draggable-next'
+import Loading from 'vue-full-loading'
 
 export default {
     name: "Rotation",
     components: {
         ModalConfirmDelete,
         ModalRotation,
+        Loading,
         BreezeAuthenticatedLayout,
         draggable: VueDraggableNext,
         Head
@@ -175,6 +182,9 @@ export default {
     },
     data () {
         return {
+            show: false,
+            label: 'Création du planning en cours...',
+            loadClass: 'load-class',
             confirmDel: false,
             collaborateur: null,
             showModalRotation: false,
@@ -188,12 +198,26 @@ export default {
     },
     methods: {
         generatePlanning () {
+        this.show = true
           axios.post('generate', {
-              rotations: this.listRotation,
-              collaborateur: this.collaborateur,
-              dateStart: this.dateStart,
-              dateEnd: this.dateEnd,
-          })
+                  rotations: this.listRotation,
+                  collaborateur: this.collaborateur,
+                  dateStart: this.dateStart,
+                  dateEnd: this.dateEnd,
+              })
+            .then(() => {
+                this.$notify({
+                    title: "Succès",
+                    text: "Planning crée avec succès !",
+                    type: 'success',
+                });
+            })
+            .catch(err => {
+                console.log(err)
+            })
+            .finally(() => {
+                this.show = false
+            })
         },
         deleteListRotation (index) {
             this.listRotation = this.listRotation.filter((item, key) => {
@@ -252,6 +276,11 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style>
+.load-class {
+    position: absolute;
+    display: inline-block;
+    right:40%;
+    bottom:50%;
+}
 </style>

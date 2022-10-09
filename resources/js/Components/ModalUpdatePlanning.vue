@@ -2,7 +2,7 @@
 
     <div class="fixed fade z-10 inset-0 w-full h-full outline-none overflow-x-hidden overflow-y-auto" aria-labelledby="modification planning" role="dialog" aria-modal="true">
 
-        <div class="flex items-end justify-center pt-4 px-4 pb-20 text-center sm:block sm:p-0 w-10/12 mb-6 mx-auto">
+        <div class="flex items-end justify-center pt-4 px-4 pb-20 text-center sm:block sm:p-0 sm:w-auto lg:w-6/12 mb-6 mx-auto">
             <div @click="closeModal()" class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
 
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
@@ -10,18 +10,17 @@
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <div class="sm:flex sm:items-start">
                         <section class="container p-6 mx-auto bg-white">
-                            <h2 class="font-bold text-center text-3xl text-gray-800 md:text-2xl mb-5">
+                            <h2 class="font-bold text-left text-xl text-gray-800 mb-5">
                                 Modification du planning de {{ collaborateur.name }}
                             </h2>
                             <div v-if="errors" class="bg-red-100 rounded-lg py-5 px-6 mb-4 tex t-base text-red-700 mb-3" role="alert">
                                 {{ errors }}
                             </div>
                              <div>
-                                    <form class="rounded-lg w-auto">
+                                    <div class="rounded-lg w-auto w-4/6">
                                         <div>
                                             <label class="text-gray-800 font-semibold block my-3 text-md">Type</label>
                                             <select v-model="radio" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
-                                                <option :value="null" selected> -- Veuillez sélectionner le type de planification --</option>
                                                 <option value="1">
                                                     Planifié
                                                 </option>
@@ -30,6 +29,9 @@
                                                 </option>
                                                 <option value="3">
                                                     Congés payés
+                                                </option>
+                                                <option value="4">
+                                                    Formation
                                                 </option>
                                             </select>
                                         </div>
@@ -82,15 +84,45 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
+                                    </div>
                              </div>
                         </section>
-
+                            <section class="container p-6 mx-auto bg-white w-full">
+                            <div>
+                                <h2 class="font-bold text-left text-xl text-gray-800 mb-5">
+                                    Les Rotations
+                                </h2>
+                                <div
+                                    class="list-group-item bg-gray-700 m-1 p-3 rounded-md text-center text-white"
+                                    v-for="(rotation, index) in rotations"
+                                    :key="index">
+                                    <div class="flex justify-between">
+                                        <Popper theme-background-color="black" placement="left">
+                                            <button @click="defineContent(rotation)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                                                </svg>
+                                            </button>
+                                            <template #content>
+                                                <div v-html="content"></div>
+                                            </template>
+                                        </Popper>
+                                        <div @click="selecteRotation(index)" class="mr-5">
+                                            {{ rotation.type }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
                     </div>
                 </div>
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button @click="this.modalMail = true" type="button" class="mt-3 w-full inline-flex justify-center bg-blue-500 rounded-md border shadow-sm px-4 py-2 text-base font-medium text-white sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Valider</button>
-                    <button @click="closeModal()" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Fermer</button>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 flex justify-between">
+                    <div>
+                        <button @click="closeModal()" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Annuler</button>
+                    </div>
+                    <div>
+                        <button @click="this.modalMail = true" type="button" class="mt-3 w-full inline-flex justify-center bg-blue-500 rounded-md border shadow-sm px-4 py-2 text-base font-medium text-white sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Valider</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -105,9 +137,14 @@
 
 <script>
 import ModalNotificationMail from "@/Components/ModalNotificationMail";
+import Popper from "vue3-popper";
+
 export default {
     name: "ModalUpdatePlanning",
-    components: {ModalNotificationMail},
+    components: {
+        ModalNotificationMail,
+        Popper
+    },
     emits: ["closeModal"],
     props: {
         selected: Array,
@@ -115,6 +152,7 @@ export default {
     },
     data () {
         return {
+            content: null,
             horaires: [
                 '8h00',
                 '8h30',
@@ -145,14 +183,15 @@ export default {
                 '21h00'
             ],
             errors: null,
-            radio: null,
+            radio: '1',
             isTech: false,
             debut_journee: null,
             debut_pause: 'Pas de pause',
             fin_pause: null,
             fin_journee: null,
             teletravail: false,
-            modalMail: false
+            modalMail: false,
+            rotations: []
         }
     },
     methods: {
@@ -214,11 +253,45 @@ export default {
 
                 return true
             }
+        },
+        defineContent (data) {
+            let text = 'Semaine de ' + data.hours + '<br><br>'
+            data.rotations.forEach(item => {
+                const horaire = JSON.parse(item.horaire)
+                const debut_journee = horaire.debut_journee ? horaire.debut_journee : 'Non Planifié'
+                const fin_journee = horaire.fin_journee ? ' - ' + horaire.fin_journee : ''
+                text += this.capitalizeFirstLetter(item.day) + ' : ' + debut_journee + fin_journee + '<br>'
+            })
+            this.content = text
+        },
+        getRotations () {
+            axios.get('rotation/show')
+            .then(response => {
+                this.rotations = response.data
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        },
+         capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
         }
+    },
+    mounted () {
+        this.getRotations()
     }
 }
 </script>
 
-<style scoped>
-
+<style>
+:root {
+    --popper-theme-background-color: black;
+    --popper-theme-background-color-hover: #333333;
+    --popper-theme-text-color: #ffffff;
+    --popper-theme-border-width: 0px;
+    --popper-theme-border-style: solid;
+    --popper-theme-border-radius: 6px;
+    --popper-theme-padding: 32px;
+    --popper-theme-box-shadow: 0 6px 30px -6px rgba(0, 0, 0, 0.25);
+}
 </style>

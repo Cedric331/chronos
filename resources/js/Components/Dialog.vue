@@ -35,13 +35,7 @@ export default {
     },
     methods: {
         deleted () {
-            axios.delete('equipe/' + this.user.id)
-            .then(() => {
-                this.$emit('closeConfirm', true)
-            })
-            .catch(error => {
-                console.log(error)
-            })
+            this.$emit('closeConfirm', true)
         }
     }
 }

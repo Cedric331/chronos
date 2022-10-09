@@ -29,3 +29,4 @@ require __DIR__.'/planning.php';
 require __DIR__.'/parametre.php';
 require __DIR__.'/lien.php';
 require __DIR__.'/rotation.php';
+require __DIR__.'/collaborateur.php';
