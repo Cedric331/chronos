@@ -268,7 +268,15 @@ export default {
               this.store()
           }
         },
+        checkPause () {
+            Object.keys(this.jours).forEach((item, key) => {
+                if (!this.jours[item]['debut_pause']) {
+                    this.jours[item]['fin_pause'] = null
+                }
+            })
+        },
         store () {
+            this.checkPause()
             axios.post('rotation', {
                 type: this.type,
                 jours: this.jours,
@@ -279,6 +287,7 @@ export default {
             })
         },
         update () {
+            this.checkPause()
             axios.patch('rotation', {
                 id: this.rotation.id,
                 type: this.type,

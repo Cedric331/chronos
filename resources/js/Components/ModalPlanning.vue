@@ -36,7 +36,7 @@
                                             </div>
                                             <div v-if="planning.horaires">
                                                 <p class="font-light text-justify line-clamp-3" :style="texte">
-                                                    {{ planning.horaires.teletravail ? 'Télétravail' : 'Hub'}}
+                                                    {{ planning.horaires.teletravail ? 'Télétravail' : 'Hub'}} {{ planning.horaires.rotation ? ' - ' + planning.horaires.rotation : ''}}
                                                 </p>
                                                 <p class="font-light text-justify line-clamp-3" :style="texte">
                                                     Début : {{ planning.horaires.debut_journee }}

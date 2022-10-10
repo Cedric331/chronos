@@ -54,7 +54,7 @@ class PlanningController extends Controller
 
     public function __construct()
     {
-        $this->middleware(['role:Coordinateur|Administrateur|Responsable'], ['only' => ['import', 'updatePlanning']]);
+        $this->middleware(['role:Coordinateur|Administrateur|Responsable'], ['only' => ['import', 'updateRotationPlanning', 'updatePlanning']]);
     }
 
 
@@ -506,29 +506,34 @@ class PlanningController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function switchPlanning(Request $request): \Illuminate\Http\JsonResponse
+    public function updateRotationPlanning (Request $request): \Illuminate\Http\JsonResponse
     {
-        $type = null;
-        if ($request->planification === null) {
-            return response()->json(false, 400);
-        }
-        if ($request->planification === '3') {
-            $type = 'CP';
-        }
-        if ($request->isTech) {
-            $type = 'Iti1';
-        }
 
         foreach ($request->selected as $selected) {
+            $day = strtolower(explode(' ', $selected['date'])[0]);
+            foreach ($request->rotation['rotations'] as $rotation) {
+                if ($rotation['day'] == $day) {
+                    $rotation = json_decode($rotation['horaire']);
+
+                    if ($request->technicien) {
+                        $type = 'Iti1';
+                    } else {
+                        $type = null;
+                    }
+
+                    $horaires = [
+                        'debut_journee' => $rotation->debut_journee,
+                        'debut_pause' => $rotation->debut_pause,
+                        'fin_pause' => $rotation->fin_pause,
+                        'fin_journee' => $rotation->fin_journee,
+                        'teletravail' => false,
+                        'rotation' => $request->rotation['type'],
+                        'type' => $type
+                    ];
+                }
+            }
+
             $collaborateurDate = CollaborateurDate::find($selected['horaire_id']);
-            $horaires = [
-                'debut_journee' => $request->debut_journee,
-                'debut_pause' => $request->debut_pause,
-                'fin_pause' => $request->fin_pause,
-                'fin_journee' => $request->fin_journee,
-                'teletravail' => $request->teletravail,
-                'type' => $type,
-            ];
 
             $collaborateurDate->horaire = json_encode($horaires);
             $collaborateurDate->save();

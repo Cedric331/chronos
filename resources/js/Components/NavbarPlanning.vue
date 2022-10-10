@@ -1,9 +1,9 @@
 <template>
     <header class="bg-white shadow sticky top-0 z-50">
         <nav class="bg-gray-800">
-            <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+            <div class="w-full mx-auto px-2 sm:px-6 lg:px-8">
                 <div class="relative flex items-center justify-between h-16">
-                    <div class="flex-1 flex items-center justify-center sm:justify-start hidden sm:block">
+                    <div class="flex-1 hidden sm:block">
                         <div class="flex-shrink-0 flex items-center text-white xl:visible">
                             Planning de {{ collaborateur.name }}
                         </div>

@@ -20,7 +20,7 @@
                                     <div class="rounded-lg w-auto w-4/6">
                                         <div>
                                             <label class="text-gray-800 font-semibold block my-3 text-md">Type</label>
-                                            <select v-model="radio" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
+                                            <select :disabled="this.rotation !== null" v-model="radio" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
                                                 <option value="1">
                                                     Planifié
                                                 </option>
@@ -38,7 +38,7 @@
                                         <div v-if="radio === '1'">
                                             <div>
                                                 <label class="text-gray-800 font-semibold block my-3 text-md">Début journée</label>
-                                                <select v-model="debut_journee" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
+                                                <select :disabled="this.rotation !== null" v-model="debut_journee" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
                                                     <option v-for="(horaire, index) in horaires" :key="index" :value="horaire">
                                                         {{ horaire }}
                                                     </option>
@@ -46,7 +46,7 @@
                                             </div>
                                             <div>
                                                 <label class="text-gray-800 font-semibold block my-3 text-md">Début pause</label>
-                                                <select v-model="debut_pause" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
+                                                <select :disabled="this.rotation !== null" v-model="debut_pause" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
                                                     <option selected>Pas de pause</option>
                                                     <option v-for="(horaire, index) in horaires" :key="index" :value="horaire">
                                                         {{ horaire }}
@@ -55,7 +55,7 @@
                                             </div>
                                             <div v-if="debut_pause !== null && debut_pause !== 'Pas de pause'">
                                                 <label class="text-gray-800 font-semibold block my-3 text-md">Fin pause</label>
-                                                <select v-model="fin_pause" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
+                                                <select :disabled="this.rotation !== null" v-model="fin_pause" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
                                                     <option v-for="(horaire, index) in horaires" :key="index" :value="horaire">
                                                         {{ horaire }}
                                                     </option>
@@ -63,7 +63,7 @@
                                             </div>
                                             <div>
                                                 <label class="text-gray-800 font-semibold block my-3 text-md">Fin journée</label>
-                                                <select v-model="fin_journee" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
+                                                <select :disabled="this.rotation !== null" v-model="fin_journee" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
                                                     <option v-for="(horaire, index) in horaires" :key="index" :value="horaire">
                                                         {{ horaire }}
                                                     </option>
@@ -71,13 +71,13 @@
                                             </div>
                                             <div class="flex justify-start">
                                                 <div class="form-check mt-6">
-                                                    <input v-model="isTech" class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox">
+                                                    <input :disabled="this.rotation !== null" v-model="isTech" class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox">
                                                     <label class="form-check-label inline-block text-gray-800">
                                                         Technicien
                                                     </label>
                                                 </div>
                                                 <div class="form-check mt-6 ml-4">
-                                                    <input v-model="teletravail" class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox">
+                                                    <input :disabled="this.rotation !== null" v-model="teletravail" class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox">
                                                     <label class="form-check-label inline-block text-gray-800">
                                                         Télétravail
                                                     </label>
@@ -93,20 +93,21 @@
                                     Les Rotations
                                 </h2>
                                 <div
-                                    class="list-group-item bg-gray-700 m-1 p-3 rounded-md text-center text-white"
+                                    :class="[this.rotation === rotation ? 'border-4 border-red-500 border-solid' : '']"
+                                    class="list-group-item bg-gray-700 m-1 p-3 rounded-md text-center text-white flex justify-between"
                                     v-for="(rotation, index) in rotations"
                                     :key="index">
-                                    <div class="flex justify-between">
-                                        <Popper theme-background-color="black" placement="left">
-                                            <button @click="defineContent(rotation)">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-                                                </svg>
-                                            </button>
-                                            <template #content>
-                                                <div v-html="content"></div>
-                                            </template>
-                                        </Popper>
+                                    <Popper theme-background-color="black" placement="left">
+                                        <button @click="defineContent(rotation)">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                                            </svg>
+                                        </button>
+                                        <template #content>
+                                            <div v-html="content"></div>
+                                        </template>
+                                    </Popper>
+                                    <div class="w-full" @click="selecteRotation(rotation)">
                                         <div @click="selecteRotation(index)" class="mr-5">
                                             {{ rotation.type }}
                                         </div>
@@ -191,6 +192,7 @@ export default {
             fin_journee: null,
             teletravail: false,
             modalMail: false,
+            rotation: null,
             rotations: []
         }
     },
@@ -200,32 +202,56 @@ export default {
         },
         submit (sendMail) {
             if (this.valideData) {
-                this.debut_pause === 'Pas de pause' ? this.debut_pause = null : ''
-                axios.patch('planning/update', {
-                    sendMail: sendMail,
-                    selected: this.selected,
-                    user: this.collaborateur,
-                    planification: this.radio,
-                    isTech: this.isTech,
-                    debut_journee: this.debut_journee,
-                    debut_pause: this.debut_pause,
-                    fin_pause: this.fin_pause,
-                    fin_journee: this.fin_journee,
-                    teletravail: this.teletravail,
-                })
-                    .then(() => {
-                        this.radio = null
-                        this.isTech = false
-                        this.debut_journee = null
-                        this.debut_pause = 'Pas de pause'
-                        this.fin_pause = null
-                        this.fin_journee = null
-                        this.teletravail = false
-                        this.closeModal(true)
+                if (this.rotation !== null) {
+                    axios.patch('planning/update/rotation', {
+                        sendMail: sendMail,
+                        selected: this.selected,
+                        user: this.collaborateur,
+                        rotation: this.rotation
                     })
-                    .catch(error => {
-                        console.log(error)
+                        .then(() => {
+                            this.radio = null
+                            this.isTech = false
+                            this.debut_journee = null
+                            this.debut_pause = 'Pas de pause'
+                            this.fin_pause = null
+                            this.fin_journee = null
+                            this.teletravail = false
+                            this.rotation = null
+                            this.closeModal(true)
+                        })
+                        .catch(error => {
+                            console.log(error)
+                        })
+                } else {
+                    this.debut_pause === 'Pas de pause' ? this.debut_pause = null : ''
+                    axios.patch('planning/update', {
+                        sendMail: sendMail,
+                        selected: this.selected,
+                        user: this.collaborateur,
+                        planification: this.radio,
+                        isTech: this.isTech,
+                        debut_journee: this.debut_journee,
+                        debut_pause: this.debut_pause,
+                        fin_pause: this.fin_pause,
+                        fin_journee: this.fin_journee,
+                        teletravail: this.teletravail,
                     })
+                        .then(() => {
+                            this.radio = null
+                            this.isTech = false
+                            this.debut_journee = null
+                            this.debut_pause = 'Pas de pause'
+                            this.fin_pause = null
+                            this.fin_journee = null
+                            this.teletravail = false
+                            this.rotation = null
+                            this.closeModal(true)
+                        })
+                        .catch(error => {
+                            console.log(error)
+                        })
+                }
             }
         },
         valideData () {
@@ -255,12 +281,16 @@ export default {
             }
         },
         defineContent (data) {
+            console.log('ok')
             let text = 'Semaine de ' + data.hours + '<br><br>'
             data.rotations.forEach(item => {
                 const horaire = JSON.parse(item.horaire)
+                console.log(horaire)
                 const debut_journee = horaire.debut_journee ? horaire.debut_journee : 'Non Planifié'
+                const debut_pause = horaire.debut_pause ? ' - ' + horaire.debut_pause : ''
+                const fin_pause = horaire.fin_pause ? ' - ' + horaire.fin_pause : ''
                 const fin_journee = horaire.fin_journee ? ' - ' + horaire.fin_journee : ''
-                text += this.capitalizeFirstLetter(item.day) + ' : ' + debut_journee + fin_journee + '<br>'
+                text += this.capitalizeFirstLetter(item.day) + ' : ' + debut_journee + debut_pause + fin_pause + fin_journee + '<br>'
             })
             this.content = text
         },
@@ -275,6 +305,13 @@ export default {
         },
          capitalizeFirstLetter(string) {
             return string.charAt(0).toUpperCase() + string.slice(1);
+        },
+        selecteRotation (data) {
+            if (this.rotation === data) {
+                this.rotation = null
+            } else {
+                this.rotation = data
+            }
         }
     },
     mounted () {

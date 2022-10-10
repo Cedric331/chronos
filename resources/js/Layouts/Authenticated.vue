@@ -1,7 +1,7 @@
 <template>
     <notifications position="bottom right" />
     <div>
-        <div class="h-screen bg-gray-700">
+        <div class="h-screen">
             <nav class="bg-white border-b border-gray-400">
                 <!-- Primary Navigation Menu -->
                 <div class="w-full mx-auto px-4 sm:px-6 lg:px-8">
@@ -93,7 +93,7 @@
 
                                     <template #content>
                                         <BreezeDropdownLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" style="z-index: 9999" :href="route('parametre')" method="get" as="button">
-                                            Paramètres
+                                            Modification des couleurs
                                         </BreezeDropdownLink>
                                         <BreezeDropdownLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" style="z-index: 9999" :href="route('user.update')" method="get" as="button">
                                             Modifier mon mot de passe
@@ -155,7 +155,7 @@
 
                         <div class="mt-3 space-y-1">
                             <BreezeResponsiveNavLink :href="route('parametre')" method="get" as="button">
-                                Paramètres
+                                Modification des couleurs
                             </BreezeResponsiveNavLink>
                             <BreezeResponsiveNavLink :href="route('user.update')" as="button">
                                 Modifier mon mot de passe
@@ -176,8 +176,8 @@
             </header>
 
             <!-- Page Content -->
-            <main class="bg-gray-700">
-                <slot ref="ChildComponent" />
+            <main id="main" class="h-full" :style="'background-image: url(/images/background'+ this.$page.props.season +'.jpg);'">
+                <slot />
             </main>
         </div>
     </div>
@@ -234,3 +234,10 @@ export default {
     }
 }
 </script>
+
+<style>
+#main {
+    background-attachment: fixed;
+    background-size: cover;
+}
+</style>

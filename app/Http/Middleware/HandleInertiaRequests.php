@@ -64,7 +64,23 @@ class HandleInertiaRequests extends Middleware
                 : null,
             'hub' => $request->user() ? Hub::find($request->user()->hub_id) : null,
             'hub.horodatage' => $request->user() ? Hub::find($request->user()->hub_id)->horodatage() : null,
-            'hubs' => Hub::orderBy('ville')->get()
+            'hubs' => Hub::orderBy('ville')->get(),
+            'season' => $this->timestampToSeason()
         ]);
+    }
+
+    private function timestampToSeason(): string {
+        $dayOfTheYear = date('z', strtotime(now()));
+
+        if($dayOfTheYear < 80 || $dayOfTheYear > 356){
+            return 2;
+        }
+        if($dayOfTheYear < 173){
+            return 3;
+        }
+        if($dayOfTheYear < 266){
+            return 4;
+        }
+        return 1;
     }
 }
