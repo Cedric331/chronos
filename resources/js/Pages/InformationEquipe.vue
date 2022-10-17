@@ -4,10 +4,10 @@
         <title>Information Équipe</title>
     </Head>
     <BreezeAuthenticatedLayout>
-        <div class="mb-32">
-            <div class="w-full px-10 pt-10 h-16 content-center">
-                    <div class="overflow-x-auto shadow-md sm:rounded-lg mt-5">
-                        <table class="w-full font-bold text-left">
+            <div class="w-12/12 h-full px-10 pt-10 h-16 flex justify-center">
+
+                    <div class="w-7/12 overflow-x-auto shadow-md sm:rounded-lg p-8">
+                        <table class="w-auto font-bold text-left">
                             <thead class="text-xs uppercase bg-white">
                             <tr>
                                 <th scope="col" class="px-6 py-3">
@@ -55,37 +55,37 @@
                             </tbody>
                         </table>
                     </div>
+
+                </div>
+
+            <div class="my-5 bg-gray-200 flex items-center justify-center sm:invisible visible">
+                <div class="text-center md:text-left">
+                    <div v-for="user in users" :key="user.id" class="border-b bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 mt-2 p-4">
+                        <div class="font-medium text-white whitespace-nowrap">
+                            {{ user.name }}
+                        </div>
+                        <div class="font-medium text-white whitespace-nowrap">
+                            {{ user.email }}
+                        </div>
+                        <div class="font-medium text-white whitespace-nowrap">
+                            {{ user.phone ? '0' + user.phone : '' }}
+                        </div>
+                        <div class="font-medium text-white whitespace-nowrap">
+                            {{ user.anniversaire }}
+                        </div>
+                        <div v-if="this.$page.props.auth.user.coordinateur || this.$page.props.auth.user.id === user.id" class=" text-right flex justify-between mt-1">
+                            <button @click="edit(user)" class="bg-blue-700 text-white py-1 px-2 rounded-full">
+                                Modifier
+                            </button>
+                        </div>
+                        <div v-else class="text-right flex justify-between mt-1">
+                            <button class="bg-slate-400 text-white py-1 px-2 rounded-full" disabled>
+                                Modifier
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-<!--            <div class="my-5 bg-gray-200 flex items-center justify-center sm:invisible visible">-->
-<!--                <div class="text-center md:text-left">-->
-<!--                    <div v-for="user in users" :key="user.id" class="border-b bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 mt-2 p-4">-->
-<!--                        <div class="font-medium text-white whitespace-nowrap">-->
-<!--                            {{ user.name }}-->
-<!--                        </div>-->
-<!--                        <div class="font-medium text-white whitespace-nowrap">-->
-<!--                            {{ user.email }}-->
-<!--                        </div>-->
-<!--                        <div class="font-medium text-white whitespace-nowrap">-->
-<!--                            {{ user.phone ? '0' + user.phone : '' }}-->
-<!--                        </div>-->
-<!--                        <div class="font-medium text-white whitespace-nowrap">-->
-<!--                            {{ user.anniversaire }}-->
-<!--                        </div>-->
-<!--                        <div v-if="this.$page.props.auth.user.coordinateur || this.$page.props.auth.user.id === user.id" class=" text-right flex justify-between mt-1">-->
-<!--                            <button @click="edit(user)" class="bg-blue-700 text-white py-1 px-2 rounded-full">-->
-<!--                                Modifier-->
-<!--                            </button>-->
-<!--                        </div>-->
-<!--                        <div v-else class="text-right flex justify-between mt-1">-->
-<!--                            <button class="bg-slate-400 text-white py-1 px-2 rounded-full" disabled>-->
-<!--                                Modifier-->
-<!--                            </button>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
 
         <ModalInformation
             v-show="showModal"

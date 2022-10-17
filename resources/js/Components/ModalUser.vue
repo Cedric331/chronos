@@ -108,7 +108,7 @@ export default {
           }
         },
         update () {
-          axios.patch('equipe/' + this.userUpdate.id, {
+          axios.patch('/equipe/' + this.userUpdate.id, {
               name: this.name,
               email: this.email,
               hub: this.hub_id
@@ -144,7 +144,7 @@ export default {
                            this.closeModal()
                        })
                } else {
-                   axios.post('equipe',{
+                   axios.post('/equipe',{
                        name: this.name,
                        email: this.email
                    }).then(response => {
@@ -159,7 +159,7 @@ export default {
            }
         },
         getHub () {
-            axios.get('hub')
+            axios.get('/hub')
             .then(response => {
                 this.hubs = response.data
             })

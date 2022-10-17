@@ -1,7 +1,6 @@
 <template>
     <notifications position="bottom right" />
-    <div>
-        <div class="h-screen">
+        <div class="min-h-screen h-full">
             <nav class="bg-white border-b border-gray-400">
                 <!-- Primary Navigation Menu -->
                 <div class="w-full mx-auto px-4 sm:px-6 lg:px-8">
@@ -9,7 +8,7 @@
                         <!-- Logo -->
                         <div class="shrink-0 flex items-center">
                             <Link :href="route('planning')">
-                                <BreezeApplicationLogo class="block h-9 w-auto" />
+                                <BreezeApplicationLogo class="block w-auto" />
                             </Link>
                         </div>
                             <!-- Navigation Links -->
@@ -19,7 +18,7 @@
                                         <template #trigger>
                                         <span class="inline-flex rounded-md">
                                             <button type="button" class="hover:bg-black hover:text-white font-bold rounded-full inline-flex items-center p-2 border border-transparent leading-4 bg-white focus:outline-none transition ease-in-out duration-150">
-                                                Gestion du Hub
+                                                Mon Hub
                                                 <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                                 </svg>
@@ -28,14 +27,11 @@
                                         </template>
 
                                         <template #content>
+                                            <BreezeDropdownLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" style="z-index: 9999" v-if="$page.props.auth.user.coordinateur" :href="route('gestion.hub')" method="get" as="button">
+                                                Gestion du Hub
+                                            </BreezeDropdownLink>
                                             <BreezeDropdownLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" style="z-index: 9999" v-if="$page.props.auth.user.coordinateur" :href="route('dashboard')" method="get" as="button">
                                                 Import fichier
-                                            </BreezeDropdownLink>
-                                            <BreezeDropdownLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" style="z-index: 9999" v-if="$page.props.auth.user.coordinateur" :href="route('equipe')" method="get" as="button">
-                                                Gestion Équipe
-                                            </BreezeDropdownLink>
-                                            <BreezeDropdownLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" style="z-index: 9999" v-if="$page.props.auth.user.coordinateur" :href="route('collaborateur')" method="get" as="button">
-                                                Gestion Collaborateur
                                             </BreezeDropdownLink>
                                             <BreezeDropdownLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" style="z-index: 9999" :href="route('equipe.information')" method="get" as="button">
                                                 Information Équipe
@@ -62,6 +58,11 @@
 
                         <div class="flex">
                             <div v-if="this.$page.props.auth.user.coordinateur" class="flex items-center sm:ml-6">
+                                <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                                    <input v-model="isAuthorize" @click="updateAuthorizeHub(!isAuthorize)" type="checkbox" name="toggle" id="toggle" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer" />
+                                    <label for="toggle" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-300 cursor-pointer"></label>
+                                </div>
+                                <label for="toggle" class="text-sm text-gray-700">Autoriser la modification des horaires</label>
                                 <div class="ml-3 relative">
                                     <select v-model="selected" class="p-2 hover:bg-black hover:text-white font-bold rounded-full block w-full overflow-y-auto text-sm leading-4 font-medium rounded-md rounded transition ease-in-out m-0" style="border-width: 0">
                                         <option v-for="hub in this.$page.props.hubs" :key="hub.id" :value="hub.ville">
@@ -119,19 +120,9 @@
                     </div>
                 </div>
 
-                <!-- Responsive Navigation Menu -->
                 <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="sm:hidden">
 
                     <div class="pt-2 pb-3 space-y-1">
-                        <BreezeResponsiveNavLink v-if="$page.props.auth.user.coordinateur" :href="route('dashboard')" method="get" as="button">
-                            Import fichier
-                        </BreezeResponsiveNavLink>
-                        <BreezeResponsiveNavLink v-if="$page.props.auth.user.coordinateur" :href="route('equipe')" method="get" as="button">
-                            Gestion Équipe
-                        </BreezeResponsiveNavLink>
-                        <BreezeResponsiveNavLink v-if="$page.props.auth.user.coordinateur" :href="route('collaborateur')" method="get" as="button">
-                            Gestion Collaborateur
-                        </BreezeResponsiveNavLink>
                         <BreezeResponsiveNavLink :href="route('equipe.information')" :active="route().current('equipe.information')" method="get" as="button">
                             Information Équipe
                         </BreezeResponsiveNavLink>
@@ -154,9 +145,6 @@
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <BreezeResponsiveNavLink :href="route('parametre')" method="get" as="button">
-                                Modification des couleurs
-                            </BreezeResponsiveNavLink>
                             <BreezeResponsiveNavLink :href="route('user.update')" as="button">
                                 Modifier mon mot de passe
                             </BreezeResponsiveNavLink>
@@ -176,11 +164,10 @@
             </header>
 
             <!-- Page Content -->
-            <main id="main" class="h-full" :style="'background-image: url(/images/background'+ this.$page.props.season +'.jpg);'">
+            <main id="main" :style="'background-image: url(/images/background'+ this.$page.props.season +'.jpg);'">
                 <slot />
             </main>
         </div>
-    </div>
 </template>
 
 <script>
@@ -204,6 +191,7 @@ export default {
     data() {
         return {
             showingNavigationDropdown: false,
+            isAuthorize: this.$page.props.hub.droit_update === 1,
             selected: this.$page.props.hub.ville
         }
     },
@@ -217,6 +205,26 @@ export default {
       }
     },
     methods: {
+        updateAuthorizeHub (data) {
+            axios.patch('/hub/' + this.$page.props.hub.id + '/authorize', {
+                isAuthorize: data
+            })
+                .then(() => {
+                    this.$notify({
+                        title: "Succès",
+                        text: "Modification effectuée avec succès !",
+                        type: 'success',
+                    });
+                })
+                .catch(error => {
+                    console.log(error)
+                    this.$notify({
+                        title: "Erreur",
+                        text: "Oups désolé il y a une erreur !",
+                        type: 'info',
+                    });
+                })
+        },
         updateHub (id) {
             axios.patch('/hub/' + id + '/user')
             .then(() => {
@@ -239,5 +247,14 @@ export default {
 #main {
     background-attachment: fixed;
     background-size: cover;
+}
+.toggle-checkbox:checked {
+    @apply: right-0 border-green-400;
+    right: 0;
+    border-color: #1a202c;
+}
+.toggle-checkbox:checked + .toggle-label {
+    @apply: bg-green-400;
+    background-color: #1a202c;
 }
 </style>

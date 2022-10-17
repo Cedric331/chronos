@@ -23,7 +23,7 @@ class RotationController extends Controller
 
     public function __construct()
     {
-        $this->middleware('role:Coordinateur|Administrateur|Responsable');
+        $this->middleware(['role:Coordinateur|Administrateur|Responsable'], ['only' => ['store', 'update', 'delete', 'generatePlanning']]);
     }
 
     /**
@@ -73,7 +73,7 @@ class RotationController extends Controller
         $heures = self::timeHours($request);
 
         if (is_array($heures)) {
-            return response()->json($heures['message'], 422);
+            return response()->json(['date' => $heures['message']], 422);
         }
 
         $typeRotation = TypeRotation::create([
@@ -108,7 +108,7 @@ class RotationController extends Controller
         $heures = self::timeHours($request);
 
         if (is_array($heures)) {
-            return response()->json($heures['message'], 422);
+            return response()->json(['errors' => $heures['message']], 422);
         }
 
         $typeRotation = TypeRotation::find($request->id);

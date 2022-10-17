@@ -16,7 +16,7 @@
                                     </svg>
                                 </div>
                                 <div v-if="!planning.horaires.teletravail">
-                                    <div v-if="$page.props.auth.user.coordinateur && planning.horaires && planning.type !== 'Iti'" @click="changeHome(planning, planning.horaires.teletravail, index)" class="flex justify-end p-1">
+                                    <div v-if="$page.props.auth.user.coordinateur || this.$page.props.hub.droit_update === 1 && planning.horaires && planning.type !== 'Iti'" @click="changeHome(planning, planning.horaires.teletravail, index)" class="flex justify-end p-1">
                                         <svg class="fill-current" :style="texte" height="16px" version="1.1" viewBox="0 0 20 20" width="16px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title/>
                                             <g stroke-width="1">
                                                 <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd" />
@@ -26,7 +26,7 @@
                                     </div>
                                 </div>
                                 <div v-else>
-                                    <div v-if="$page.props.auth.user.coordinateur && planning.horaires && planning.type !== 'Iti'" @click="changeHome(planning, planning.horaires.teletravail, index)" class="flex justify-end p-1">
+                                    <div v-if="$page.props.auth.user.coordinateur || this.$page.props.hub.droit_update === 1 && planning.horaires && planning.type !== 'Iti'" @click="changeHome(planning, planning.horaires.teletravail, index)" class="flex justify-end p-1">
                                         <svg class="fill-current" :style="texte" height="16px" version="1.1" viewBox="0 0 20 20" width="16px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title/>
                                             <g stroke-width="1">
                                                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
@@ -73,7 +73,7 @@
                         </div>
                     </div>
                 </div>
-            <SelectedDate @click="updatePlanning = true" v-if="selectedPlanning.length > 0 && $page.props.auth.user.coordinateur" :classCss="'fixed bottom-3 right-6 bg-blue-500 rounded-full'" :value="'Modifier horaires'" :selected="selectedPlanning.length"></SelectedDate>
+            <SelectedDate @click="updatePlanning = true" v-if="selectedPlanning.length > 0 && $page.props.auth.user.coordinateur || selectedPlanning.length > 0 && this.$page.props.hub.droit_update === 1" :classCss="'fixed bottom-3 right-6 bg-blue-500 rounded-full'" :value="'Modifier horaires'" :selected="selectedPlanning.length"></SelectedDate>
         </div>
         <div v-else>
             <h1 class="text-3l text-center font-bold text-dark mt-8">
@@ -87,16 +87,16 @@
             @refreshViewDate="(data, index) => this.viewDate(data, index)"
             @closeModal="this.showPlanning = false">
         </ModalPlanning>
-        <ModalUpdatePlanning v-if="updatePlanning && $page.props.auth.user.coordinateur"
+        <ModalUpdatePlanning v-if="updatePlanning && $page.props.auth.user.coordinateur || this.$page.props.hub.droit_update === 1 && updatePlanning"
                              :collaborateur="member"
                              :selected="this.selectedPlanning"
                              @closeModal="bool => { this.closeUpdate(bool) }">
         </ModalUpdatePlanning>
-        <ModalSwitchPlanning v-if="updateSwitch && $page.props.auth.user.coordinateur"
-                             :collaborateurs="members"
-                             :collaborateur="member"
-                             :selected="this.selectedPlanning">
-        </ModalSwitchPlanning>
+<!--        <ModalSwitchPlanning v-if="updateSwitch && $page.props.auth.user.coordinateur"-->
+<!--                             :collaborateurs="members"-->
+<!--                             :collaborateur="member"-->
+<!--                             :selected="this.selectedPlanning">-->
+<!--        </ModalSwitchPlanning>-->
         <CheckUpdate v-if="!$page.props.auth.user.check_update"
                              @closeModal="this.closeCheck()">
         </CheckUpdate>
@@ -166,7 +166,7 @@ export default {
             }
         },
         selectPlanning (data) {
-            if (this.$page.props.auth.user.coordinateur) {
+            if (this.$page.props.auth.user.coordinateur || this.$page.props.hub.droit_update === 1) {
                 const inArray = this.selectedPlanning.filter(function (item) {
                     return item === data
                 })
@@ -257,6 +257,13 @@ export default {
                 this.member = response.data.collaborateur
                 this.members = response.data.collaborateurs
                 this.allPlannings = response.data.plannings
+            })
+            .catch(err => {
+                this.$notify({
+                    title: "Erreur",
+                    text: "Erreur lors de la modification !",
+                    type: 'warn',
+                });
             })
         },
         closeCheck () {

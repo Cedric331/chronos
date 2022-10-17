@@ -14,6 +14,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -54,7 +55,7 @@ class PlanningController extends Controller
 
     public function __construct()
     {
-        $this->middleware(['role:Coordinateur|Administrateur|Responsable'], ['only' => ['import', 'updateRotationPlanning', 'updatePlanning']]);
+        $this->middleware(['role:Coordinateur|Administrateur|Responsable'], ['only' => ['import']]);
     }
 
 
@@ -465,6 +466,10 @@ class PlanningController extends Controller
      */
     public function updatePlanning (Request $request): \Illuminate\Http\JsonResponse
     {
+        if (!Gate::allows('update-planning',  Hub::find(Auth::user()->hub_id))) {
+            abort(401);
+        }
+
         $type = null;
         if ($request->planification === null) {
             return response()->json(false, 400);
@@ -475,6 +480,13 @@ class PlanningController extends Controller
         if ($request->planification === '4') {
             $type = 'FOR';
         }
+        if ($request->planification === '5') {
+            $type = 'RJF';
+        }
+        if ($request->planification === '6') {
+            $type = 'F';
+        }
+
         if ($request->isTech) {
             $type = 'Iti1';
         }
@@ -508,6 +520,9 @@ class PlanningController extends Controller
      */
     public function updateRotationPlanning (Request $request): \Illuminate\Http\JsonResponse
     {
+        if (!Gate::allows('update-planning',  Hub::find(Auth::user()->hub_id))) {
+            abort(401);
+        }
 
         foreach ($request->selected as $selected) {
             $day = strtolower(explode(' ', $selected['date'])[0]);
@@ -515,7 +530,7 @@ class PlanningController extends Controller
                 if ($rotation['day'] == $day) {
                     $rotation = json_decode($rotation['horaire']);
 
-                    if ($request->technicien) {
+                    if ($rotation->technicien || $request->technicien) {
                         $type = 'Iti1';
                     } else {
                         $type = null;
@@ -585,6 +600,10 @@ class PlanningController extends Controller
      */
     public function updateTeletravail (Request $request): \Illuminate\Http\JsonResponse
     {
+        if (!Gate::allows('update-planning',  Hub::find(Auth::user()->hub_id))) {
+            abort(401);
+        }
+
         $collaborateurDate = CollaborateurDate::find($request->date['horaire_id']);
         $horaires =  json_decode($collaborateurDate->horaire);
         $horaires->teletravail = !$request->home;

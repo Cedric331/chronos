@@ -1,5 +1,5 @@
 <template>
-    <div id="main" class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+    <div id="main" :style="'background-image: url(/images/background'+ this.$page.props.season +'.jpg);'" class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
         <div>
             <Link href="/">
                 <BreezeApplicationLogo class="w-20 h-20 fill-current text-gray-500" />
@@ -26,7 +26,6 @@ export default {
 
 <style>
 #main {
-    background-image: url('/images/background.jpg');
     background-size: cover;
 }
 </style>

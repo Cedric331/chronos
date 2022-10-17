@@ -10,7 +10,7 @@
     </Loading>
     <BreezeAuthenticatedLayout>
             <div class="flex overflow-hidden">
-                <div class="h-full w-full bg-white relative overflow-y-auto lg:m-24 m-auto p-5">
+                <div class="h-full w-full bg-white relative overflow-y-auto lg:m-24 mx-auto p-5">
                     <div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">Création du Planning</h3>
                     </div>
@@ -86,7 +86,7 @@
                                     <div class="flex flex-col mt-8">
                                         <div class="overflow-x-auto drop-shadow-xl rounded-lg">
                                             <div class=" drop-shadow-xl align-middle inline-block min-w-full">
-                                                <div class="shadow overflow-hidden sm:rounded-lg">
+                                                <div class="shadow overflow-y-auto h-[400px] sm:rounded-lg">
                                                     <table class="min-w-full divide-y divide-gray-200">
                                                         <thead class="bg-black">
                                                         <tr>
@@ -96,7 +96,7 @@
                                                                 Nom de la Rotation
                                                             </th>
                                                             <th scope="col" class="p-4 text-left text-xs font-medium text-white uppercase tracking-wider">
-                                                                Nombres d'heures sur la rotation
+                                                                Nombre d'heures sur la rotation
                                                             </th>
                                                             <th scope="col" class="p-4 text-left text-xs font-medium text-white uppercase tracking-wider">
                                                                 Actions

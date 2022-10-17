@@ -8,10 +8,13 @@
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
             <div class="inline-block align-bottom bg-white rounded-lg text-left shadow-xl transform transition-all sm:my-4 sm:align-middle w-full">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <h2 class="font-bold text-center text-xl text-gray-800 mb-5">
+                        Modification du planning de {{ collaborateur.name }}
+                    </h2>
                     <div class="sm:flex sm:items-start">
                         <section class="container p-6 mx-auto bg-white">
-                            <h2 class="font-bold text-left text-xl text-gray-800 mb-5">
-                                Modification du planning de {{ collaborateur.name }}
+                            <h2 class="font-bold text-center text-xl text-gray-800 mb-5">
+                                Création d'un horaire spécifique
                             </h2>
                             <div v-if="errors" class="bg-red-100 rounded-lg py-5 px-6 mb-4 tex t-base text-red-700 mb-3" role="alert">
                                 {{ errors }}
@@ -32,6 +35,12 @@
                                                 </option>
                                                 <option value="4">
                                                     Formation
+                                                </option>
+                                                <option value="5">
+                                                    Récup. jour férié
+                                                </option>
+                                                <option value="6">
+                                                    Férié
                                                 </option>
                                             </select>
                                         </div>
@@ -87,10 +96,13 @@
                                     </div>
                              </div>
                         </section>
+                        <div>
+                            <hr>
+                        </div>
                             <section class="container p-6 mx-auto bg-white w-full">
                             <div>
-                                <h2 class="font-bold text-left text-xl text-gray-800 mb-5">
-                                    Les Rotations
+                                <h2 class="font-bold text-center text-xl text-gray-800 mb-5">
+                                    Ou sélectionner une Rotation
                                 </h2>
                                 <div
                                     :class="[this.rotation === rotation ? 'border-4 border-red-500 border-solid' : '']"
@@ -122,7 +134,7 @@
                         <button @click="closeModal()" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Annuler</button>
                     </div>
                     <div>
-                        <button @click="this.modalMail = true" type="button" class="mt-3 w-full inline-flex justify-center bg-blue-500 rounded-md border shadow-sm px-4 py-2 text-base font-medium text-white sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Valider</button>
+                        <button @click="submit(false)" type="button" class="mt-3 w-full inline-flex justify-center bg-blue-500 rounded-md border shadow-sm px-4 py-2 text-base font-medium text-white sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Valider</button>
                     </div>
                 </div>
             </div>
@@ -222,6 +234,11 @@ export default {
                         })
                         .catch(error => {
                             console.log(error)
+                            this.$notify({
+                                title: "Erreur",
+                                text: "Erreur lors de la modification !",
+                                type: 'warn',
+                            });
                         })
                 } else {
                     this.debut_pause === 'Pas de pause' ? this.debut_pause = null : ''
@@ -250,6 +267,11 @@ export default {
                         })
                         .catch(error => {
                             console.log(error)
+                            this.$notify({
+                                title: "Erreur",
+                                text: "Erreur lors de la modification !",
+                                type: 'warn',
+                            });
                         })
                 }
             }
@@ -330,5 +352,11 @@ export default {
     --popper-theme-border-radius: 6px;
     --popper-theme-padding: 32px;
     --popper-theme-box-shadow: 0 6px 30px -6px rgba(0, 0, 0, 0.25);
+}
+hr{
+    border:         none;
+    border-left:    1px solid hsla(200, 10%, 50%,100);
+    height:         50vh;
+    width:          1px;
 }
 </style>

@@ -16,6 +16,7 @@ class Hub extends Model
      */
     protected $fillable = [
         'ville',
+        'droit_update',
         'import_horodatage'
     ];
 

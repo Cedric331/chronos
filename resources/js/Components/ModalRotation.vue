@@ -9,7 +9,7 @@
                         <div class="mt-6 flex justify-between">
                             <div>
                                 <label for="type" class="block mb-2 text-lg font-medium text-gray-700">*Nom de la Rotation</label>
-                                <input v-model="type" type="text" id="type" max="3" class="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="3 caractères maximum" required>
+                                <input v-model="type" type="text" id="type" max="3" class="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="5 caractères maximum" required>
                             </div>
                             <div class="border-t-0 px-6 align-middle border-l-0 border-r-0 flex justify-between p-4">
                                 <label class="inline-flex items-center mt-3">
@@ -99,12 +99,12 @@
                             <button @click="closeModal()" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                                 Annuler
                             </button>
-                            <button :disabled="errors !== null" @click="submit()" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm">
+                            <button @click="submit()" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm">
                                 {{ isUpdate ? 'Modifier' : 'Créer' }}
                             </button>
                         </div>
-                        <div v-if="errors" class="sm:align-middle font-medium text-lg text-red-600">
-                            {{ errors }}
+                        <div v-for="(errorArray, idx) in notifmsg" :key="idx">
+                            <span class="text-red-600 font-bold">{{ errorArray[0] }} </span>
                         </div>
                 </div>
             </div>
@@ -214,7 +214,7 @@ export default {
                 '21h00'
             ],
             type: null,
-            errors: null
+            notifmsg: []
         }
     },
     methods: {
@@ -276,6 +276,7 @@ export default {
             })
         },
         store () {
+            this.notifmsg = []
             this.checkPause()
             axios.post('rotation', {
                 type: this.type,
@@ -285,17 +286,28 @@ export default {
                 this.$emit('storeRotation', res.data)
                 this.closeModal()
             })
+            .catch(err => {
+                if (err.response.data.errors) {
+                    this.notifmsg = err.response.data.errors
+                } else {
+                    this.notifmsg.push(err.date)
+                }
+            })
         },
         update () {
+            this.notifmsg = []
             this.checkPause()
             axios.patch('rotation', {
-                id: this.rotation.id,
-                type: this.type,
-                jours: this.jours,
-            })
+                    id: this.rotation.id,
+                    type: this.type,
+                    jours: this.jours,
+                })
                 .then(res => {
                     this.$emit('storeRotation', res.data, true)
                     this.closeModal()
+                })
+                .catch(err => {
+                    this.notifmsg = err.response.data.errors
                 })
         },
         closeModal () {

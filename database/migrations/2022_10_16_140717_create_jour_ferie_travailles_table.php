@@ -1,11 +1,12 @@
 <?php
 
 use App\Models\Hub;
+use App\Models\JourFerie;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTypeRotationsTable extends Migration
+class CreateJourFerieTravaillesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,12 +15,12 @@ class CreateTypeRotationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('type_rotations', function (Blueprint $table) {
+        Schema::create('jour_ferie_travailles', function (Blueprint $table) {
             $table->id();
-            $table->string('type', 5);
-            $table->string('hours', 5)->nullable();
-            $table->foreignId('hub_id')->constrained('hubs');
-            $table->unique(['type', 'hub_id']);
+            $table->json('collaborateurs')->nullable();
+            $table->foreignIdFor(JourFerie::class);
+            $table->foreignIdFor(Hub::class);
+            $table->unique(['jour_ferie_id', 'hub_id']);
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ class CreateTypeRotationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('type_rotations');
+        Schema::dropIfExists('jour_ferie_travailles');
     }
 }

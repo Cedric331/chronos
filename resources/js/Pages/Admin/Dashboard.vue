@@ -11,25 +11,25 @@
                         </h3>
                     </div>
                     <div class="flex justify-between ml-5">
-                    <div class="shadow-lg rounded-xl w-full md:w-80 p-4 bg-white relative overflow-y-auto" style="height: 250px">
-                        <div class="w-full flex items-center justify-between mb-6">
-                            <p class="text-gray-800 text-xl font-medium">
-                                Liste des hubs
-                            </p>
-                            <button @click.prevent="create()" class="flex items-center hover:text-black text-gray-800 border-0 focus:outline-none">
-                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1600 736v192q0 40-28 68t-68 28h-416v416q0 40-28 68t-68 28h-192q-40 0-68-28t-28-68v-416h-416q-40 0-68-28t-28-68v-192q0-40 28-68t68-28h416v-416q0-40 28-68t68-28h192q40 0 68 28t28 68v416h416q40 0 68 28t28 68z"></path>
-                                </svg>
-                            </button>
-                        </div>
-                        <div @click="this.hub = item" v-for="item in hubs" :key="item.id" :class="[item.id === hub.id ? 'bg-green-100' :  '']" class="flex items-center mb-2 rounded justify-between p-3 bg-gray-100">
-                            <div class="flex w-full ml-2 items-center justify-between">
-                                <p>
-                                    {{ item.ville }}
+                        <div class="shadow-lg rounded-xl w-full md:w-80 p-4 bg-white relative overflow-y-auto" style="height: 400px">
+                            <div class="w-full flex items-center justify-between mb-6">
+                                <p class="text-gray-800 text-xl font-medium">
+                                    Liste des hubs
                                 </p>
+                                <button @click.prevent="create()" class="flex items-center hover:text-black text-gray-800 border-0 focus:outline-none">
+                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M1600 736v192q0 40-28 68t-68 28h-416v416q0 40-28 68t-68 28h-192q-40 0-68-28t-28-68v-416h-416q-40 0-68-28t-28-68v-192q0-40 28-68t68-28h416v-416q0-40 28-68t68-28h192q40 0 68 28t28 68v416h416q40 0 68 28t28 68z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div @click="this.hub = item" v-for="item in hubs" :key="item.id" :class="[item.id === hub.id ? 'bg-green-100' :  '']" class="flex items-center mb-2 rounded justify-between p-3 bg-gray-100">
+                                <div class="flex w-full ml-2 items-center justify-between">
+                                    <p>
+                                        {{ item.ville }}
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
                         <div class="container mx-auto px-4 sm:px-8 ">
                             <div>
@@ -130,6 +130,7 @@ export default {
     },
     data () {
         return {
+            annee: null,
             hub: null,
             showModalHub: false,
             showModalUser: false

@@ -1,0 +1,75 @@
+<template>
+    <notifications position="bottom right" />
+    <Head title="Import Chronos" />
+    <Loading
+        :show="show"
+        :loader-class="loadClass"
+        :label="label">
+    </Loading>
+    <BreezeAuthenticatedLayout>
+    <div class="flex flex-wrap min-h-screen h-full w-10/12 mx-auto">
+        <div class="w-full">
+            <ul class="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row">
+                <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
+                    <a class="cursor-pointer text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal" v-on:click="toggleTabs('GestionEquipe')" v-bind:class="{'bg-white': currentTabComponent !== 'GestionEquipe', 'text-white bg-black': currentTabComponent === 'GestionEquipe'}">
+                        Gestion d'équipe
+                    </a>
+                </li>
+                <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
+                    <a class="cursor-pointer text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal" v-on:click="toggleTabs('GestionCollaborateur')" v-bind:class="{'bg-white': currentTabComponent !== 'GestionCollaborateur', 'text-white bg-black': currentTabComponent === 'GestionCollaborateur'}">
+                        Gestion des collaborateurs
+                    </a>
+                </li>
+                <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
+                    <a class="cursor-pointer text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal" v-on:click="toggleTabs('Dashboard')" v-bind:class="{'bg-white': currentTabComponent !== 'Dashboard', 'text-white bg-black': currentTabComponent === 'Dashboard'}">
+                        Gestion des jours fériés
+                    </a>
+                </li>
+            </ul>
+            <div class="relative flex flex-col min-w-0 break-words w-full shadow-lg rounded">
+                <div class="px-4 py-5 flex-auto">
+                    <div class="tab-content tab-space">
+                        <KeepAlive>
+                            <component :collaborateurs="collaborateurs" :users="users" :is="currentTabComponent"></component>
+                        </KeepAlive>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</BreezeAuthenticatedLayout>
+
+</template>
+
+<script>
+import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue'
+import { Head } from '@inertiajs/inertia-vue3';
+import Loading from 'vue-full-loading'
+import GestionEquipe from "@/Pages/GestionEquipe.vue";
+import GestionCollaborateur from "@/Pages/GestionCollaborateur.vue";
+
+export default {
+    name: "GestionHub",
+    components: {
+        GestionCollaborateur,
+        GestionEquipe,
+        BreezeAuthenticatedLayout,
+        Loading,
+        Head,
+    },
+    props: {
+        collaborateurs: Array,
+        users: Array
+    },
+    data() {
+        return {
+            currentTabComponent: 'GestionEquipe'
+        }
+    },
+    methods: {
+        toggleTabs: function(component){
+            this.currentTabComponent = component
+        }
+    }
+}
+</script>

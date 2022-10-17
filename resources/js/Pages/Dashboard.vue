@@ -1,13 +1,13 @@
 <template>
     <notifications position="bottom right" />
-    <Head title="Gestion du HUB" />
+    <Head title="Import Chronos" />
     <Loading
         :show="show"
         :loader-class="loadClass"
         :label="label">
     </Loading>
     <BreezeAuthenticatedLayout>
-        <div class="py-12 h-full">
+        <div class="py-12 h-screen">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                     <div class="px-4 py-5 sm:px-6">
@@ -37,8 +37,8 @@
                     </div>
                 </div>
             </div>
+            <ModalConfirmImport v-if="confirModal" @closeConfirm="this.confirModal = false" @validated="this.validated()"></ModalConfirmImport>
         </div>
-        <ModalConfirmImport v-if="confirModal" @closeConfirm="this.confirModal = false" @validated="this.validated()"></ModalConfirmImport>
     </BreezeAuthenticatedLayout>
 </template>
 

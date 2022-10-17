@@ -33,7 +33,7 @@ class UpdateRotationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => 'required|string|max:3',
+            'type' => 'required|string|max:5',
             'jours' => 'required',
 
             'jours.lundi' => 'required',
@@ -44,14 +44,12 @@ class UpdateRotationRequest extends FormRequest
 
             'jours.mardi' => 'required',
             'jours.mardi.debut_journee' => new RequiredIf($this->jours['mardi']['fin_journee'] !== null || $this->jours['mardi']['is_off'] === false),
-            'jours.mardi.debut_journee' => new RequiredIf($this->jours['mardi']['fin_journee'] !== null),
             'jours.mardi.fin_journee' => new RequiredIf($this->jours['mardi']['debut_journee'] !== null),
             'jours.mardi.debut_pause' =>  new RequiredIf($this->jours['mardi']['fin_pause'] !== null),
             'jours.mardi.fin_pause' => new RequiredIf($this->jours['mardi']['debut_pause'] !== null),
 
             'jours.mercredi' => 'required',
             'jours.mercredi.debut_journee' => new RequiredIf($this->jours['mercredi']['fin_journee'] !== null || $this->jours['mercredi']['is_off'] === false),
-            'jours.mercredi.debut_journee' => new RequiredIf($this->jours['mercredi']['fin_journee'] !== null),
             'jours.mercredi.fin_journee' => new RequiredIf($this->jours['mercredi']['debut_journee'] !== null),
             'jours.mercredi.debut_pause' =>  new RequiredIf($this->jours['mercredi']['fin_pause'] !== null),
             'jours.mercredi.fin_pause' => new RequiredIf($this->jours['mercredi']['debut_pause'] !== null),
@@ -79,6 +77,60 @@ class UpdateRotationRequest extends FormRequest
             'jours.dimanche.fin_journee' => new RequiredIf($this->jours['dimanche']['debut_journee'] !== null),
             'jours.dimanche.debut_pause' =>  new RequiredIf($this->jours['dimanche']['fin_pause'] !== null),
             'jours.dimanche.fin_pause' => new RequiredIf($this->jours['dimanche']['debut_pause'] !== null),
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes(): array
+    {
+        return [
+            'type' => 'Nom de la rotation',
+
+            'jours.lundi' => 'lundi',
+            'jours.lundi.debut_journee' => 'Début de journée de lundi',
+            'jours.lundi.fin_journee' => 'Fin de journée de lundi',
+            'jours.lundi.debut_pause' =>  'Début de pause de lundi',
+            'jours.lundi.fin_pause' => 'Fin de pause de lundi',
+
+            'jours.mardi' => 'mardi',
+            'jours.mardi.debut_journee' => 'Début de journée de mardi',
+            'jours.mardi.fin_journee' => 'Fin de journée de mardi',
+            'jours.mardi.debut_pause' =>  'Début de pause de mardi',
+            'jours.mardi.fin_pause' => 'Fin de pause de mardi',
+
+            'jours.mercredi' => 'mercredi',
+            'jours.mercredi.debut_journee' => 'Début de journée de mercredi',
+            'jours.mercredi.fin_journee' => 'Fin de journée de mercredi',
+            'jours.mercredi.debut_pause' =>  'Début de pause de mercredi',
+            'jours.mercredi.fin_pause' => 'Fin de pause de mercredi',
+
+            'jours.jeudi' => 'jeudi',
+            'jours.jeudi.debut_journee' => 'Début de journée de jeudi',
+            'jours.jeudi.fin_journee' => 'Fin de journée de jeudi',
+            'jours.jeudi.debut_pause' =>  'Début de pause de jeudi',
+            'jours.jeudi.fin_pause' => 'Fin de pause de jeudi',
+
+            'jours.vendredi' => 'vendredi',
+            'jours.vendredi.debut_journee' => 'Début de journée de vendredi',
+            'jours.vendredi.fin_journee' => 'Fin de journée de vendredi',
+            'jours.vendredi.debut_pause' =>  'Début de pause de vendredi',
+            'jours.vendredi.fin_pause' => 'Fin de pause de vendredi',
+
+            'jours.samedi' => 'samedi',
+            'jours.samedi.debut_journee' => 'Début de journée de samedi',
+            'jours.samedi.fin_journee' => 'Fin de journée de samedi',
+            'jours.samedi.debut_pause' =>  'Début de pause de samedi',
+            'jours.samedi.fin_pause' => 'Fin de pause de samedi',
+
+            'jours.dimanche' => 'dimanche',
+            'jours.dimanche.debut_journee' => 'Début de journée de dimanche',
+            'jours.dimanche.fin_journee' => 'Fin de journée de dimanche',
+            'jours.dimanche.debut_pause' =>  'Début de pause de dimanche',
+            'jours.dimanche.fin_pause' => 'Fin de pause de dimanche',
         ];
     }
 }
