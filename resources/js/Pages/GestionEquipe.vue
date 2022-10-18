@@ -9,7 +9,7 @@
                     </button>
                 </div>
 
-                <div class="max-w-2xl mx-auto sm:visible invisible">
+                <div class="max-w-2xl mx-auto">
                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
                         <table class="w-full text-left">
                             <thead class="uppercase bg-white">

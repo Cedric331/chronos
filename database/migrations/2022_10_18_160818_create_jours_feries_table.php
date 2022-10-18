@@ -1,12 +1,11 @@
 <?php
 
 use App\Models\Hub;
-use App\Models\JourFerie;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateJourFerieTravaillesTable extends Migration
+class CreateJoursFeriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,12 +14,13 @@ class CreateJourFerieTravaillesTable extends Migration
      */
     public function up()
     {
-        Schema::create('jour_ferie_travailles', function (Blueprint $table) {
+        Schema::create('jours_feries', function (Blueprint $table) {
             $table->id();
-            $table->json('collaborateurs')->nullable();
-            $table->foreignIdFor(JourFerie::class);
-            $table->foreignIdFor(Hub::class);
-            $table->unique(['jour_ferie_id', 'hub_id']);
+            $table->string('name')->nullable();
+            $table->year('annee');
+            $table->date('date');
+            $table->foreignId('hub_id')->constrained('hubs');
+            $table->unique(['annee', 'date', 'hub_id']);
             $table->timestamps();
         });
     }
@@ -32,6 +32,6 @@ class CreateJourFerieTravaillesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('jour_ferie_travailles');
+        Schema::dropIfExists('jours_feries');
     }
 }

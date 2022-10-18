@@ -1,10 +1,12 @@
 <?php
 
+use App\Models\Collaborateur;
+use App\Models\JoursFerie;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateJourFeriesTable extends Migration
+class CreateCollaborateurJoursFeriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +15,10 @@ class CreateJourFeriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('jour_feries', function (Blueprint $table) {
+        Schema::create('collaborateur_jours_feries', function (Blueprint $table) {
             $table->id();
-            $table->date('date')->unique();
-            $table->string('name')->nullable();
+            $table->foreignId('collaborateur_id')->constrained('collaborateurs');
+            $table->foreignId('jours_ferie_id')->constrained('jours_feries');
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ class CreateJourFeriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('jour_feries');
+        Schema::dropIfExists('collaborateur_jours_feries');
     }
 }

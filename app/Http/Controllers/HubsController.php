@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\ControllerResponse;
 use App\Models\Collaborateur;
 use App\Models\Hub;
+use App\Models\JoursFerie;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,8 +29,14 @@ class HubsController extends Controller
             ->where('status', 'Conseiller')
             ->get();
 
+        $annees = JoursFerie::with('collaborateurs')
+            ->where('hub_id', Auth::user()->hub_id)
+            ->get();
+        $annees = $annees->groupBy('annee');
+
         return Inertia::render('GestionHub', [
             'collaborateurs' => $collaborateurs,
+            'annees' => $annees,
             'users' => $users
         ]);
     }

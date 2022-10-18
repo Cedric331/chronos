@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class JourFerieTravaille extends Model
+class CollaborateurJoursFerie extends Model
 {
     use HasFactory;
 
@@ -15,8 +15,7 @@ class JourFerieTravaille extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'collaborateurs',
-        'hub_id',
-        'jour_ferie_id',
+        'collaborateur_id',
+        'hub_id'
     ];
 }

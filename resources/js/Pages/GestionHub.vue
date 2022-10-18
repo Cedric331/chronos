@@ -21,7 +21,7 @@
                     </a>
                 </li>
                 <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
-                    <a class="cursor-pointer text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal" v-on:click="toggleTabs('Dashboard')" v-bind:class="{'bg-white': currentTabComponent !== 'Dashboard', 'text-white bg-black': currentTabComponent === 'Dashboard'}">
+                    <a class="cursor-pointer text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal" v-on:click="toggleTabs('GestionJoursFerie')" v-bind:class="{'bg-white': currentTabComponent !== 'GestionJoursFerie', 'text-white bg-black': currentTabComponent === 'GestionJoursFerie'}">
                         Gestion des jours fériés
                     </a>
                 </li>
@@ -30,7 +30,7 @@
                 <div class="px-4 py-5 flex-auto">
                     <div class="tab-content tab-space">
                         <KeepAlive>
-                            <component :collaborateurs="collaborateurs" :users="users" :is="currentTabComponent"></component>
+                            <component :collaborateurs="collaborateurs" :users="users" :annees="annees" :is="currentTabComponent"></component>
                         </KeepAlive>
                     </div>
                 </div>
@@ -47,11 +47,13 @@ import { Head } from '@inertiajs/inertia-vue3';
 import Loading from 'vue-full-loading'
 import GestionEquipe from "@/Pages/GestionEquipe.vue";
 import GestionCollaborateur from "@/Pages/GestionCollaborateur.vue";
+import GestionJoursFerie from "@/Pages/GestionJoursFerie.vue";
 
 export default {
     name: "GestionHub",
     components: {
         GestionCollaborateur,
+        GestionJoursFerie,
         GestionEquipe,
         BreezeAuthenticatedLayout,
         Loading,
@@ -59,6 +61,7 @@ export default {
     },
     props: {
         collaborateurs: Array,
+        annees: Object,
         users: Array
     },
     data() {
