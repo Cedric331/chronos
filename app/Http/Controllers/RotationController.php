@@ -5,15 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Rotation\StoreRotationRequest;
 use App\Http\Requests\Rotation\UpdateRotationRequest;
 use App\Models\Collaborateur;
+use App\Models\CollaborateurDate;
 use App\Models\Date;
 use App\Models\Hub;
 use App\Models\Rotation;
 use App\Models\TypeRotation;
 use App\Models\User;
+use Carbon\CarbonInterface;
 use DateTime;
 use DateTimeImmutable;
 use http\Env\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -112,13 +115,40 @@ class RotationController extends Controller
         }
 
         $typeRotation = TypeRotation::find($request->id);
-
+        $type = $typeRotation->type;
         $typeRotation->update([
             'type' => $request->type,
             'hours' => $heures
         ]);
 
+
         foreach ($request->jours as $key => $value) {
+
+           $dates = Date::all();
+
+            $filteredIdDate = collect();
+            foreach($dates as $record){
+                if(Carbon::parse($record->date)->format('l') == $this->formatDateEn($key)){
+                    $filteredIdDate->push($record->id);
+                }
+            }
+
+           $horaire = json_decode(json_encode($value));
+            $horaires = [
+                'debut_journee' => $horaire->debut_journee,
+                'debut_pause' => $horaire->debut_pause,
+                'fin_pause' => $horaire->fin_pause,
+                'fin_journee' => $horaire->fin_journee,
+                'teletravail' => false,
+                'type' => $horaire->technicien ? 'Iti1' : null,
+                'rotation' => $request->type,
+            ];
+
+            CollaborateurDate::whereIn('date_id', $filteredIdDate)
+                ->where('hub_id', Auth::user()->hub_id)
+                ->whereJsonContains('horaire->rotation', $type)
+                ->update(['horaire' => $horaires]);
+
             $rotation = Rotation::find($request->jours[$key]['id']);
 
             $rotation->update([
@@ -133,6 +163,29 @@ class RotationController extends Controller
             ->find($typeRotation->id);
 
         return response()->json($rotations);
+    }
+
+    /**
+     * @param $data
+     * @return string|void
+     */
+    private function formatDateEn($data)
+    {
+        $days = [
+            'Monday' => 'lundi',
+            'Tuesday' => 'mardi',
+            'Wednesday' => 'mercredi',
+            'Thursday' => 'jeudi',
+            'Friday' => 'vendredi',
+            'Saturday' => 'samedi',
+            'Sunday' => 'dimanche'
+        ];
+
+        foreach ($days as $key => $value) {
+            if ($value === $data) {
+                return $key;
+            }
+        }
     }
 
     /**
