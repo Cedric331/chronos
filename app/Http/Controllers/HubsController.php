@@ -32,6 +32,7 @@ class HubsController extends Controller
         $annees = JoursFerie::with('collaborateurs')
             ->where('hub_id', Auth::user()->hub_id)
             ->get();
+
         $annees = $annees->groupBy('annee');
 
         return Inertia::render('GestionHub', [
