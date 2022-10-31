@@ -1,7 +1,7 @@
 <template>
     <notifications position="bottom right" />
     <Head>
-        <title>Information Équipe</title>
+        <title>Information des Utilisateurs</title>
     </Head>
     <BreezeAuthenticatedLayout>
             <div class="w-12/12 h-full px-10 pt-10 h-16 flex justify-center">

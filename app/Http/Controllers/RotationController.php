@@ -8,6 +8,7 @@ use App\Models\Collaborateur;
 use App\Models\CollaborateurDate;
 use App\Models\Date;
 use App\Models\Hub;
+use App\Models\JoursFerie;
 use App\Models\Rotation;
 use App\Models\TypeRotation;
 use App\Models\User;
@@ -267,6 +268,18 @@ class RotationController extends Controller
                 $date = Date::firstOrCreate([
                     'date' => date('Y-m-d', strtotime($selectTimeStart))
                 ]);
+
+                $jourFerie = JoursFerie::where('date', $date->date)->first();
+                if ($jourFerie) {
+                    $horaires = [
+                        'debut_journee' => null,
+                        'debut_pause' => null,
+                        'fin_pause' => null,
+                        'fin_journee' => null,
+                        'teletravail' => false,
+                        'type' => 'F',
+                    ];
+                }
 
                 $collaborateur = Collaborateur::firstOrCreate([
                     'name' => $request->collaborateur['name'],

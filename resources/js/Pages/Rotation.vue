@@ -30,7 +30,7 @@
                                     </div>
                                     <div class="border border-4 shadow-2xl my-5 w-full mx-auto rounded-md p-16 flex flex-col sm:flex-row sm:justify-evenly">
                                         <div class="p-16 flex flex-col bg-white rounded-lg">
-                                            <h1 class="font-semibold tracking-wide mb-2">Choisir le collaborateur</h1>
+                                            <h1 class="font-semibold tracking-wide mb-2">Choisir le conseiller</h1>
 
                                             <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                                                 <div class="flex justify-center">
@@ -175,8 +175,8 @@ export default {
         Head
     },
     props: {
-        dateLimitStart: Date,
-        dateLimitEnd: Date,
+        dateLimitStart: String,
+        dateLimitEnd: String,
         rotations: Object,
         collaborateurs: Object
     },
@@ -211,6 +211,7 @@ export default {
                     text: "Planning crée avec succès !",
                     type: 'success',
                 });
+                this.$inertia.reload()
             })
             .catch(err => {
                 console.log(err)

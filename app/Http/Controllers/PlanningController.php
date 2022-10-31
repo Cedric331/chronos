@@ -554,11 +554,6 @@ class PlanningController extends Controller
             $collaborateurDate->save();
         }
 
-        $data = $request;
-
-        if ($request->sendMail) {
-            $this->sendMailPlanningUpdate($data, $type);
-        }
         return response()->json(true);
     }
 

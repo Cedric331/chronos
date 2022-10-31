@@ -7,6 +7,7 @@ use App\Models\JoursFerie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Validation\Rule;
 
 class JourFerieController extends Controller
 {
@@ -27,7 +28,7 @@ class JourFerieController extends Controller
 
         $annees = $annees->groupBy('annee');
 
-        return response()->json($annees);
+        return response()->json($annees->toArray());
     }
 
     /**
@@ -36,9 +37,16 @@ class JourFerieController extends Controller
      */
     public function store (Request $request): \Illuminate\Http\JsonResponse
     {
-        // TODO Mettre validate
+       $request->validate([
+           'zone' => 'required', 'string',
+           'annee' => 'required', 'string', 'min:4', 'max:4'
+       ]);
 
-        $res = Http::get('https://calendrier.api.gouv.fr/jours-feries/metropole/' . $request->annee . '.json');
+        $res = Http::get('https://calendrier.api.gouv.fr/jours-feries/' . $request->zone . '/' . $request->annee . '.json');
+
+        if ($res->collect()->isEmpty()) {
+            return response()->json('Erreur Année incorrecte', 404);
+        }
 
         foreach ($res->collect() as $date => $name) {
             JoursFerie::create([
@@ -55,7 +63,7 @@ class JourFerieController extends Controller
 
         $annees = $annees->groupBy('annee');
 
-        return response()->json($annees);
+        return response()->json($annees->toArray());
     }
 
     /**

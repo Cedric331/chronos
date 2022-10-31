@@ -12,12 +12,12 @@
             <ul class="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row">
                 <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
                     <a class="cursor-pointer text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal" v-on:click="toggleTabs('GestionEquipe')" v-bind:class="{'bg-white': currentTabComponent !== 'GestionEquipe', 'text-white bg-black': currentTabComponent === 'GestionEquipe'}">
-                        Gestion d'équipe
+                        Gestion des utilisateurs
                     </a>
                 </li>
                 <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
                     <a class="cursor-pointer text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal" v-on:click="toggleTabs('GestionCollaborateur')" v-bind:class="{'bg-white': currentTabComponent !== 'GestionCollaborateur', 'text-white bg-black': currentTabComponent === 'GestionCollaborateur'}">
-                        Gestion des collaborateurs
+                        Gestion des conseillers
                     </a>
                 </li>
                 <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
@@ -61,7 +61,7 @@ export default {
     },
     props: {
         collaborateurs: Array,
-        annees: Object,
+        annees: Array,
         users: Array
     },
     data() {

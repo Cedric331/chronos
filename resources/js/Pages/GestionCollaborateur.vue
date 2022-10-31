@@ -1,11 +1,11 @@
 <template>
     <notifications position="bottom right" />
-    <Head title="Gestion Collaborateur" />
-        <div class="mb-5">
+    <Head title="Gestion Conseillers" />
+        <div class="mb-5 min-h-screen">
             <div class="w-full content-center">
                 <div class="flex justify-center my-auto">
                     <button @click.stop="this.openModal = true" class="inline-flex items-center flex justify-center h-10 px-5 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800">
-                        <span>Ajouter un collaborateur</span>
+                        <span>Ajouter un conseiller</span>
                     </button>
                 </div>
 
