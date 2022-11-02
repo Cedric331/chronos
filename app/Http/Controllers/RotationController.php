@@ -241,6 +241,7 @@ class RotationController extends Controller
         }
 
         $collaborateur->dates()->detach();
+        $collaborateur->joursFerie()->detach();
         $collaborateur->delete();
 
 
@@ -251,35 +252,39 @@ class RotationController extends Controller
 
             foreach ($request->rotations[$i]['rotations'] as $rotation) {
 
-                if ($rotation['day'] === $day) {
-                    $horaire = json_decode($rotation['horaire']);
-                    $horaires = [
-                        'debut_journee' => $horaire->debut_journee,
-                        'debut_pause' => $horaire->debut_pause,
-                        'fin_pause' => $horaire->fin_pause,
-                        'fin_journee' => $horaire->fin_journee,
-                        'teletravail' => false,
-                        'type' => $horaire->technicien ? 'Iti1' : null,
-                        'rotation' => $request->rotations[$i]['type'],
-                    ];
-                }
-            }
-
                 $date = Date::firstOrCreate([
                     'date' => date('Y-m-d', strtotime($selectTimeStart))
                 ]);
 
-                $jourFerie = JoursFerie::where('date', $date->date)->first();
-                if ($jourFerie) {
-                    $horaires = [
-                        'debut_journee' => null,
-                        'debut_pause' => null,
-                        'fin_pause' => null,
-                        'fin_journee' => null,
-                        'teletravail' => false,
-                        'type' => 'F',
-                    ];
+                $jourFerie = JoursFerie::where('date', $date->date)
+                    ->where('hub_id', Auth::user()->hub_id)
+                    ->first();
+
+                if ($rotation['day'] === $day) {
+                    $horaire = json_decode($rotation['horaire']);
+
+                    if ($jourFerie) {
+                        $horaires = [
+                            'debut_journee' => 'OFF',
+                            'debut_pause' => null,
+                            'fin_pause' => null,
+                            'fin_journee' => 'OFF',
+                            'teletravail' => false,
+                            'type' => 'F',
+                        ];
+                    } else {
+                        $horaires = [
+                            'debut_journee' => $horaire->debut_journee,
+                            'debut_pause' => $horaire->debut_pause,
+                            'fin_pause' => $horaire->fin_pause,
+                            'fin_journee' => $horaire->fin_journee,
+                            'teletravail' => false,
+                            'type' => $horaire->technicien ? 'Iti1' : null,
+                            'rotation' => $request->rotations[$i]['type'],
+                        ];
+                    }
                 }
+            }
 
                 $collaborateur = Collaborateur::firstOrCreate([
                     'name' => $request->collaborateur['name'],
@@ -327,7 +332,7 @@ class RotationController extends Controller
      * @return array|string|null
      * @throws \Exception
      */
-    private function timeHours($request): array|string|null
+    private function timeHours($request)
     {
         date_default_timezone_set('Europe/Paris');
         $minutes = null;
@@ -387,7 +392,7 @@ class RotationController extends Controller
      * @param $hours
      * @return float|int|string
      */
-    protected function convertMinute ($hours): float|int|string
+    protected function convertMinute ($hours)
     {
         $t = explode(':', $hours);
         return $t[0] * 60 + $t[1];

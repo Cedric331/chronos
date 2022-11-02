@@ -16,6 +16,6 @@ class CollaborateurJoursFerie extends Model
      */
     protected $fillable = [
         'collaborateur_id',
-        'hub_id'
+        'jours_ferie_id'
     ];
 }

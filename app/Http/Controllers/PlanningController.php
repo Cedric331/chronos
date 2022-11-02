@@ -9,6 +9,7 @@ use App\Models\Collaborateur;
 use App\Models\CollaborateurDate;
 use App\Models\Date;
 use App\Models\Hub;
+use App\Models\JoursFerie;
 use App\Models\Planning;
 use App\Models\User;
 use Carbon\Carbon;
@@ -491,19 +492,35 @@ class PlanningController extends Controller
             $type = 'Iti1';
         }
 
-        foreach ($request->selected as $selected) {
-           $collaborateurDate = CollaborateurDate::find($selected['horaire_id']);
-            $horaires = [
-                'debut_journee' => $request->debut_journee,
-                'debut_pause' => $request->debut_pause,
-                'fin_pause' => $request->fin_pause,
-                'fin_journee' => $request->fin_journee,
-                'teletravail' => $request->teletravail,
-                'type' => $type,
-            ];
+        $horaires = [
+            'debut_journee' => $request->debut_journee,
+            'debut_pause' => $request->debut_pause,
+            'fin_pause' => $request->fin_pause,
+            'fin_journee' => $request->fin_journee,
+            'teletravail' => $request->teletravail,
+            'type' => $type,
+        ];
 
-           $collaborateurDate->horaire = json_encode($horaires);
-           $collaborateurDate->save();
+        if ($request->ferie) {
+            $time = date('Y-m-d', strtotime($request->selected['date']));
+            $date = Date::where('date', $time)->first();
+
+            $collaborateurDate = CollaborateurDate::where('collaborateur_id', $request->user['id'])
+                        ->where('date_id', $date->id)
+                        ->first();
+            $collaborateurDate->horaire = json_encode($horaires);
+            $collaborateurDate->save();
+
+            $joursFerie = JoursFerie::where('date', $time)
+                ->where('hub_id', Auth::user()->hub_id)
+                ->first();
+            $joursFerie->collaborateurs()->attach($request->user['id']);
+        } else {
+            foreach ($request->selected as $selected) {
+                $collaborateurDate = CollaborateurDate::find($selected['horaire_id']);
+                $collaborateurDate->horaire = json_encode($horaires);
+                $collaborateurDate->save();
+            }
         }
 
         $data = $request;

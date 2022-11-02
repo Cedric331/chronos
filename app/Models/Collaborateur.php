@@ -24,4 +24,9 @@ class Collaborateur extends Model
         return $this->belongsToMany(Date::class, 'collaborateur_dates')
             ->withPivot('horaire','id');
     }
+
+    public function joursFerie (): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(joursFerie::class, 'collaborateur_jours_feries');
+    }
 }

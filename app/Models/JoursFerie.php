@@ -33,7 +33,7 @@ class JoursFerie extends Model
 
     public function collaborateurs (): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Collaborateur::class, 'collaborateur_jours_feries', 'collaborateur_id', 'jours_ferie_id');
+        return $this->belongsToMany(Collaborateur::class, 'collaborateur_jours_feries');
     }
 
     /**
