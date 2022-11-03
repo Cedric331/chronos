@@ -54,7 +54,6 @@
                                             </div>
                                         </div>
 
-
                                         <div class="inset-y-0 right-0 w-full flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                                                 <table class="w-full text-left">
                                                     <thead class="uppercase bg-white">
@@ -84,7 +83,7 @@
                                                         <td class="px-6 py-4 text-white">
                                                             <div v-if="ferie.collaborateurs.length > 0">
                                                                  <span v-for="collaborateur in ferie.collaborateurs">
-                                                                    {{ collaborateur.name }}
+                                                                    {{ collaborateur.name }}<br>
                                                                 </span>
                                                             </div>
                                                             <div v-else>
@@ -119,6 +118,7 @@
         v-if="updateModal"
         :collaborateurs="collaborateurs"
         :selected="selected"
+        @updateData="data => this.updateData(data)"
         @closeModal="this.updateModal = false"
     />
 </template>
@@ -126,10 +126,12 @@
 <script>
 import ModalConfirmDelete from "@/Components/ModalConfirmDelete.vue";
 import ModalUpdatePlanningFerie from "@/Components/ModalUpdatePlanningFerie.vue";
+import {Head} from "@inertiajs/inertia-vue3"
 
 export default {
     name: "GestionJoursFerie",
     components: {
+        Head,
         ModalUpdatePlanningFerie,
         ModalConfirmDelete
     },
@@ -194,7 +196,14 @@ export default {
                 this.confirmDel = false
             })
         },
+        updateData (data) {
+            this.years = data
+            this.getFirstElement()
+        },
         getFirstElement () {
+            if (this.selectYear !== null) {
+                console.log(this.selectYear)
+            }
             var data = null
             Object.entries(this.years).forEach(([key, value]) => {
                 if (data === null) {

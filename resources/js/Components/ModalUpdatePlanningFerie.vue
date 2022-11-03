@@ -124,7 +124,7 @@
 
 export default {
     name: "ModalUpdatePlanningFerie",
-    emits: ["closeModal"],
+    emits: ["closeModal", "updateData"],
     props: {
         selected: Array,
         collaborateurs: Object
@@ -192,7 +192,7 @@ export default {
                     fin_journee: this.fin_journee,
                     teletravail: this.teletravail,
                 })
-                    .then(() => {
+                    .then(res => {
                         this.radio = null
                         this.isTech = false
                         this.debut_journee = null
@@ -201,6 +201,7 @@ export default {
                         this.fin_journee = null
                         this.teletravail = false
                         this.rotation = null
+                        this.$emit('updateData', res.data)
                         this.closeModal(true)
                     })
                     .catch(error => {

@@ -19,6 +19,7 @@ class CreateCollaborateurJoursFeriesTable extends Migration
             $table->id();
             $table->foreignId('collaborateur_id')->constrained('collaborateurs');
             $table->foreignId('jours_ferie_id')->constrained('jours_feries');
+            $table->unique(['collaborateur_id', 'jours_ferie_id']);
             $table->timestamps();
         });
     }

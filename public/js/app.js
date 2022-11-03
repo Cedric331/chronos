@@ -20981,7 +20981,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "ModalUpdatePlanningFerie",
-  emits: ["closeModal"],
+  emits: ["closeModal", "updateData"],
   props: {
     selected: Array,
     collaborateurs: Object
@@ -21023,7 +21023,7 @@ __webpack_require__.r(__webpack_exports__);
           fin_pause: this.fin_pause,
           fin_journee: this.fin_journee,
           teletravail: this.teletravail
-        }).then(function () {
+        }).then(function (res) {
           _this.radio = null;
           _this.isTech = false;
           _this.debut_journee = null;
@@ -21032,6 +21032,8 @@ __webpack_require__.r(__webpack_exports__);
           _this.fin_journee = null;
           _this.teletravail = false;
           _this.rotation = null;
+
+          _this.$emit('updateData', res.data);
 
           _this.closeModal(true);
         })["catch"](function (error) {
@@ -22325,6 +22327,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Components_ModalConfirmDelete_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/Components/ModalConfirmDelete.vue */ "./resources/js/Components/ModalConfirmDelete.vue");
 /* harmony import */ var _Components_ModalUpdatePlanningFerie_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/Components/ModalUpdatePlanningFerie.vue */ "./resources/js/Components/ModalUpdatePlanningFerie.vue");
+/* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -22339,9 +22342,11 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "GestionJoursFerie",
   components: {
+    Head: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_2__.Head,
     ModalUpdatePlanningFerie: _Components_ModalUpdatePlanningFerie_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
     ModalConfirmDelete: _Components_ModalConfirmDelete_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
@@ -22409,7 +22414,15 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         _this2.confirmDel = false;
       });
     },
+    updateData: function updateData(data) {
+      this.years = data;
+      this.getFirstElement();
+    },
     getFirstElement: function getFirstElement() {
+      if (this.selectYear !== null) {
+        console.log(this.selectYear);
+      }
+
       var data = null;
       Object.entries(this.years).forEach(function (_ref) {
         var _ref2 = _slicedToArray(_ref, 2),
@@ -28318,19 +28331,24 @@ var _hoisted_25 = {
 var _hoisted_26 = {
   key: 0
 };
-var _hoisted_27 = {
-  key: 1
-};
 
-var _hoisted_28 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, " - Aucun Conseiller - ", -1
+var _hoisted_27 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1
 /* HOISTED */
 );
 
-var _hoisted_29 = [_hoisted_28];
-var _hoisted_30 = {
+var _hoisted_28 = {
+  key: 1
+};
+
+var _hoisted_29 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, " - Aucun Conseiller - ", -1
+/* HOISTED */
+);
+
+var _hoisted_30 = [_hoisted_29];
+var _hoisted_31 = {
   "class": "px-6 py-4 text-right"
 };
-var _hoisted_31 = ["onClick"];
+var _hoisted_32 = ["onClick"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _this = this;
 
@@ -28405,19 +28423,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_24, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(ferie.date), 1
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_25, [ferie.collaborateurs.length > 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_26, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(ferie.collaborateurs, function (collaborateur) {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(collaborateur.name), 1
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(collaborateur.name), 1
       /* TEXT */
-      );
+      ), _hoisted_27]);
     }), 256
     /* UNKEYED_FRAGMENT */
-    ))])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_27, _hoisted_29))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_30, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    ))])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_28, _hoisted_30))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_31, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
       onClick: function onClick($event) {
         return $options.openModal(ferie);
       },
       "class": "bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-full"
     }, " Modifier ", 8
     /* PROPS */
-    , _hoisted_31)])]);
+    , _hoisted_32)])]);
   }), 256
   /* UNKEYED_FRAGMENT */
   ))])])])])])])])])])]), $data.confirmDel ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_ModalConfirmDelete, {
@@ -28432,7 +28450,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     key: 1,
     collaborateurs: $props.collaborateurs,
     selected: $data.selected,
-    onCloseModal: _cache[7] || (_cache[7] = function ($event) {
+    onUpdateData: _cache[7] || (_cache[7] = function (data) {
+      return _this.updateData(data);
+    }),
+    onCloseModal: _cache[8] || (_cache[8] = function ($event) {
       return _this.updateModal = false;
     })
   }, null, 8

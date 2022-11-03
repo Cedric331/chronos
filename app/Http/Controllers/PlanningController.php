@@ -257,7 +257,7 @@ class PlanningController extends Controller
     /**
      * @param Request $request
      */
-    public function loadPlanning (Request $request): \Illuminate\Http\JsonResponse|\Inertia\Response
+    public function loadPlanning (Request $request)
     {
         $hub = Hub::findOrFail(Auth::user()->hub_id);
 
@@ -503,23 +503,61 @@ class PlanningController extends Controller
 
         if ($request->ferie) {
             $time = date('Y-m-d', strtotime($request->selected['date']));
-            $date = Date::where('date', $time)->first();
+            $date = Date::firstOrCreate([
+                'date' => $time
+            ]);
 
             $collaborateurDate = CollaborateurDate::where('collaborateur_id', $request->user['id'])
                         ->where('date_id', $date->id)
-                        ->first();
+                        ->firstOrNew([
+                            'horaire' => $horaires,
+                            'collaborateur_id' => $request->user['id'],
+                            'date_id' => $date->id,
+                            'hub_id' => Auth::user()->hub_id
+                        ]);
+
             $collaborateurDate->horaire = json_encode($horaires);
             $collaborateurDate->save();
 
             $joursFerie = JoursFerie::where('date', $time)
                 ->where('hub_id', Auth::user()->hub_id)
                 ->first();
-            $joursFerie->collaborateurs()->attach($request->user['id']);
+
+            if ($type === 'F') {
+                $joursFerie->collaborateurs()->detach($request->user['id']);
+            } else {
+                $joursFerie->collaborateurs()->attach($request->user['id']);
+            }
         } else {
             foreach ($request->selected as $selected) {
-                $collaborateurDate = CollaborateurDate::find($selected['horaire_id']);
-                $collaborateurDate->horaire = json_encode($horaires);
-                $collaborateurDate->save();
+                $date = Date::find($selected['date_id']);
+
+                $joursFerie = JoursFerie::where('date', $date->date)
+                    ->where('hub_id', Auth::user()->hub_id)
+                    ->first();
+
+                if ($joursFerie) {
+                    $collaborateurDate = CollaborateurDate::where('collaborateur_id', $request->user['id'])
+                        ->where('date_id', $date->id)
+                        ->firstOrNew([
+                            'horaire' => $horaires,
+                            'collaborateur_id' => $request->user['id'],
+                            'date_id' => $date->id,
+                            'hub_id' => Auth::user()->hub_id
+                        ]);
+
+                    $collaborateurDate->horaire = json_encode($horaires);
+                    $collaborateurDate->save();
+                    if ($type === 'F') {
+                        $joursFerie->collaborateurs()->detach($request->user['id']);
+                    } else {
+                        $joursFerie->collaborateurs()->attach($request->user['id']);
+                    }
+                } else {
+                    $collaborateurDate = CollaborateurDate::find($selected['horaire_id']);
+                    $collaborateurDate->horaire = json_encode($horaires);
+                    $collaborateurDate->save();
+                }
             }
         }
 
@@ -528,7 +566,17 @@ class PlanningController extends Controller
         if ($request->sendMail) {
             $this->sendMailPlanningUpdate($data, $type);
         }
-        return response()->json(true);
+        if ($request->ferie) {
+            $annees = JoursFerie::with('collaborateurs')
+                ->where('hub_id', Auth::user()->hub_id)
+                ->get();
+
+            $annees = $annees->groupBy('annee');
+
+            return response()->json($annees->toArray());
+        } else {
+            return response()->json(true);
+        }
     }
 
     /**
