@@ -199,18 +199,27 @@ export default {
         updateData (data) {
             this.years = data
             this.getFirstElement()
+            this.$notify({
+                title: "Succès",
+                text: "Modification effectuée avec succès !",
+                type: 'success',
+            });
         },
         getFirstElement () {
             if (this.selectYear !== null) {
-                console.log(this.selectYear)
+                Object.entries(this.years).forEach(([key, value]) => {
+                    if (key === this.selectYear[0].annee) {
+                        this.selectYear = value
+                    }
+                });
             }
-            var data = null
+            const today = new Date();
+            const year = today.getFullYear();
             Object.entries(this.years).forEach(([key, value]) => {
-                if (data === null) {
-                    data = value
+                if (key == year) {
+                    this.selectYear = value
                 }
             });
-            this.selectYear = data
         },
         openModal (ferie) {
             this.selected = ferie

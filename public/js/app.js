@@ -22417,23 +22417,38 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     updateData: function updateData(data) {
       this.years = data;
       this.getFirstElement();
+      this.$notify({
+        title: "Succès",
+        text: "Modification effectuée avec succès !",
+        type: 'success'
+      });
     },
     getFirstElement: function getFirstElement() {
+      var _this3 = this;
+
       if (this.selectYear !== null) {
-        console.log(this.selectYear);
+        Object.entries(this.years).forEach(function (_ref) {
+          var _ref2 = _slicedToArray(_ref, 2),
+              key = _ref2[0],
+              value = _ref2[1];
+
+          if (key === _this3.selectYear[0].annee) {
+            _this3.selectYear = value;
+          }
+        });
       }
 
-      var data = null;
-      Object.entries(this.years).forEach(function (_ref) {
-        var _ref2 = _slicedToArray(_ref, 2),
-            key = _ref2[0],
-            value = _ref2[1];
+      var today = new Date();
+      var year = today.getFullYear();
+      Object.entries(this.years).forEach(function (_ref3) {
+        var _ref4 = _slicedToArray(_ref3, 2),
+            key = _ref4[0],
+            value = _ref4[1];
 
-        if (data === null) {
-          data = value;
+        if (key == year) {
+          _this3.selectYear = value;
         }
       });
-      this.selectYear = data;
     },
     openModal: function openModal(ferie) {
       this.selected = ferie;

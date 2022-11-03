@@ -507,14 +507,16 @@ class PlanningController extends Controller
                 'date' => $time
             ]);
 
-            $collaborateurDate = CollaborateurDate::where('collaborateur_id', $request->user['id'])
-                        ->where('date_id', $date->id)
-                        ->firstOrNew([
-                            'horaire' => $horaires,
-                            'collaborateur_id' => $request->user['id'],
-                            'date_id' => $date->id,
-                            'hub_id' => Auth::user()->hub_id
-                        ]);
+            $collaborateurDate = CollaborateurDate::firstOrCreate(
+                ['collaborateur_id' => $request->user['id'],
+                    'date_id' => $date->id
+                ],
+                [
+                    'horaire' => $horaires,
+                    'collaborateur_id' => $request->user['id'],
+                    'date_id' => $date->id,
+                    'hub_id' => Auth::user()->hub_id
+                ]);
 
             $collaborateurDate->horaire = json_encode($horaires);
             $collaborateurDate->save();
@@ -537,9 +539,11 @@ class PlanningController extends Controller
                     ->first();
 
                 if ($joursFerie) {
-                    $collaborateurDate = CollaborateurDate::where('collaborateur_id', $request->user['id'])
-                        ->where('date_id', $date->id)
-                        ->firstOrNew([
+                    $collaborateurDate = CollaborateurDate::firstOrCreate(
+                            ['collaborateur_id' => $request->user['id'],
+                            'date_id' => $date->id
+                            ],
+                            [
                             'horaire' => $horaires,
                             'collaborateur_id' => $request->user['id'],
                             'date_id' => $date->id,
@@ -548,6 +552,7 @@ class PlanningController extends Controller
 
                     $collaborateurDate->horaire = json_encode($horaires);
                     $collaborateurDate->save();
+
                     if ($type === 'F') {
                         $joursFerie->collaborateurs()->detach($request->user['id']);
                     } else {
