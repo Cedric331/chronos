@@ -507,15 +507,13 @@ class PlanningController extends Controller
                 'date' => $time
             ]);
 
-            $collaborateurDate = CollaborateurDate::firstOrCreate(
-                ['collaborateur_id' => $request->user['id'],
-                    'date_id' => $date->id
+            $collaborateurDate = CollaborateurDate::firstOrNew([
+                'collaborateur_id' => $request->user['id'],
+                'date_id' => $date->id
                 ],
                 [
-                    'horaire' => $horaires,
-                    'collaborateur_id' => $request->user['id'],
-                    'date_id' => $date->id,
-                    'hub_id' => Auth::user()->hub_id
+                'horaire' => $horaires,
+                'hub_id' => Auth::user()->hub_id
                 ]);
 
             $collaborateurDate->horaire = json_encode($horaires);
