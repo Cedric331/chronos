@@ -57,6 +57,7 @@ class CollaborateurController extends Controller
             ]);
         }
         $collaborateur->dates()->detach();
+        $collaborateur->joursFerie()->detach();
         $delete = $collaborateur->delete();
 
        return response()->json($delete);

@@ -76,6 +76,7 @@ import { Head } from '@inertiajs/inertia-vue3';
 
 export default {
     name: "GestionEquipe",
+    inheritAttrs: false,
     components: {
         Dialog,
         Head,

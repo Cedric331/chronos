@@ -14,3 +14,7 @@ Route::post('/generate/jf', [JourFerieController::class, 'store'])
 Route::delete('/jf', [JourFerieController::class, 'delete'])
     ->middleware('auth')
     ->middleware('role:Coordinateur|Administrateur|Responsable');
+
+Route::get('/chart/{annee}', [JourFerieController::class, 'chart'])
+    ->middleware('auth')
+    ->middleware('role:Coordinateur|Administrateur|Responsable');

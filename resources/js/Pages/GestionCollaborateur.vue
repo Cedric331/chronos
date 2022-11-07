@@ -73,6 +73,7 @@ import ModalCollaborateur from "@/Components/ModalCollaborateur.vue";
 
 export default {
     name: "GestionCollaborateur",
+    inheritAttrs: false,
     components: {
         ModalCollaborateur,
         Dialog,
