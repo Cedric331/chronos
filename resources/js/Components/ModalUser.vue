@@ -1,65 +1,65 @@
 <template>
-    <div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="utilisateur" role="dialog" aria-modal="true">
+    <div class="fixed z-10 inset-0" aria-labelledby="utilisateur" role="dialog" aria-modal="true">
       <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
           <div @click="closeModal()" class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:w-full" :style="isUpdate ? 'max-width: 38rem' : 'max-width: 32rem'">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="mb-4 md:flex md:justify-between">
-                        <div class="mb-4 md:mr-2 md:mb-0">
-                            <label class="block mb-2 text-sm font-bold text-gray-700" for="prenom">
-                                Prénom du collaborateur
-                            </label>
-                            <input
-                                class="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                                id="prenom"
-                                type="text"
-                                v-model="name"
-                                placeholder="Prénom"
-                            />
-                        </div>
-                        <div class="md:ml-2">
-                            <label class="block mb-2 text-sm font-bold text-gray-700" for="mail">
-                                Email
-                            </label>
-                            <input
-                                class="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                                id="mail"
-                                type="email"
-                                v-model="email"
-                                placeholder="Email"
-                            />
-                        </div>
-                        <div v-if="isUpdate" class="md:ml-2">
-                            <label class="block mb-2 text-sm font-bold text-gray-700">
-                                Hub
-                            </label>
-                            <select v-model="hub_id" class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" style="min-width: 135px">
-                                <option v-for="item in hubs" :key="item.id" :value="item.id">{{ item.ville }}</option>
-                            </select>
-                        </div>
-                        <div v-if="isAdmin" class="md:ml-2">
-                            <div class="form-check form-switch">
-                                <input v-model="status" class="form-check-input appearance-none w-9 -ml-10 rounded-full float-left h-5 align-top bg-white bg-no-repeat bg-contain bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" id="status" checked>
-                                <label class="form-check-label inline-block text-gray-800" for="status">
-                                    {{ status ? 'Coordinateur' : 'Conseiller'}}
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button @click="store()" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm">
-                        {{ isUpdate ? 'Modifier' : 'Créer' }}
-                    </button>
-                    <button @click="closeModal()" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                        Annuler
-                    </button>
-                    <div v-if="errors" class="mb-4 sm:align-middle font-medium text-sm text-red-600">
-                        {{ errors }}
-                    </div>
-                </div>
-            </div>
+
+          <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+              <div class="py-12 transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0" id="modal">
+                  <div role="alert" class="container mx-auto w-11/12 md:w-2/3 max-w-lg">
+                      <div class="relative py-8 px-5 md:px-10 bg-white shadow-md rounded border border-gray-400">
+                          <h1 class="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">Création d'un utilisateur</h1>
+                          <label for="name" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Nom de l'Utilisateur</label>
+                          <div class="relative mb-5 mt-2">
+                              <div class="absolute text-gray-600 flex items-center px-4 border-r h-full">
+                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                  </svg>
+                              </div>
+                              <input v-model="name" type="text" id="name" class="text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-16 text-sm border-gray-300 rounded border" placeholder="Nom de l'utilisateur" />
+                          </div>
+                          <label for="email" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Email de l'Utilisateur</label>
+                          <div class="relative mb-5 mt-2">
+                              <div class="absolute text-gray-600 flex items-center px-4 border-r h-full">
+                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                      <path stroke-linecap="round" d="M16.5 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 10-2.636 6.364M16.5 12V8.25" />
+                                  </svg>
+                              </div>
+                              <input type="email" id="email" v-model="email" class="text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-16 text-sm border-gray-300 rounded border" placeholder="Adresse email de l'utilisateur" />
+                          </div>
+                          <div v-if="isUpdate" class="relative mb-5 mt-2">
+                              <label class="block mb-2 text-sm font-bold text-gray-700">
+                                  Hub
+                              </label>
+                              <select v-model="hub_id" class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" style="min-width: 135px">
+                                  <option v-for="item in hubs" :key="item.id" :value="item.id">{{ item.ville }}</option>
+                              </select>
+                          </div>
+                          <div v-if="isAdmin" class="relative mb-5 mt-2">
+                              <div class="relative w-full h-full flex justify-around">
+                                  <div>
+                                      <input v-model="status" type="radio" class="cursor-pointer mx-2" id="Conseiller" name="status" value="Conseiller" checked>
+                                      <label for="Conseiller">Conseiller</label>
+                                  </div>
+                                  <div>
+                                      <input v-model="status" type="radio" class="cursor-pointer mx-2" id="Coordinateur" name="status" value="Coordinateur">
+                                      <label for="Coordinateur">Coordinateur</label>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="flex items-center justify-between w-full">
+                              <button class="focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm" @click="closeModal()">Annuler</button>
+                              <button class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm" @click="store()">
+                                  {{ isUpdate ? 'Modifier' : 'Créer' }}
+                              </button>
+                              <div v-if="errors" class="mb-4 sm:align-middle font-medium text-sm text-red-600">-->
+                                  {{ errors }}
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
         </div>
     </div>
 </template>
@@ -79,7 +79,7 @@ export default {
             email: null,
             hubs: null,
             hub_id: null,
-            status: false,
+            status: 'Conseiller',
             errors: null
         }
     },
@@ -97,7 +97,7 @@ export default {
             this.name = null
             this.email = null
             this.errors = null
-            this.status = false
+            this.status = 'Conseiller'
             this.$emit('closeModal', false)
         },
         verification () {

@@ -50,7 +50,7 @@
                                 <BreezeNavLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" :href="route('planning')" :active="route().current('planning')" as="button">
                                     Planning
                                 </BreezeNavLink>
-                                <BreezeNavLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" v-if="$page.props.auth.user.admin" :href="route('administration')" :active="route().current('administration')" as="button">
+                                <BreezeNavLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" v-if="$page.props.auth.user.responsable" :href="route('administration')" :active="route().current('administration')" as="button">
                                     Administration
                                 </BreezeNavLink>
                             </div>
@@ -132,7 +132,7 @@
                         <BreezeResponsiveNavLink :href="route('planning')" :active="route().current('planning')" as="button">
                             Planning
                         </BreezeResponsiveNavLink>
-                        <BreezeResponsiveNavLink v-if="$page.props.auth.user.admin" :href="route('administration')" :active="route().current('administration')" as="button">
+                        <BreezeResponsiveNavLink v-if="$page.props.auth.user.responsable" :href="route('administration')" :active="route().current('administration')" as="button">
                             Administration
                         </BreezeResponsiveNavLink>
                     </div>

@@ -10,6 +10,11 @@ use Inertia\Inertia;
 
 class CollaborateurController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['role:Coordinateur|Responsable|Administrateur']);
+    }
+
     /**
      * Display a listing of the resource.
      *

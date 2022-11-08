@@ -2,7 +2,7 @@
     <notifications position="bottom right" />
     <Head title="Administration" />
     <BreezeAuthenticatedLayout>
-        <div class="py-12">
+        <div class="h-screen py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                     <div class="px-4 py-5 sm:px-6">
@@ -41,10 +41,10 @@
                                                 <svg width="20" height="20" class="mr-2" fill="currentColor" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
                                                     <path d="M1600 736v192q0 40-28 68t-68 28h-416v416q0 40-28 68t-68 28h-192q-40 0-68-28t-28-68v-416h-416q-40 0-68-28t-28-68v-192q0-40 28-68t68-28h416v-416q0-40 28-68t68-28h192q40 0 68 28t28 68v416h416q40 0 68 28t28 68z"></path>
                                                 </svg>
-                                                Ajouter un membre
+                                                Ajouter un membre sur le hub de {{ this.hub.ville }}
                                             </button>
 
-                                            <button @click.prevent="checkUpdate()" type="button" class="py-2 px-4 flex justify-center items-center  bg-blue-600 hover:bg-blue-700 text-white transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+                                            <button v-if="this.$page.props.auth.user.admin" @click.prevent="checkUpdate()" type="button" class="py-2 px-4 flex justify-center items-center  bg-blue-600 hover:bg-blue-700 text-white transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                                                 </svg>
@@ -83,18 +83,29 @@
                                                     </p>
                                                 </td>
                                                 <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                    <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                                                        <span aria-hidden="true" class="absolute inset-0 bg-green-200 opacity-50 rounded-full">
-                                                        </span>
-                                                        <span class="relative">
+                                                    <div v-if="member.status === 'Administrateur'">
+                                                        <p class="font-bold whitespace-no-wrap">
                                                             {{ member.status }}
-                                                        </span>
-                                                    </span>
+                                                        </p>
+                                                    </div>
+                                                    <div v-else>
+                                                        <select @change.prevent="updateUser(member)" v-model="member.status" class="p-2 hover:bg-black hover:text-white font-bold rounded-full block w-full overflow-y-auto text-sm leading-4 font-medium rounded-md rounded transition ease-in-out m-0" style="border-width: 0">
+                                                            <option value="Conseiller">
+                                                                Conseiller
+                                                            </option>
+                                                            <option value="Coordinateur">
+                                                                Coordinateur
+                                                            </option>
+                                                            <option value="Responsable">
+                                                                Responsable
+                                                            </option>
+                                                        </select>
+                                                    </div>
                                                 </td>
-                                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                    <p class="text-gray-900 whitespace-no-wrap">
+                                                <td class="px-6 py-4 text-right">
+                                                    <button @click="deleteConfirm(member)" class="bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-4 rounded-full">
                                                         Supprimer
-                                                    </p>
+                                                    </button>
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -107,6 +118,10 @@
                 </div>
             </div>
         </div>
+        <Dialog
+            v-if="confirm"
+            @closeConfirm="data => this.closeDialogue(data)">
+        </Dialog>
         <ModalHub v-show="showModalHub" @update="data => updateHub(data)" @closeModal="data => this.showModalHub = data"></ModalHub>
         <ModalUser v-show="showModalUser" :hub="this.hub.id" :isAdmin="true" @update="updateUser()" @closeModal="data => this.showModalUser = data"></ModalUser>
     </BreezeAuthenticatedLayout>
@@ -116,11 +131,13 @@
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue'
 import ModalHub from "@/Components/ModalHub.vue";
 import ModalUser from "@/Components/ModalUser.vue";
+import Dialog from "@/Components/Dialog.vue";
 import { Head } from '@inertiajs/inertia-vue3';
 
 export default {
     components: {
         BreezeAuthenticatedLayout,
+        Dialog,
         ModalUser,
         ModalHub,
         Head,
@@ -130,8 +147,11 @@ export default {
     },
     data () {
         return {
+            confirm: false,
             annee: null,
+            status: null,
             hub: null,
+            collaborateur: null,
             showModalHub: false,
             showModalUser: false
         }
@@ -144,14 +164,41 @@ export default {
             this.showModalUser = true
         },
         updateHub (data) {
-            this.hubs.push(data)
-        },
-        updateUser () {
             this.$notify({
                 title: "Succès",
-                text: "Invitation envoyée avec succès !",
+                text: "Création du Hub effectué avec succès !",
                 type: 'success',
             });
+            this.hubs.push(data)
+        },
+        updateUser (data) {
+            if (data) {
+                axios.patch('/administration/update/user', {
+                    id: data.id,
+                    status: data.status
+                })
+                    .then(() => {
+                        this.$notify({
+                            title: "Succès",
+                            text: "Mise à jour effectuée avec succès !",
+                            type: 'success',
+                        });
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        this.$notify({
+                            title: "Erreur",
+                            text: "Action non autorisée !",
+                            type: 'warn',
+                        });
+                    })
+            } else {
+                this.$notify({
+                    title: "Succès",
+                    text: "Invitation envoyée avec succès !",
+                    type: 'success',
+                });
+            }
         },
         checkUpdate () {
             axios.post('administration/check-update/user')
@@ -164,7 +211,57 @@ export default {
             })
             .catch(error => {
                 console.log(error)
+                this.$notify({
+                    title: "Erreur",
+                    text: "Action non autorisée !",
+                    type: 'warn',
+                });
             })
+        },
+        deleteConfirm (data) {
+            this.collaborateur = data
+            this.confirm = true
+        },
+        closeDialogue (data) {
+            if (!data) {
+                this.collaborateur = null
+                this.confirm = false
+            } else {
+                axios.delete('/equipe/' + this.collaborateur.id)
+                    .then(() => {
+                        this.$notify({
+                            title: "Succès",
+                            text: "Membre supprimé avec succès !",
+                            type: 'success',
+                        });
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        this.$notify({
+                            title: "Erreur",
+                            text: "Action non autorisée !",
+                            type: 'warn',
+                        });
+                    })
+                    .finally(() => {
+                        this.collaborateur = null
+                        this.confirm = false
+                        this.getHubs()
+                    })
+            }
+        },
+        getHubs () {
+            axios.get('/hub/admin')
+                .then(response => {
+                    response.data.forEach(item => {
+                        if (item.id === this.hub.id) {
+                            this.hub = item
+                        }
+                    })
+                })
+                .catch(error => {
+                    console.log(error)
+                })
         }
     },
     beforeMount() {
