@@ -30286,7 +30286,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.modal-body[data-v-34e34b14]{\n    max-height: 500px;\n}\n.bg-gray-800-opacity[data-v-34e34b14]{\n    background-color: #2D374850;\n}\n@media screen and (max-width: 768px){\n.modal-body[data-v-34e34b14] {\n        max-height: 400px;\n}\n}\n.fade-up-down-enter-active[data-v-34e34b14] {\n    transition: all 0.3s ease;\n}\n.fade-up-down-leave-active[data-v-34e34b14] {\n    transition: all 0.3s ease;\n}\n.fade-up-down-enter[data-v-34e34b14] {\n    transform: translateY(10%);\n    opacity: 0;\n}\n.fade-up-down-leave-to[data-v-34e34b14] {\n    transform: translateY(10%);\n    opacity: 0;\n}\n.fade-enter-active[data-v-34e34b14]{\n    transition: opacity .3s;\n}\n.fade-leave-active[data-v-34e34b14] {\n    transition: opacity .3s;\n}\n.fade-enter[data-v-34e34b14],\n.fade-leave-to[data-v-34e34b14]{\n    opacity: 0;\n}\n\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.modal-body[data-v-34e34b14]{\r\n    max-height: 500px;\n}\n.bg-gray-800-opacity[data-v-34e34b14]{\r\n    background-color: #2D374850;\n}\n@media screen and (max-width: 768px){\n.modal-body[data-v-34e34b14] {\r\n        max-height: 400px;\n}\n}\n.fade-up-down-enter-active[data-v-34e34b14] {\r\n    transition: all 0.3s ease;\n}\n.fade-up-down-leave-active[data-v-34e34b14] {\r\n    transition: all 0.3s ease;\n}\n.fade-up-down-enter[data-v-34e34b14] {\r\n    transform: translateY(10%);\r\n    opacity: 0;\n}\n.fade-up-down-leave-to[data-v-34e34b14] {\r\n    transform: translateY(10%);\r\n    opacity: 0;\n}\n.fade-enter-active[data-v-34e34b14]{\r\n    transition: opacity .3s;\n}\n.fade-leave-active[data-v-34e34b14] {\r\n    transition: opacity .3s;\n}\n.fade-enter[data-v-34e34b14],\r\n.fade-leave-to[data-v-34e34b14]{\r\n    opacity: 0;\n}\r\n\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -30358,7 +30358,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n#main {\n    background-attachment: fixed;\n    background-size: cover;\n}\n.toggle-checkbox:checked {\n@apply: right-0 border-green-400;\n    right: 0;\n    border-color: #1a202c;\n}\n.toggle-checkbox:checked + .toggle-label {\n@apply: bg-green-400;\n    background-color: #1a202c;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n#main {\r\n    background-attachment: fixed;\r\n    background-size: cover;\n}\n.toggle-checkbox:checked {\n@apply: right-0 border-green-400;\r\n    right: 0;\r\n    border-color: #1a202c;\n}\n.toggle-checkbox:checked + .toggle-label {\n@apply: bg-green-400;\r\n    background-color: #1a202c;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -30406,7 +30406,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.success {\n    margin: 5px;\n    padding: 10px;\n    font-size: 12px;\n    background: #68cd86;\n    border-left-color: #42a85f;\n}\n.warn {\n    background: #ffb648;\n    border-left-color: #f48a06;\n}\n.error {\n    background: #e54d42;\n    border-left-color: #b82e24;\n}\n.load-class {\n    position: absolute;\n    display: inline-block;\n    right:40%;\n    bottom:50%;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.success {\r\n    margin: 5px;\r\n    padding: 10px;\r\n    font-size: 12px;\r\n    background: #68cd86;\r\n    border-left-color: #42a85f;\n}\n.warn {\r\n    background: #ffb648;\r\n    border-left-color: #f48a06;\n}\n.error {\r\n    background: #e54d42;\r\n    border-left-color: #b82e24;\n}\n.load-class {\r\n    position: absolute;\r\n    display: inline-block;\r\n    right:40%;\r\n    bottom:50%;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
