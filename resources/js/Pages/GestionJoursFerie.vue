@@ -48,8 +48,8 @@
                                                 </select>
                                             </div>
                                             <div class="ml-5">
-                                                <button v-if="selectYear !== null" @click="this.confirmDel = true" class="text-sm font-medium hover:bg-gray-700 bg-black text-white rounded-lg p-2">
-                                                    Supprimer
+                                                <button @click="this.openChart = true" class="text-sm font-medium hover:bg-gray-700 bg-black text-white rounded-lg p-2">
+                                                    Voir graphique
                                                 </button>
                                             </div>
                                         </div>
@@ -121,26 +121,34 @@
         @updateData="data => this.updateData(data)"
         @closeModal="this.updateModal = false"
     />
+    <ModalChart v-if="openChart"
+                :annee="this.selectYear[0].annee"
+                @closeConfirm="this.openChart = false"
+    />
 </template>
 
 <script>
 import ModalConfirmDelete from "@/Components/ModalConfirmDelete.vue";
 import ModalUpdatePlanningFerie from "@/Components/ModalUpdatePlanningFerie.vue";
+import ModalChart from "@/Components/ModalChart.vue";
 import {Head} from "@inertiajs/inertia-vue3"
 
 export default {
     name: "GestionJoursFerie",
+    inheritAttrs: false,
     components: {
         Head,
+        ModalChart,
         ModalUpdatePlanningFerie,
         ModalConfirmDelete
     },
     props: {
-        annees: Array,
+        annees: Object,
         collaborateurs: Array
     },
     data () {
         return {
+            openChart: false,
             confirmDel: false,
             updateModal: false,
             selected: null,
@@ -171,29 +179,6 @@ export default {
                     type: 'warn',
                 });
                 console.log(err)
-            })
-        },
-        delete () {
-            axios.delete('/jf', {
-                data: {
-                    annee: this.selectYear
-                }
-            })
-            .then(() => {
-                Reflect.deleteProperty(this.years, this.selectYear[0].annee);
-                this.selectYear = null
-                this.getFirstElement()
-                this.$notify({
-                    title: "Succès",
-                    text: "Les jours fériés sont supprimés avec succès !",
-                    type: 'success',
-                });
-            })
-            .catch(err => {
-                console.log(err)
-            })
-            .finally(() => {
-                this.confirmDel = false
             })
         },
         updateData (data) {

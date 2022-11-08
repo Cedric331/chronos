@@ -10,6 +10,11 @@ use Inertia\Inertia;
 
 class CollaborateurController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['role:Coordinateur|Responsable|Administrateur']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -57,6 +62,7 @@ class CollaborateurController extends Controller
             ]);
         }
         $collaborateur->dates()->detach();
+        $collaborateur->joursFerie()->detach();
         $delete = $collaborateur->delete();
 
        return response()->json($delete);

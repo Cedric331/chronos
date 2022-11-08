@@ -5,7 +5,7 @@
             <div class="w-full content-center">
                 <div class="flex justify-center my-auto">
                     <button @click.stop="openModal" class="inline-flex items-center flex justify-center h-10 px-5 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800">
-                        <span>Ajouter un membre</span>
+                        <span>Créer un utilisateur</span>
                     </button>
                 </div>
 
@@ -76,6 +76,7 @@ import { Head } from '@inertiajs/inertia-vue3';
 
 export default {
     name: "GestionEquipe",
+    inheritAttrs: false,
     components: {
         Dialog,
         Head,

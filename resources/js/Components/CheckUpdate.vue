@@ -19,32 +19,16 @@
                                     </div>
                                     <div class="modal-body p-5 w-full h-full overflow-y-auto ">
                                         <h2 class="text-lg">
-                                            <b>1 - Nouveau Système de génération des plannings</b>
+                                            <b>1 - Ajout de la gestion des jours fériés dans "Gestion du hub"</b>
                                         </h2>
                                         <p class="text-justify">
-                                            Désormais le fichier Excel n'est plus nécessaire à la création des plannings. Cependant celui-ci reste en place
-                                            pour le moment pour ceux qui souhaitent encore l'utiliser.
-                                            Vous pouvez désormais créer des rotations et définir le planning pour un collaborateur pour une période
-                                            d'un an max.<br>
+                                            Les coordinateurs peuvent désormais générer les jours fériés ce qui permet d'avoir une visibilité sur les jours fériés sur le planning.<br>
                                         </p>
                                         <h2 class="text-lg">
                                             <b>2 - Gestion des collaborateurs</b>
                                         </h2>
                                         <p class="text-justify">
                                             Vous pouvez désormais ajouter/supprimer les collaborateurs afin de générer des plannings pour eux.<br>
-                                        </p>
-                                        <h2 class="text-lg">
-                                            <b>3 - Modification du formulaire pour les changements d'horaires</b>
-                                        </h2>
-                                        <p class="text-justify">
-                                            Vous pouvez désormais sélectionner une rotation qui va récupérer les horaires de la rotation suivant les jours à modifier.<br>
-                                        </p>
-                                        <h2 class="text-lg">
-                                            <b>4 - Possibilité d'ouvrir les droits pour les conseillers afin qu'ils puissent modifier les horaires</b>
-                                        </h2>
-                                        <p class="text-justify">
-                                            Afin de faciliter la mise à jour des horaires sur Chronos, les conseillers peuvent désormais changer les horaires si le Coordinateur ouvre les droits.
-                                            <br>
                                         </p>
                                     </div>
                                     <div class="modal-footer py-3 px-5 border0-t text-right">

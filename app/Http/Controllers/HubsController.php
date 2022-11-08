@@ -78,4 +78,14 @@ class HubsController extends Controller
 
         return ControllerResponse::update($update);
     }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function indexWithMember (): \Illuminate\Http\JsonResponse
+    {
+        $hubs = Hub::with('members')->get();
+
+        return response()->json($hubs);
+    }
 }

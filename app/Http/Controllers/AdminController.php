@@ -8,6 +8,7 @@ use App\Mail\NouveauUtilisateur;
 use App\Models\Hub;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
@@ -17,7 +18,7 @@ class AdminController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['role:Administrateur']);
+        $this->middleware(['role:Responsable|Administrateur']);
     }
 
     /**
@@ -42,12 +43,36 @@ class AdminController extends Controller
             'ville' => 'required', 'string'
         ]);
 
-        $create = Hub::create([
+        $hub = Hub::create([
             'ville' => $request->ville,
         ]);
 
-        if ($create) {
-            return response()->json(Hub::with('members')->find($create->id));
+        if ($request->name && $request->email) {
+
+            $request->validate([
+                'name' => 'required|string',
+                'email' => 'required|email'
+            ]);
+
+            $url = URL::signedRoute('register', [
+                'name' => Crypt::encrypt($request->name),
+                'email' => Crypt::encrypt($request->email),
+                'status' => Crypt::encrypt('Coordinateur'),
+                'hub' => Crypt::encrypt($hub->id),
+            ]);
+
+            $data = [
+                'name' => $request->name,
+                'email' => $request->email,
+                'hub' => $hub->ville,
+                'url' => $url
+            ];
+
+            Mail::to($request->email)->send(new NouveauHub($data));
+        }
+
+        if ($hub) {
+            return response()->json(Hub::with('members')->find($hub->id));
         } else {
             return response()->json('Erreur', 422);
         }
@@ -61,6 +86,7 @@ class AdminController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
+            'status' => 'nullable|string',
             'email' => 'required|email',
         ]);
 
@@ -79,7 +105,7 @@ class AdminController extends Controller
             'url' => $url
         ];
 
-        if ($request->status) {
+        if ($request->status === 'Coordinateur') {
             Mail::to($request->email)->send(new NouveauHub($data));
         } else {
             Mail::to($request->email)->send(new NouveauUtilisateur($data));
@@ -102,5 +128,22 @@ class AdminController extends Controller
         }
 
         return response()->json(true);
+    }
+
+    public function updateStatus (Request $request): \Illuminate\Http\JsonResponse
+    {
+        $user = User::find($request->id);
+        if ($user->isAdmin() || $user->id === Auth::id()) {
+            return response()->json('Action non autorisée', 401);
+        }
+        $user->update([
+            'status' => $request->status
+        ]);
+
+        if ($request->status !== 'Conseiller') {
+            $user->assignRole($request->status);
+        }
+
+        return ControllerResponse::update($user);
     }
 }

@@ -31,26 +31,29 @@
                                         <div class="p-4">
                                             <div class="flex justify-between">
                                                 <div>
-                                                    <p class="font-semibold text-sm py-1" :style="texte">{{ planning.collaborateur }}</p>
+                                                    <p class="font-semibold text-xl py-1" :style="texte">{{ planning.collaborateur }}</p>
                                                 </div>
                                             </div>
                                             <div v-if="planning.horaires">
-                                                <p class="font-light text-justify line-clamp-3" :style="texte">
+                                                <p v-if="planning.type !== 'Iti'" class="font-bold text-justify line-clamp-3" :style="texte">
                                                     {{ planning.horaires.teletravail ? 'Télétravail' : 'Hub'}} {{ planning.horaires.rotation ? ' - ' + planning.horaires.rotation : ''}}
                                                 </p>
-                                                <p class="font-light text-justify line-clamp-3" :style="texte">
-                                                    Début : {{ planning.horaires.debut_journee }}
+                                                <p v-else class="font-bold text-justify line-clamp-3" :style="texte">
+                                                    Technicien {{ planning.horaires.rotation ? ' - ' + planning.horaires.rotation : ''}}
+                                                </p>
+                                                <p class="font-semibold text-justify line-clamp-3" :style="texte">
+                                                    Début :  <span class="font-bold">{{ planning.horaires.debut_journee }}</span>
                                                 </p>
                                                 <div v-if="planning.horaires.debut_pause">
-                                                    <p class="font-light text-justify line-clamp-3" :style="texte">
-                                                        Pause Déj: {{ planning.horaires.debut_pause }}
+                                                    <p class="font-semibold text-justify line-clamp-3" :style="texte">
+                                                        Pause Déj:  <span class="font-bold">{{ planning.horaires.debut_pause }}</span>
                                                     </p>
-                                                    <p class="font-light text-justify line-clamp-3" :style="texte">
-                                                        Fin Déj : {{ planning.horaires.fin_pause }}
+                                                    <p class="font-semibold text-justify line-clamp-3" :style="texte">
+                                                        Fin Déj :  <span class="font-bold">{{ planning.horaires.fin_pause }}</span>
                                                     </p>
                                                 </div>
-                                                <p class="font-light text-justify line-clamp-3" :style="texte">
-                                                    Fin : {{ planning.horaires.fin_journee }}
+                                                <p class="font-semibold text-justify line-clamp-3" :style="texte">
+                                                    Fin : <span class="font-bold">{{ planning.horaires.fin_journee }}</span>
                                                 </p>
                                             </div>
                                             <div v-else>

@@ -1,11 +1,6 @@
 <template>
     <notifications position="bottom right" />
     <Head title="Import Chronos" />
-    <Loading
-        :show="show"
-        :loader-class="loadClass"
-        :label="label">
-    </Loading>
     <BreezeAuthenticatedLayout>
     <div class="flex flex-wrap min-h-screen h-full w-10/12 mx-auto">
         <div class="w-full">
@@ -44,24 +39,23 @@
 <script>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue'
 import { Head } from '@inertiajs/inertia-vue3';
-import Loading from 'vue-full-loading'
 import GestionEquipe from "@/Pages/GestionEquipe.vue";
 import GestionCollaborateur from "@/Pages/GestionCollaborateur.vue";
 import GestionJoursFerie from "@/Pages/GestionJoursFerie.vue";
 
 export default {
     name: "GestionHub",
+    inheritAttrs: false,
     components: {
         GestionCollaborateur,
         GestionJoursFerie,
         GestionEquipe,
         BreezeAuthenticatedLayout,
-        Loading,
         Head,
     },
     props: {
         collaborateurs: Array,
-        annees: Array,
+        annees: Object,
         users: Array
     },
     data() {

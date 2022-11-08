@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ControllerResponse;
+use App\Models\Collaborateur;
+use App\Models\CollaborateurJoursFerie;
 use App\Models\JoursFerie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -78,5 +80,22 @@ class JourFerieController extends Controller
         }
 
         ControllerResponse::delete($delete);
+    }
+
+    /**
+     * @param $annee
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function chart ($annee): \Illuminate\Http\JsonResponse
+    {
+        $data = Collaborateur::withCount([
+                'joursFerie' => function ($query) use ($annee) {
+                    $query->where('annee', $annee);
+                }
+            ])
+            ->where('hub_id', Auth::user()->hub_id)
+            ->get();
+
+        return response()->json($data);
     }
 }

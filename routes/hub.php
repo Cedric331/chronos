@@ -7,6 +7,10 @@ Route::get('/hub', [HubsController::class, 'index'])
                 ->middleware('auth')
                 ->name('hub');
 
+Route::get('/hub/admin', [HubsController::class, 'indexWithMember'])
+    ->middleware('auth')
+    ->name('hub.admin');
+
 Route::patch('/hub/{hub}/user', [HubsController::class, 'updateUser'])
     ->middleware('auth')
     ->name('update.hub.user');
