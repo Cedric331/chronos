@@ -3,10 +3,18 @@
 
     <BreezeValidationErrors class="mb-4" />
     <BreezeAuthenticatedLayout>
-        <div class="py-12">
+        <div class="py-12 min-h-screen">
             <div class="max-w-xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                     <div class="px-4 py-5 sm:px-6">
+                        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+                            Mot de passe modifié avec succès !
+                        </div>
+                        <div v-if="errors" class="mb-4 font-medium text-sm text-red-600">
+                            <div v-for="error in errors">
+                                {{ error[0] }}
+                            </div>
+                        </div>
                 <form>
                     <div>
                         <BreezeLabel for="old_password" value="Mot de passe actuel" />
@@ -56,6 +64,8 @@ export default {
     },
     data () {
         return {
+            errors: [],
+            status: null,
             password: null,
             new_password: null,
             new_password_confirmation: null
@@ -63,16 +73,17 @@ export default {
     },
     methods: {
         update () {
+            this.errors = []
             axios.patch('/update-user', {
                 password: this.password,
                 new_password: this.new_password,
                 new_password_confirmation: this.new_password_confirmation,
             })
-            .then(response => {
-                console.log(response.data)
+            .then(() => {
+                this.status = true
             })
             .catch(error => {
-                console.log(error)
+                this.errors = error.response.data.errors
             })
         }
     }

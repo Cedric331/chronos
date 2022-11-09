@@ -27,10 +27,13 @@
                                             Jour de la semaine
                                         </th>
                                         <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                                            Technicien
+                                            Jour OFF
                                         </th>
                                         <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                                            Jour OFF
+                                            Télétravail
+                                        </th>
+                                        <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                                            Technicien
                                         </th>
                                         <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                                            Début Journée
@@ -52,10 +55,13 @@
                                                 {{ days.charAt(0).toUpperCase() + days.slice(1) }}
                                             </th>
                                             <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                                <checkbox v-model="jours[days]['technicien']" :checked="jours[days]['technicien']"></checkbox>
+                                                <checkbox v-model="jours[days]['is_off']" :checked="jours[days]['is_off']"></checkbox>
                                             </td>
                                             <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                               <checkbox v-model="jours[days]['is_off']" :checked="jours[days]['is_off']"></checkbox>
+                                                <checkbox v-model="jours[days]['teletravail']" :checked="jours[days]['teletravail']"></checkbox>
+                                            </td>
+                                            <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                                <checkbox v-model="jours[days]['technicien']" :checked="jours[days]['technicien']"></checkbox>
                                             </td>
                                             <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                                                 <select @change="checkHours(jours[days], days); synchroniseValue(jours[days], 'debut_journee')" :disabled="jours[days]['is_off']" v-model="jours[days]['debut_journee']" class="block w-full text-sm leading-4 font-medium rounded-md text-gray-500 rounded transition ease-in-out m-0">
@@ -103,8 +109,11 @@
                                 {{ isUpdate ? 'Modifier' : 'Créer' }}
                             </button>
                         </div>
-                        <div v-for="(errorArray, idx) in notifmsg" :key="idx">
-                            <span class="text-red-600 font-bold">{{ errorArray[0] }} </span>
+                        <div v-if="notifmsg.length > 0">
+                            <span class="text-red-600 font-bold">{{ notifmsg }}</span>
+                        </div>
+                        <div v-if="errors">
+                            <span class="text-red-600 font-bold">{{ errors }}</span>
                         </div>
                 </div>
             </div>
@@ -125,9 +134,11 @@ export default {
     data () {
         return {
             synchronise: false,
+            errors: null,
             jours: {
                 lundi: {
                     'technicien': false,
+                    'teletravail': false,
                     'is_off': false,
                     'debut_journee': null,
                     'debut_pause': null,
@@ -136,6 +147,7 @@ export default {
                  },
                 mardi: {
                     'technicien': false,
+                    'teletravail': false,
                     'is_off': false,
                     'debut_journee': null,
                     'debut_pause': null,
@@ -144,6 +156,7 @@ export default {
                 },
                 mercredi: {
                     'technicien': false,
+                    'teletravail': false,
                     'is_off': false,
                     'debut_journee': null,
                     'debut_pause': null,
@@ -152,6 +165,7 @@ export default {
                 },
                 jeudi: {
                     'technicien': false,
+                    'teletravail': false,
                     'is_off': false,
                     'debut_journee': null,
                     'debut_pause': null,
@@ -160,6 +174,7 @@ export default {
                 },
                 vendredi: {
                     'technicien': false,
+                    'teletravail': false,
                     'is_off': false,
                     'debut_journee': null,
                     'debut_pause': null,
@@ -168,6 +183,7 @@ export default {
                 },
                 samedi: {
                     'technicien': false,
+                    'teletravail': false,
                     'is_off': true,
                     'debut_journee': null,
                     'debut_pause': null,
@@ -176,6 +192,7 @@ export default {
                 },
                 dimanche: {
                     'technicien': false,
+                    'teletravail': false,
                     'is_off': true,
                     'debut_journee': null,
                     'debut_pause': null,
@@ -228,6 +245,7 @@ export default {
             }
         },
         checkHours (data, days) {
+            this.errors = null
             var debut_journee = data['debut_journee'] ? data['debut_journee'].split('h') : null
             var debut_pause =  data['debut_pause'] ? data['debut_pause'].split('h') : null
             var fin_pause = data['fin_pause'] ? data['fin_pause'].split('h') : null
@@ -247,15 +265,15 @@ export default {
             }
 
             if (debut_journee && fin_journee) {
-                if (debut_journee > fin_journee) {
-                    this.errors = 'Le début de journée de ' + days + ' doit commencer avant la fin de journée'
+                if (debut_journee >= fin_journee) {
+                    this.errors = 'Le début de journée de ' + days + ' doit commencer ou être différent de la fin de journée'
                 } else {
                     this.errors = null
                 }
             }
             if (debut_pause && fin_pause) {
-                if (debut_pause > fin_pause) {
-                    this.errors = 'Le début de pause de ' + days + ' doit commencer avant la fin de pause'
+                if (debut_pause >= fin_pause) {
+                    this.errors = 'Le début de pause de ' + days + ' doit commencer ou être différent de la fin de pause'
                 } else {
                     this.errors = null
                 }
@@ -277,6 +295,7 @@ export default {
         },
         store () {
             this.notifmsg = []
+            this.errors = null
             this.checkPause()
             axios.post('rotation', {
                 type: this.type,
@@ -296,6 +315,7 @@ export default {
         },
         update () {
             this.notifmsg = []
+            this.errors = null
             this.checkPause()
             axios.patch('rotation', {
                     id: this.rotation.id,
@@ -307,7 +327,11 @@ export default {
                     this.closeModal()
                 })
                 .catch(err => {
-                    this.notifmsg = err.response.data.errors
+                    if (typeof err.response.data.errors === 'string') {
+                        this.notifmsg = err.response.data.errors
+                    } else {
+                        this.notifmsg = Object.values(err.response.data.errors)[0][0]
+                    }
                 })
         },
         closeModal () {
@@ -321,6 +345,9 @@ export default {
             this.rotation.rotations.forEach(item => {
                 this.type = this.rotation.type
                 this.jours[item.day] = JSON.parse(item.horaire)
+                if (!this.jours[item.day]['teletravail']) {
+                    this.jours[item.day]['teletravail'] = false
+                }
                 this.jours[item.day]['id'] = item.id
             })
         }

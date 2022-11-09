@@ -52,7 +52,6 @@ export default {
         },
       updateFavori () {
           axios.post('update/favori', {
-            user: this.$page.props.auth.user.id,
             collaborateur: this.selected.id
           })
         .then(() => {

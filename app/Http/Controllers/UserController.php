@@ -29,7 +29,9 @@ class UserController extends Controller
     {
         $request->validate([
             'new_password' => ['required', 'min:8', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', 'min:8'],
         ]);
+
         $request->request->add(['email' => Auth::user()->email]);
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
@@ -49,7 +51,7 @@ class UserController extends Controller
      */
     public function updateFavori (Request $request): \Illuminate\Http\JsonResponse
     {
-        $user = User::find($request->user);
+        $user = User::find(Auth::id());
 
         $collaborateur = null;
         if ($user->collaborateur_id !== $request->collaborateur) {

@@ -76,7 +76,7 @@
             <SelectedDate @click="updatePlanning = true" v-if="selectedPlanning.length > 0 && $page.props.auth.user.coordinateur || selectedPlanning.length > 0 && this.$page.props.hub.droit_update === 1" :classCss="'fixed bottom-3 right-6 bg-blue-500 rounded-full'" :value="'Modifier horaires'" :selected="selectedPlanning.length"></SelectedDate>
         </div>
         <div v-else class="min-h-screen bg-gray-700">
-            <h1 class="text-3l text-center font-bold text-white">
+            <h1 class="text-3l text-center font-bold text-white py-12">
                 -- Aucun Planning --
             </h1>
         </div>

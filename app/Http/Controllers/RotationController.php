@@ -140,7 +140,7 @@ class RotationController extends Controller
                 'debut_pause' => $horaire->debut_pause,
                 'fin_pause' => $horaire->fin_pause,
                 'fin_journee' => $horaire->fin_journee,
-                'teletravail' => false,
+                'teletravail' => $horaire->teletravail,
                 'type' => $horaire->technicien ? 'Iti1' : null,
                 'rotation' => $request->type,
             ];
