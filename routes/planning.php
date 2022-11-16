@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GeneratePlanningController;
 use App\Http\Controllers\PlanningController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,3 +27,6 @@ Route::patch('/planning/update/rotation', [PlanningController::class, 'updateRot
 Route::patch('/planning/update/teletravail', [PlanningController::class, 'updateTeletravail'])
     ->middleware('auth')
     ->name('planning.update.teletravail');
+
+Route::get('/planning/generate', [GeneratePlanningController::class, 'generetePlanning'])
+    ->middleware('auth');

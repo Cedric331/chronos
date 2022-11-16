@@ -142,6 +142,8 @@ class AdminController extends Controller
 
         if ($request->status !== 'Conseiller') {
             $user->assignRole($request->status);
+        } else {
+            $user->syncRoles([]);
         }
 
         return ControllerResponse::update($user);

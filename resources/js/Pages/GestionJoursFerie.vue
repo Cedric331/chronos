@@ -48,7 +48,7 @@
                                                 </select>
                                             </div>
                                             <div class="ml-5">
-                                                <button @click="this.openChart = true" class="text-sm font-medium hover:bg-gray-700 bg-black text-white rounded-lg p-2">
+                                                <button :disabled="!this.selectYear" @click="this.openChart = true" class="text-sm font-medium hover:bg-gray-700 bg-black text-white rounded-lg p-2">
                                                     Voir graphique
                                                 </button>
                                             </div>
@@ -166,6 +166,7 @@ export default {
             })
             .then(res => {
                 this.years = res.data
+                this.getFirstElement()
                 this.$notify({
                     title: "Succès",
                     text: "La création des jours fériés pour l'année " + this.annee + " est réussie !",
@@ -196,6 +197,10 @@ export default {
                     if (key === this.selectYear[0].annee) {
                         this.selectYear = value
                     }
+                });
+            } else {
+                Object.entries(this.years).forEach(([key, value]) => {
+                        this.selectYear = value
                 });
             }
             const today = new Date();

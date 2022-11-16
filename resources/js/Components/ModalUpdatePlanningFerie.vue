@@ -126,7 +126,7 @@ export default {
     name: "ModalUpdatePlanningFerie",
     emits: ["closeModal", "updateData"],
     props: {
-        selected: Array,
+        selected: Object,
         collaborateurs: Object
     },
     data () {

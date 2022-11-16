@@ -6,7 +6,7 @@
     <BreezeAuthenticatedLayout>
             <div class="w-12/12 h-full px-10 pt-10 h-16 flex justify-center">
 
-                    <div class="w-7/12 overflow-x-auto shadow-md sm:rounded-lg p-8">
+                    <div class="w-7/12 overflow-x-auto shadow-md sm:rounded-lg p-8 sm:visible invisible">
                         <table class="w-auto font-bold text-left">
                             <thead class="text-xs uppercase bg-white">
                             <tr>

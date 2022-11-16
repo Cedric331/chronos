@@ -161,6 +161,9 @@ export default {
                 case 'F':
                     return 'Férié'
                     break;
+                case 'AM':
+                    return 'Arrêt Maladie'
+                    break;
                 default:
                    return 'Repos'
             }

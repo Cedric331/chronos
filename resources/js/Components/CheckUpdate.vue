@@ -22,13 +22,7 @@
                                             <b>1 - Ajout de la gestion des jours fériés dans "Gestion du hub"</b>
                                         </h2>
                                         <p class="text-justify">
-                                            Les coordinateurs peuvent désormais générer les jours fériés ce qui permet d'avoir une visibilité sur les jours fériés sur le planning.<br>
-                                        </p>
-                                        <h2 class="text-lg">
-                                            <b>2 - Gestion des collaborateurs</b>
-                                        </h2>
-                                        <p class="text-justify">
-                                            Vous pouvez désormais ajouter/supprimer les collaborateurs afin de générer des plannings pour eux.<br>
+                                            Les coordinateurs peuvent désormais générer les jours fériés facilement ce qui permet d'avoir une visibilité sur les jours fériés sur le planning.<br>
                                         </p>
                                     </div>
                                     <div class="modal-footer py-3 px-5 border0-t text-right">

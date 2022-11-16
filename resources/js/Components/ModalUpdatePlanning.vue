@@ -42,6 +42,9 @@
                                                 <option value="6">
                                                     Férié
                                                 </option>
+                                                <option value="7">
+                                                    Arrêt Maladie
+                                                </option>
                                             </select>
                                         </div>
                                         <div v-if="radio === '1'">
@@ -213,6 +216,14 @@ export default {
             this.$emit('closeModal', bool)
         },
         submit (sendMail) {
+            if (this.radio !== '1') {
+                this.isTech = false
+                this.debut_journee = null
+                this.debut_pause = 'Pas de pause'
+                this.fin_pause = null
+                this.fin_journee = null
+                this.teletravail = false
+            }
             if (this.valideData) {
                 if (this.rotation !== null) {
                     axios.patch('planning/update/rotation', {
@@ -303,11 +314,9 @@ export default {
             }
         },
         defineContent (data) {
-            console.log('ok')
             let text = 'Semaine de ' + data.hours + '<br><br>'
             data.rotations.forEach(item => {
                 const horaire = JSON.parse(item.horaire)
-                console.log(horaire)
                 const debut_journee = horaire.debut_journee ? horaire.debut_journee : 'Non Planifié'
                 const debut_pause = horaire.debut_pause ? ' - ' + horaire.debut_pause : ''
                 const fin_pause = horaire.fin_pause ? ' - ' + horaire.fin_pause : ''
