@@ -84,7 +84,6 @@ class PlanningController extends Controller
 
         $reader->setLoadSheetsOnly(' PLANNING ');
         $reader->setReadDataOnly(true);
-
         $spreadsheet = $reader->load($inputFileName);
 
         $sheet = $spreadsheet->getActiveSheet();
