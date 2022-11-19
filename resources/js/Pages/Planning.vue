@@ -74,6 +74,19 @@
                     </div>
                 </div>
             <SelectedDate @click="updatePlanning = true" v-if="selectedPlanning.length > 0 && $page.props.auth.user.coordinateur || selectedPlanning.length > 0 && this.$page.props.hub.droit_update === 1" :classCss="'fixed bottom-3 right-6 bg-blue-500 rounded-full'" :value="'Modifier horaires'" :selected="selectedPlanning.length"></SelectedDate>
+
+            <div v-if="showAllPlanning" class="fixed bottom-3 left-6 bg-green-600 rounded-full">
+                <button @click="showPlanningUpdate()" class="relative text-white p-3 rounded-lg text-sm uppercase font-semibold tracking-tight overflow-visible">
+                    Revenir au planning du jour
+                </button>
+            </div>
+
+            <div v-else class="fixed bottom-3 left-6 bg-green-500 rounded-full">
+                <button @click="showPlanningUpdate()" class="relative text-white p-3 rounded-lg text-sm uppercase font-semibold tracking-tight overflow-visible">
+                    Voir tout le planning
+                </button>
+            </div>
+
         </div>
         <div v-else class="min-h-screen bg-gray-700">
             <h1 class="text-3l text-center font-bold text-white py-12">
@@ -134,6 +147,7 @@ export default {
     },
     data () {
         return {
+            showAllPlanning: false,
             member: this.collaborateur,
             members: this.collaborateurs,
             allPlannings: this.plannings,
@@ -147,6 +161,22 @@ export default {
         }
     },
     methods: {
+        showPlanningUpdate () {
+            this.showAllPlanning = !this.showAllPlanning
+            axios.get('/planning', {
+                params: {
+                    showPlanning: this.showAllPlanning
+                }
+            })
+            .then(response => {
+                this.member = response.data.collaborateur
+                this.members = response.data.collaborateurs
+                this.allPlannings = response.data.plannings
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        },
         getType (data) {
             switch (data) {
                 case 'CP':

@@ -286,7 +286,7 @@ class PlanningController extends Controller
         $collect = collect();
         if ($collaborateur) {
             foreach ($collaborateur->dates as $date) {
-                if (strtotime(date('l d F Y', strtotime($date->date))) > strtotime(date('l d F Y', strtotime('- '.$this->getLundi().' days')))) {
+                if ($request->showPlanning === 'true' || strtotime(date('l d F Y', strtotime($date->date))) > strtotime(date('l d F Y', strtotime('- '.$this->getLundi().' days')))) {
                     $horaires = $this->getHoraire($date->pivot->horaire);
                     $object = [
                         'date_id' => $date->id,
@@ -303,7 +303,7 @@ class PlanningController extends Controller
             unset($collaborateur['dates']);
         }
 
-        if (!$request->loadData) {
+        if (!$request->loadData && $request->showPlanning === null) {
             return Inertia::render('Planning', [
                 'collaborateurs' => $collaborateurs,
                 'collaborateur' => $collaborateur,

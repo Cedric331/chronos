@@ -21,6 +21,7 @@ class GeneratePlanningController extends Controller
         '',
         '',
         '',
+        '',
         '8h00',
         '8h30',
         '9h00',
@@ -64,7 +65,7 @@ class GeneratePlanningController extends Controller
         $sheet1Data = collect();
         $date = null;
 
-        $title = ['', '', 'Horaire', 'Conseiller', 'Rotation'];
+        $title = ['', '', 'Horaire', 'Conseiller', 'type', 'Rotation'];
         $sheet1Data->push($title, []);
         $sheet1Data->push($this->cells);
 
@@ -77,10 +78,11 @@ class GeneratePlanningController extends Controller
 
                 $data = [
                     '',
-                    $item['date'],
-                    $item['horaires'] ? $item['horaires']->debut_journee . '-' . $item['horaires']->fin_journee : null,
+                    $date === null || $date !== $item['date'] ? $this->convertDateToFormatExcel($item['date']) : null,
+                    $item['horaires'] ? $item['horaires']->debut_journee . '-' . $item['horaires']->fin_journee : 'Non Planifié',
                     $item['collaborateur'],
-                    $item['horaires'] ? property_exists($item['horaires'], 'rotation') ? $item['horaires']->rotation : null : null
+                    $item['type'],
+                    $item['horaires'] ? property_exists($item['horaires'], 'rotation') ? $item['horaires']->rotation : 'N/A' : 'Repos'
                 ];
                 $date = $item['date'];
                 $sheet1Data->push($data);
@@ -96,11 +98,22 @@ class GeneratePlanningController extends Controller
                 $worksheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
             }
         }
-
+        $spreadsheet->getActiveSheet()->getStyle('B')
+            ->getNumberFormat()
+            ->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DDMMYYYY);
         $writer = new Xlsx($spreadsheet);
+
         $writer->save('test.xlsx');
 
 //        Storage::put('avatars/1', $writer);
+    }
+
+    private function convertDateToFormatExcel ($date)
+    {
+        $unix_date = strtotime($date);
+        $excel_date = 25569 + ($unix_date / 86400);
+
+        return $excel_date;
     }
 
     private function loadPlanning (): array
@@ -119,7 +132,7 @@ class GeneratePlanningController extends Controller
                     $horaires = $this->getHoraire($date->pivot->horaire);
                     $object = [
                         'collaborateur' => $collaborateur->name,
-                        'date' => $this->formatDateFr($date->date),
+                        'date' => $date->date,
                         'horaires' => $horaires,
                         'type' => $this->getType($date->pivot->horaire, $horaires)
                     ];

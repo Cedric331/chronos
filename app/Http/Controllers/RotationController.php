@@ -226,24 +226,7 @@ class RotationController extends Controller
 
         $collaborateur = Collaborateur::find($request->collaborateur['id']);
 
-        $users = User::where('collaborateur_id', $collaborateur->id)->get();
-        $saveCollaborateurs = collect();
-
-        $saveCollaborateurs->push([
-            'name' => $collaborateur->name,
-            'users' => $users
-        ]);
-
-        foreach ($users as $user) {
-            $user->update([
-                'collaborateur_id' => null
-            ]);
-        }
-
-        $collaborateur->dates()->detach();
         $collaborateur->joursFerie()->detach();
-        $collaborateur->delete();
-
 
         $i = 0;
         while ($selectTimeStart !== $selectTimeEnd) {
@@ -286,15 +269,19 @@ class RotationController extends Controller
                 }
             }
 
-                $collaborateur = Collaborateur::firstOrCreate([
-                    'name' => $request->collaborateur['name'],
-                    'hub_id' => $hub->id,
-                ]);
+            $collaborateurDate = CollaborateurDate::where('hub_id', $hub->id)
+                ->where('collaborateur_id', $collaborateur->id)
+                ->where('date_id', $date->id)
+                ->count();
 
-                $hub->dates()->attach($date, [
-                    'collaborateur_id' => $collaborateur->id,
+            if ($collaborateurDate == 0) {
+                $collaborateur->dates()->attach($date, [
+                    'hub_id' => $hub->id,
                     'horaire' => json_encode($horaires)
                 ]);
+            } else {
+                $collaborateur->dates()->updateExistingPivot($date->id, ['horaire' => json_encode($horaires)]);
+            }
 
             $selectTimeStart = date('l d F Y',(strtotime('+1 days', strtotime($selectTimeStart))));
 
@@ -305,21 +292,6 @@ class RotationController extends Controller
                     $i++;
                 } else {
                     $i = 0;
-                }
-            }
-        }
-
-        foreach ($saveCollaborateurs as $save) {
-
-            $collaborateur = Collaborateur::where('hub_id', Auth::user()->hub_id)
-                ->where('name', $save['name'])
-                ->first();
-
-            if ($collaborateur) {
-                foreach ($save['users'] as $user) {
-                    $user->update([
-                        'collaborateur_id' => $collaborateur->id
-                    ]);
                 }
             }
         }

@@ -23011,6 +23011,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      showAllPlanning: false,
       member: this.collaborateur,
       members: this.collaborateurs,
       allPlannings: this.plannings,
@@ -23024,6 +23025,22 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    showPlanningUpdate: function showPlanningUpdate() {
+      var _this = this;
+
+      this.showAllPlanning = !this.showAllPlanning;
+      axios.get('/planning', {
+        params: {
+          showPlanning: this.showAllPlanning
+        }
+      }).then(function (response) {
+        _this.member = response.data.collaborateur;
+        _this.members = response.data.collaborateurs;
+        _this.allPlannings = response.data.plannings;
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    },
     getType: function getType(data) {
       switch (data) {
         case 'CP':
@@ -23102,23 +23119,23 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     changeHome: function changeHome(data, home, index) {
-      var _this = this;
+      var _this2 = this;
 
       axios.patch('planning/update/teletravail', {
         date: data,
         home: home
       }).then(function () {
-        _this.updateCollaborateur(_this.member);
+        _this2.updateCollaborateur(_this2.member);
 
-        _this.notificationUpdate();
+        _this2.notificationUpdate();
       })["catch"](function (error) {
         console.log(error);
 
-        _this.notificationUpdate(false);
+        _this2.notificationUpdate(false);
       });
     },
     viewDate: function viewDate(data, index) {
-      var _this2 = this;
+      var _this3 = this;
 
       var previous = index === 0 ? null : this.allPlannings[index - 1].date_id;
       var next = index === this.allPlannings.length - 1 ? null : this.allPlannings[index + 1].date_id;
@@ -23130,15 +23147,15 @@ __webpack_require__.r(__webpack_exports__);
           index: index
         }
       }).then(function (response) {
-        _this2.showDates = response.data.planning;
-        _this2.datePlanning = response.data.date;
-        _this2.showPlanning = true;
+        _this3.showDates = response.data.planning;
+        _this3.datePlanning = response.data.date;
+        _this3.showPlanning = true;
       })["catch"](function (error) {
         console.log(error);
       });
     },
     updateCollaborateur: function updateCollaborateur(data) {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.get('planning', {
         params: {
@@ -23146,11 +23163,11 @@ __webpack_require__.r(__webpack_exports__);
           loadData: true
         }
       }).then(function (response) {
-        _this3.member = response.data.collaborateur;
-        _this3.members = response.data.collaborateurs;
-        _this3.allPlannings = response.data.plannings;
+        _this4.member = response.data.collaborateur;
+        _this4.members = response.data.collaborateurs;
+        _this4.allPlannings = response.data.plannings;
       })["catch"](function (err) {
-        _this3.$notify({
+        _this4.$notify({
           title: "Erreur",
           text: "Erreur lors de la modification !",
           type: 'warn'
@@ -29994,16 +30011,24 @@ var _hoisted_30 = {
 };
 var _hoisted_31 = {
   key: 1,
+  "class": "fixed bottom-3 left-6 bg-green-600 rounded-full"
+};
+var _hoisted_32 = {
+  key: 2,
+  "class": "fixed bottom-3 left-6 bg-green-500 rounded-full"
+};
+var _hoisted_33 = {
+  key: 1,
   "class": "min-h-screen bg-gray-700"
 };
 
-var _hoisted_32 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
+var _hoisted_34 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
   "class": "text-3l text-center font-bold text-white py-12"
 }, " -- Aucun Planning -- ", -1
 /* HOISTED */
 );
 
-var _hoisted_33 = [_hoisted_32];
+var _hoisted_35 = [_hoisted_34];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _this = this;
 
@@ -30176,14 +30201,24 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         selected: $data.selectedPlanning.length
       }, null, 8
       /* PROPS */
-      , ["selected"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_31, _hoisted_33)), $data.showPlanning ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_ModalPlanning, {
+      , ["selected"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.showAllPlanning ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_31, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+        onClick: _cache[3] || (_cache[3] = function ($event) {
+          return $options.showPlanningUpdate();
+        }),
+        "class": "relative text-white p-3 rounded-lg text-sm uppercase font-semibold tracking-tight overflow-visible"
+      }, " Revenir au planning du jour ")])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+        onClick: _cache[4] || (_cache[4] = function ($event) {
+          return $options.showPlanningUpdate();
+        }),
+        "class": "relative text-white p-3 rounded-lg text-sm uppercase font-semibold tracking-tight overflow-visible"
+      }, " Voir tout le planning ")]))])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_33, _hoisted_35)), $data.showPlanning ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_ModalPlanning, {
         key: 2,
         showDates: $data.showDates,
         datePlanning: $data.datePlanning,
-        onRefreshViewDate: _cache[3] || (_cache[3] = function (data, index) {
+        onRefreshViewDate: _cache[5] || (_cache[5] = function (data, index) {
           return _this.viewDate(data, index);
         }),
-        onCloseModal: _cache[4] || (_cache[4] = function ($event) {
+        onCloseModal: _cache[6] || (_cache[6] = function ($event) {
           return _this.showPlanning = false;
         })
       }, null, 8
@@ -30192,14 +30227,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         key: 3,
         collaborateur: $data.member,
         selected: _this.selectedPlanning,
-        onCloseModal: _cache[5] || (_cache[5] = function (bool) {
+        onCloseModal: _cache[7] || (_cache[7] = function (bool) {
           _this.closeUpdate(bool);
         })
       }, null, 8
       /* PROPS */
       , ["collaborateur", "selected"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        <ModalSwitchPlanning v-if=\"updateSwitch && $page.props.auth.user.coordinateur\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                             :collaborateurs=\"members\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                             :collaborateur=\"member\""), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                             :selected=\"this.selectedPlanning\">"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        </ModalSwitchPlanning>"), !_ctx.$page.props.auth.user.check_update ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_CheckUpdate, {
         key: 4,
-        onCloseModal: _cache[6] || (_cache[6] = function ($event) {
+        onCloseModal: _cache[8] || (_cache[8] = function ($event) {
           return _this.closeCheck();
         })
       })) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
