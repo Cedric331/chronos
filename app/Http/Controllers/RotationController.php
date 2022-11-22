@@ -229,7 +229,7 @@ class RotationController extends Controller
         $collaborateur->joursFerie()->detach();
 
         $i = 0;
-        while ($selectTimeStart !== $selectTimeEnd) {
+        while (date("Y-m-d", strtotime($selectTimeStart)) !== date("Y-m-d", strtotime($selectTimeEnd . "+1 week"))) {
 
              $day = $this->formatDateFr($selectTimeStart);
 

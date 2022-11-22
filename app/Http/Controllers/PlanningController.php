@@ -13,11 +13,13 @@ use App\Models\JoursFerie;
 use App\Models\Planning;
 use App\Models\User;
 use Carbon\Carbon;
+use DateTimeImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
@@ -365,6 +367,7 @@ class PlanningController extends Controller
     /**
      * @param $data
      * @return mixed
+     * @throws \Exception
      */
     private function getHoraire ($data): mixed
     {
