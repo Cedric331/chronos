@@ -100,6 +100,11 @@
             @refreshViewDate="(data, index) => this.viewDate(data, index)"
             @closeModal="this.showPlanning = false">
         </ModalPlanning>
+        <ModalPlanningWeek
+            v-if="showPlanningWeek"
+            :showDates="showDates"
+            @closeModal="this.showPlanningWeek = false">
+        </ModalPlanningWeek>
         <ModalUpdatePlanning v-if="updatePlanning && $page.props.auth.user.coordinateur || this.$page.props.hub.droit_update === 1 && updatePlanning"
                              :collaborateur="member"
                              :selected="this.selectedPlanning"
@@ -126,6 +131,7 @@ import SelectedDate from "@/Components/SelectedDate.vue";
 import Checkbox from "@/Components/Checkbox";
 import CheckUpdate from "@/Components/CheckUpdate";
 import ModalSwitchPlanning from "@/Components/ModalSwitchPlanning.vue";
+import ModalPlanningWeek from "@/Components/ModalPlanningWeek.vue";
 
 export default {
     name: "Planning",
@@ -137,6 +143,7 @@ export default {
         NavbarPlanning,
         ModalUpdatePlanning,
         SelectedDate,
+        ModalPlanningWeek,
         BreezeAuthenticatedLayout,
         Head
     },
@@ -155,6 +162,7 @@ export default {
             showDates: null,
             datePlanning: null,
             showPlanning: false,
+            showPlanningWeek: false,
             updatePlanning: false,
             updateSwitch: false,
             texte: this.colorTexte()
@@ -260,24 +268,39 @@ export default {
             })
         },
         viewDate(data, index) {
-            let previous = index === 0 ? null : this.allPlannings[index - 1].date_id
-            let next = index === this.allPlannings.length - 1 ? null : this.allPlannings[index + 1].date_id
-          axios.get('planning/date', {
-              params: {
-                  date: data,
-                  previous: previous,
-                  next: next,
-                  index: index
-              }
-          })
-        .then(response => {
-            this.showDates = response.data.planning
-            this.datePlanning = response.data.date
-            this.showPlanning = true
-        })
-        .catch(error => {
-            console.log(error)
-        })
+            if (window.innerWidth < 1200) {
+                let previous = index === 0 ? null : this.allPlannings[index - 1].date_id
+                let next = index === this.allPlannings.length - 1 ? null : this.allPlannings[index + 1].date_id
+                axios.get('planning/date', {
+                    params: {
+                        date: data,
+                        previous: previous,
+                        next: next,
+                        index: index
+                    }
+                })
+                    .then(response => {
+                        this.showDates = response.data.planning
+                        this.datePlanning = response.data.date
+                        this.showPlanning = true
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+            } else {
+                axios.get('planning/week', {
+                    params: {
+                        date: data
+                    }
+                })
+                    .then(response => {
+                        this.showDates = response.data.planning
+                        this.showPlanningWeek = true
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+            }
         },
         updateCollaborateur (data) {
             axios.get('planning', {

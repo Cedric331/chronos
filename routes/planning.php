@@ -16,6 +16,10 @@ Route::get('/planning/date', [PlanningController::class, 'loadPlanningDate'])
     ->middleware('auth')
     ->name('planning.date');
 
+Route::get('/planning/week', [PlanningController::class, 'loadPlanningWeek'])
+    ->middleware('auth')
+    ->name('planning.week');
+
 Route::patch('/planning/update', [PlanningController::class, 'updatePlanning'])
     ->middleware('auth')
     ->name('planning.update');

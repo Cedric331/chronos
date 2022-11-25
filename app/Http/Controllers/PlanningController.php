@@ -13,6 +13,7 @@ use App\Models\JoursFerie;
 use App\Models\Planning;
 use App\Models\User;
 use Carbon\Carbon;
+use DateTime;
 use DateTimeImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -362,6 +363,54 @@ class PlanningController extends Controller
                     'index' => $request->index
                 ]
             ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function loadPlanningWeek (Request $request): \Illuminate\Http\JsonResponse
+    {
+        $date = Date::find($request->date);
+        $date = new DateTime($date->date);
+        $week = $date->format('W');
+        $year = $date->format('Y');
+        $days = $this->getStartAndEndDate($week, $year);
+
+        $collaborateurs = Collaborateur::with(['dates' => function ($query) use ($request, $days) {
+            $query->whereBetween('dates.date', [$days['week_start'], $days['week_end']]);
+        }
+        ])->where('hub_id', Auth::user()->hub_id)
+            ->get();
+
+        $collect = collect();
+        if ($collaborateurs) {
+            foreach ($collaborateurs as $collaborateur) {
+                foreach ($collaborateur->dates as $date) {
+                    $horaires = $this->getHoraire($date->pivot->horaire);
+                    $object = [
+                        'collaborateur' => $collaborateur->name,
+                        'horaires' => $horaires,
+                        'type' => $this->getType($date->pivot->horaire, $horaires)
+                    ];
+                    $collect->push($object);
+                }
+            }
+        }
+
+        return response()->json([
+            'planning' => $collect->groupBy('collaborateur')->unique()
+        ]);
+    }
+
+    private function getStartAndEndDate($week, $year): array
+    {
+        $dto = new DateTime();
+        $dto->setISODate($year, $week);
+        $ret['week_start'] = $dto->format('Y-m-d');
+        $dto->modify('+6 days');
+        $ret['week_end'] = $dto->format('Y-m-d');
+        return $ret;
     }
 
     /**
