@@ -13,95 +13,94 @@
 
                             <div class="flex items-center justify-center">
                                 <div class="grid gap-8 mt-8 grid-cols-1">
-
-
-                                        <div class="w-full mx-auto bg-white shadow-lg rounded-sm border border-gray-200">
-<!--                                            <header class="px-5 py-4 border-b border-gray-100">-->
-<!--                                                <h2 class="font-semibold text-gray-800">Customers</h2>-->
-<!--                                            </header>-->
-                                            <div class="p-3">
+                                        <div class="w-full mx-auto">
+                                            <header class="px-5 py-4 border-b border-gray-100">
+                                                <h2 class="font-bold text-2xl text-center">
+                                                    Planning de la semaine du {{showWeeks[0]}} au {{showWeeks[1]}}
+                                                </h2>
+                                            </header>
+                                            <div>
                                                 <div class="overflow-x-auto">
                                                     <table class="table-auto w-full">
+<!--                                                        <colgroup>-->
+<!--                                                            <col :style="this.today === 'Samedi' ? 'border-2;border-4;border-color:blue; !important' : null">-->
+<!--                                                            <col :style="this.today === 'Lundi' ? 'background-color:blue' : null">-->
+<!--                                                            <col :style="this.today === 'Mardi' ? 'background-color:blue' : null">-->
+<!--                                                            <col :style="this.today === 'Mercredi' ? 'background-color:blue' : null">-->
+<!--                                                            <col :style="this.today === 'Jeudi' ? 'background-color:blue' : null">-->
+<!--                                                            <col :style="this.today === 'Vendredi' ? 'background-color:blue' : null">-->
+<!--                                                            <col :style="this.today === 'Samedi' ? 'background-color:blue' : null">-->
+<!--                                                            <col :style="this.today === 'Dimanche' ? 'border-color:blue' : null">-->
+<!--                                                        </colgroup>-->
                                                         <thead class="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
                                                         <tr>
                                                             <th class="p-2 whitespace-nowrap">
-                                                                <div class="font-semibold text-left">Name</div>
+                                                                <div class="font-bold text-center">Conseiller</div>
+                                                            </th>
+                                                            <th :style="this.today === 'Lundi' ? 'bg-color-blue' : null" class="p-2 whitespace-nowrap">
+                                                                <div class="font-bold text-center">Lundi</div>
                                                             </th>
                                                             <th class="p-2 whitespace-nowrap">
-                                                                <div class="font-semibold text-left">Lundi</div>
+                                                                <div class="font-bold text-center">Mardi</div>
                                                             </th>
                                                             <th class="p-2 whitespace-nowrap">
-                                                                <div class="font-semibold text-left">Mardi</div>
+                                                                <div class="font-bold text-center">Mercredi</div>
                                                             </th>
                                                             <th class="p-2 whitespace-nowrap">
-                                                                <div class="font-semibold text-center">Mercredi</div>
+                                                                <div class="font-bold text-center">Jeudi</div>
                                                             </th>
                                                             <th class="p-2 whitespace-nowrap">
-                                                                <div class="font-semibold text-center">Jeudi</div>
+                                                                <div class="font-bold text-center">Vendredi</div>
                                                             </th>
                                                             <th class="p-2 whitespace-nowrap">
-                                                                <div class="font-semibold text-center">Vendredi</div>
+                                                                <div class="font-bold text-center">Samedi</div>
                                                             </th>
                                                             <th class="p-2 whitespace-nowrap">
-                                                                <div class="font-semibold text-center">Samedi</div>
-                                                            </th>
-                                                            <th class="p-2 whitespace-nowrap">
-                                                                <div class="font-semibold text-center">Dimanche</div>
+                                                                <div class="font-bold text-center">Dimanche</div>
                                                             </th>
                                                         </tr>
                                                         </thead>
                                                         <tbody class="text-sm divide-y divide-gray-100">
                                                         <tr v-for="(element, index) in showDates" :key="index">
-                                                            <td class="p-2 whitespace-nowrap">
+                                                            <td class="p-2 whitespace-nowrap border-2 border-black">
                                                                 <div class="flex items-center">
-                                                                    <div class="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3"><img class="rounded-full" src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-05.jpg" width="40" height="40" alt="Alex Shatov"></div>
-                                                                    <div class="font-medium text-gray-800">{{index}}</div>
+                                                                    <div class="font-bold">{{index}}</div>
                                                                 </div>
                                                             </td>
-                                                            <td v-for="i in numbers" class="p-2 whitespace-nowrap">
-                                                                <div class="text-left">{{element[i].horaires}}</div>
+                                                            <td v-for="i in numbers" :style="colorPlanning(element[i])" class="border-2 border-black p-3 m-1 whitespace-nowrap">
+                                                                <div v-if="element[i].horaires">
+                                                                    <p v-if="element[i].type !== 'Iti'" class="font-bold text-justify line-clamp-3" :style="texte">
+                                                                        {{ element[i].horaires.teletravail ? 'Télétravail' : 'Hub'}} {{ element[i].horaires.rotation ? ' - ' + element[i].horaires.rotation : ''}}
+                                                                    </p>
+                                                                    <p v-else class="font-bold text-justify line-clamp-3" :style="texte">
+                                                                        Technicien {{ element[i].horaires.rotation ? ' - ' + element[i].horaires.rotation : ''}}
+                                                                    </p>
+                                                                    <p class="font-semibold text-justify line-clamp-3" :style="texte">
+                                                                        Début :  <span class="font-bold">{{ element[i].horaires.debut_journee }}</span>
+                                                                    </p>
+                                                                    <div v-if="element[i].horaires.debut_pause">
+                                                                        <p class="font-semibold text-justify line-clamp-3" :style="texte">
+                                                                            Pause Déj:  <span class="font-bold">{{ element[i].horaires.debut_pause }}</span>
+                                                                        </p>
+                                                                        <p class="font-semibold text-justify line-clamp-3" :style="texte">
+                                                                            Fin Déj :  <span class="font-bold">{{ element[i].horaires.fin_pause }}</span>
+                                                                        </p>
+                                                                    </div>
+                                                                    <p class="font-semibold text-justify line-clamp-3" :style="texte">
+                                                                        Fin : <span class="font-bold">{{ element[i].horaires.fin_journee }}</span>
+                                                                    </p>
+                                                                </div>
+                                                                <div v-else>
+                                                                    <p class="font-bold text-justify line-clamp-3" :style="texte">
+                                                                        {{ getType(element[i].type) }}
+                                                                    </p>
+                                                                </div>
                                                             </td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </div>
-
-<!--                                        <div class="p-4">-->
-<!--                                            <div class="flex justify-between">-->
-<!--                                                <div>-->
-<!--                                                    <p class="font-semibold text-xl py-1" :style="texte">{{ planning.collaborateur }}</p>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                            <div v-if="planning.horaires">-->
-<!--                                                <p v-if="planning.type !== 'Iti'" class="font-bold text-justify line-clamp-3" :style="texte">-->
-<!--                                                    {{ planning.horaires.teletravail ? 'Télétravail' : 'Hub'}} {{ planning.horaires.rotation ? ' - ' + planning.horaires.rotation : ''}}-->
-<!--                                                </p>-->
-<!--                                                <p v-else class="font-bold text-justify line-clamp-3" :style="texte">-->
-<!--                                                    Technicien {{ planning.horaires.rotation ? ' - ' + planning.horaires.rotation : ''}}-->
-<!--                                                </p>-->
-<!--                                                <p class="font-semibold text-justify line-clamp-3" :style="texte">-->
-<!--                                                    Début :  <span class="font-bold">{{ planning.horaires.debut_journee }}</span>-->
-<!--                                                </p>-->
-<!--                                                <div v-if="planning.horaires.debut_pause">-->
-<!--                                                    <p class="font-semibold text-justify line-clamp-3" :style="texte">-->
-<!--                                                        Pause Déj:  <span class="font-bold">{{ planning.horaires.debut_pause }}</span>-->
-<!--                                                    </p>-->
-<!--                                                    <p class="font-semibold text-justify line-clamp-3" :style="texte">-->
-<!--                                                        Fin Déj :  <span class="font-bold">{{ planning.horaires.fin_pause }}</span>-->
-<!--                                                    </p>-->
-<!--                                                </div>-->
-<!--                                                <p class="font-semibold text-justify line-clamp-3" :style="texte">-->
-<!--                                                    Fin : <span class="font-bold">{{ planning.horaires.fin_journee }}</span>-->
-<!--                                                </p>-->
-<!--                                            </div>-->
-<!--                                            <div v-else>-->
-<!--                                                <p class="font-light text-justify line-clamp-3" :style="texte">-->
-<!--                                                    {{ getType(planning.type) }}-->
-<!--                                                </p>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-
                                     </div>
                                 </div>
                             </div>
@@ -121,11 +120,14 @@
 export default {
     name: "ModalPlanningWeek",
     props: {
-        showDates: Object
+        showDates: Object,
+        today: String,
+        showWeeks: Array
     },
     data () {
         return {
-            numbers: [ 0, 1, 2, 3, 4, 5, 6]
+            numbers: [ 0, 1, 2, 3, 4, 5, 6],
+            texte: this.colorTexte()
         }
     },
     methods: {

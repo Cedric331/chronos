@@ -103,6 +103,8 @@
         <ModalPlanningWeek
             v-if="showPlanningWeek"
             :showDates="showDates"
+            :showWeeks="showWeeks"
+            :today="today"
             @closeModal="this.showPlanningWeek = false">
         </ModalPlanningWeek>
         <ModalUpdatePlanning v-if="updatePlanning && $page.props.auth.user.coordinateur || this.$page.props.hub.droit_update === 1 && updatePlanning"
@@ -110,11 +112,6 @@
                              :selected="this.selectedPlanning"
                              @closeModal="bool => { this.closeUpdate(bool) }">
         </ModalUpdatePlanning>
-<!--        <ModalSwitchPlanning v-if="updateSwitch && $page.props.auth.user.coordinateur"-->
-<!--                             :collaborateurs="members"-->
-<!--                             :collaborateur="member"-->
-<!--                             :selected="this.selectedPlanning">-->
-<!--        </ModalSwitchPlanning>-->
         <CheckUpdate v-if="!$page.props.auth.user.check_update"
                              @closeModal="this.closeCheck()">
         </CheckUpdate>
@@ -160,6 +157,8 @@ export default {
             allPlannings: this.plannings,
             selectedPlanning: [],
             showDates: null,
+            showWeeks: null,
+            today: null,
             datePlanning: null,
             showPlanning: false,
             showPlanningWeek: false,
@@ -295,6 +294,8 @@ export default {
                 })
                     .then(response => {
                         this.showDates = response.data.planning
+                        this.showWeeks = response.data.weeks
+                        this.today = response.data.today
                         this.showPlanningWeek = true
                     })
                     .catch(error => {

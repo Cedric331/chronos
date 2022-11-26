@@ -399,7 +399,9 @@ class PlanningController extends Controller
         }
 
         return response()->json([
-            'planning' => $collect->groupBy('collaborateur')->unique()
+            'planning' => $collect->groupBy('collaborateur')->unique(),
+            'today' => explode(' ', $this->formatDateFr(now()))[0],
+            'weeks' => [date('d-m-Y', strtotime($days['week_start'])), date('d-m-Y', strtotime($days['week_end']))],
         ]);
     }
 
