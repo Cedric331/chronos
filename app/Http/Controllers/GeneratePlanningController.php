@@ -53,8 +53,6 @@ class GeneratePlanningController extends Controller
 
     public function generetePlanning ()
     {
-        $hub = Hub::find(Auth::user()->hub_id);
-
         $spreadsheet = new Spreadsheet();
         $spreadsheet->removeSheetByIndex(0);
         $worksheet1 = new Worksheet($spreadsheet, " PLANNING ");
@@ -69,23 +67,34 @@ class GeneratePlanningController extends Controller
         $sheet1Data->push($title, []);
         $sheet1Data->push($this->cells);
 
+        $i = 4;
         foreach ($data as $items) {
             foreach ($items as $item) {
                 if ($date !== null && $date !== $item['date']) {
                     $sheet1Data->push([], []);
                     $sheet1Data->push($this->cells);
+                    $i += 3;
                 }
 
+                $rotation = $item['horaires'] ? property_exists($item['horaires'], 'rotation') ? $item['horaires']->rotation : 'N/A' : 'Repos';
                 $data = [
                     '',
                     $date === null || $date !== $item['date'] ? $this->convertDateToFormatExcel($item['date']) : null,
                     $item['horaires'] ? $item['horaires']->debut_journee . '-' . $item['horaires']->fin_journee : 'Non Planifié',
                     $item['collaborateur'],
-                    $item['type'],
-                    $item['horaires'] ? property_exists($item['horaires'], 'rotation') ? $item['horaires']->rotation : 'N/A' : 'Repos'
+                    $item['horaires'] ? $item['horaires']->teletravail ? 'TLT' : null : null,
+                    $item['type'] === 'Iti' ? 'Iti' : $rotation
                 ];
                 $date = $item['date'];
                 $sheet1Data->push($data);
+                if ($item['horaires'] && $item['horaires']->debut_pause && $item['horaires']->fin_pause) {
+                   $cells = $this->getCellDej($item['horaires']->debut_pause, $item['horaires']->fin_pause);
+                   foreach ($cells as $cell) {
+                       $spreadsheet->getActiveSheet()
+                           ->setCellValue($cell.$i, 'DEJ');
+                   }
+                }
+                $i++;
             }
         }
         $worksheet1->fromArray($sheet1Data->toArray());
@@ -102,8 +111,9 @@ class GeneratePlanningController extends Controller
             ->getNumberFormat()
             ->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DDMMYYYY);
         $writer = new Xlsx($spreadsheet);
-
-        $writer->save('test.xlsx');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="'. urlencode('planning.xlsx').'"');
+        $writer->save('php://output');
 
 //        Storage::put('avatars/1', $writer);
     }
@@ -116,6 +126,49 @@ class GeneratePlanningController extends Controller
         return $excel_date;
     }
 
+    private function getCellDej ($debut, $fin): array
+    {
+        $cells = [
+            'G' => '8h00',
+            'H' => '8h30',
+            'I' => '9h00',
+            'J' => '9h30',
+            'K' => '10h00',
+            'L' => '10h30',
+            'M' => '11h00',
+            'N' => '11h30',
+            'O' => '12h00',
+            'P' => '12h30',
+            'Q' => '13h00',
+            'R' => '13h30',
+            'S' => '14h00',
+            'T' => '14h30',
+            'U' => '15h00',
+            'V' => '15h30',
+            'W' => '16h00',
+            'X' => '16h30',
+            'Y' => '17h00',
+            'Z' => '17h30',
+            'AA' => '18h00',
+            'AB' => '18h30',
+            'AC' => '19h00',
+            'AD' => '19h30',
+            'AE' =>'20h00',
+            'AF' => '20h30',
+            'AG' => '21h00'
+        ];
+
+        $collect = collect();
+        foreach ($cells as $key => $value) {
+            if (strtotime(str_replace('h', ':', $value)) >= strtotime(str_replace('h', ':', $debut)) &&
+                strtotime(str_replace('h', ':', $value)) < strtotime(str_replace('h', ':', $fin))
+            ) {
+                $collect->push($key);
+            }
+        }
+        return $collect->toArray();
+    }
+
     private function loadPlanning (): array
     {
         $hub = Hub::findOrFail(Auth::user()->hub_id);
@@ -125,10 +178,9 @@ class GeneratePlanningController extends Controller
             ->get();
 
         $collect = collect();
-
         foreach ($collaborateurs as $collaborateur) {
             foreach ($collaborateur->dates as $date) {
-                if (strtotime(date('l d F Y', strtotime($date->date))) > strtotime(date('l d F Y', strtotime('- '.$this->getLundi().' days')))) {
+                if ($date) {
                     $horaires = $this->getHoraire($date->pivot->horaire);
                     $object = [
                         'collaborateur' => $collaborateur->name,
@@ -140,8 +192,13 @@ class GeneratePlanningController extends Controller
                 }
             }
         }
-           $collect = $collect->groupBy('date');
-            return $collect->toArray();
+
+        $unique = $collect->unique(function ($item) {
+            return $item['date'].$item['collaborateur'];
+        });
+        $collect = $unique->groupBy('date');
+
+        return $collect->toArray();
 
     }
 
