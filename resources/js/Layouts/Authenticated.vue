@@ -62,13 +62,18 @@
                                     <input v-model="isAuthorize" @click="updateAuthorizeHub(!isAuthorize)" type="checkbox" name="toggle" id="toggle" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer" />
                                     <label for="toggle" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-300 cursor-pointer"></label>
                                 </div>
-                                <label for="toggle" class="text-sm text-gray-700">Autoriser la modification des horaires</label>
-                                <div class="ml-3 relative">
-                                    <select v-model="selected" class="p-2 hover:bg-black hover:text-white font-bold rounded-full block w-full overflow-y-auto text-sm leading-4 font-medium rounded-md rounded transition ease-in-out m-0" style="border-width: 0">
-                                        <option v-for="hub in this.$page.props.hubs" :key="hub.id" :value="hub.ville">
-                                            {{ hub.ville }}
-                                        </option>
-                                    </select>
+                                <label for="toggle" class="text-sm font-bold">Autoriser la modification des horaires</label>
+                                <div>
+<!--                                    <select v-model="selected" size="5" class="font-bold rounded-full w-full text-sm leading-4 font-medium rounded-md rounded transition ease-in-out m-0">-->
+<!--                                        <option v-for="hub in this.$page.props.hubs" :key="hub.id" :value="hub.ville">-->
+<!--                                            {{ hub.ville }}-->
+<!--                                        </option>-->
+<!--                                    </select>-->
+                                    <label for="hub" class="font-bold rounded-full w-full text-md leading-4 mx-5">Hub :</label>
+                                    <input v-model="selected" list="hub" id="ice-cream-choice" name="hub">
+                                        <datalist id="hub" style="height:5.1em;overflow:hidden">
+                                            <option class="font-bold text-sm" v-for="hub in this.$page.props.hubs" :key="hub.id" :value="hub.ville">{{ hub.ville }} </option>
+                                        </datalist>
                                 </div>
                             </div>
                             <div v-else class="flex items-center sm:ml-6">

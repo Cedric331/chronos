@@ -12,26 +12,25 @@
                         <section class="container p-6 mx-auto bg-white">
 
                             <div class="flex items-center justify-center">
-                                <div class="grid gap-8 mt-8 grid-cols-1">
+                                <div class="grid gap-8 grid-cols-1">
                                         <div class="w-full mx-auto">
                                             <header class="px-5 py-4 border-b border-gray-100">
                                                 <h2 class="font-bold text-2xl text-center">
-                                                    Planning de la semaine du {{showWeeks[0]}} au {{showWeeks[1]}}
+                                                    Planning sur la semaine du {{showWeeks[0]}} au {{showWeeks[1]}}
                                                 </h2>
                                             </header>
                                             <div>
                                                 <div class="overflow-x-auto">
                                                     <table class="table-auto w-full">
-<!--                                                        <colgroup>-->
-<!--                                                            <col :style="this.today === 'Samedi' ? 'border-2;border-4;border-color:blue; !important' : null">-->
-<!--                                                            <col :style="this.today === 'Lundi' ? 'background-color:blue' : null">-->
-<!--                                                            <col :style="this.today === 'Mardi' ? 'background-color:blue' : null">-->
-<!--                                                            <col :style="this.today === 'Mercredi' ? 'background-color:blue' : null">-->
-<!--                                                            <col :style="this.today === 'Jeudi' ? 'background-color:blue' : null">-->
-<!--                                                            <col :style="this.today === 'Vendredi' ? 'background-color:blue' : null">-->
-<!--                                                            <col :style="this.today === 'Samedi' ? 'background-color:blue' : null">-->
-<!--                                                            <col :style="this.today === 'Dimanche' ? 'border-color:blue' : null">-->
-<!--                                                        </colgroup>-->
+                                                        <colgroup>
+                                                            <col>
+                                                            <col :class="this.today === 'Lundi' ? 'border-4 border-red-600 rounded-lg' : null">
+                                                            <col :class="this.today === 'Mardi' ? 'border-4 border-red-600 rounded-lg' : null">
+                                                            <col :class="this.today === 'Mercredi' ? 'border-4 border-red-600 rounded-lg' : null">
+                                                            <col :class="this.today === 'Vendredi' ? 'border-4 border-red-600 rounded-lg' : null">
+                                                            <col :class="this.today === 'Samedi' ? 'border-4 border-red-600 rounded-lg' : null">
+                                                            <col :class="this.today === 'Dimanche' ? 'border-4 border-red-600 rounded-lg' : null">
+                                                        </colgroup>
                                                         <thead class="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
                                                         <tr>
                                                             <th class="p-2 whitespace-nowrap">
