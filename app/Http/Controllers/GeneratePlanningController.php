@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Collaborateur;
 use App\Models\Hub;
 use App\Models\Planning;
+use App\Models\TypeRotation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -56,16 +57,30 @@ class GeneratePlanningController extends Controller
         $spreadsheet = new Spreadsheet();
         $spreadsheet->removeSheetByIndex(0);
         $worksheet1 = new Worksheet($spreadsheet, " PLANNING ");
+        $worksheet2 = new Worksheet($spreadsheet, "ROTATION");
         $spreadsheet->addSheet($worksheet1);
+        $spreadsheet->addSheet($worksheet2);
 
         $data = $this->loadPlanning();
+        $rotations = $this->loadRotation();
 
         $sheet1Data = collect();
+        $sheet2Data = collect();
         $date = null;
 
         $title = ['', '', 'Horaire', 'Conseiller', 'type', 'Rotation'];
         $sheet1Data->push($title, []);
         $sheet1Data->push($this->cells);
+        $sheet2Data->push([
+            'Nom de la Rotation',
+            'Jour',
+            'Travaillé',
+            'Télétravail',
+            'Technicien',
+            'Debut de journée',
+            'Début de pause',
+            'Fin de pause',
+            'Fin de journée'], []);
 
         $i = 4;
         foreach ($data as $items) {
@@ -76,7 +91,7 @@ class GeneratePlanningController extends Controller
                     $i += 3;
                 }
 
-                $rotation = $item['horaires'] ? property_exists($item['horaires'], 'rotation') ? $item['horaires']->rotation : 'N/A' : 'Repos';
+                $rotation = $item['horaires'] ? property_exists($item['horaires'], 'rotation') ? $item['horaires']->rotation : '' : 'R';
                 $data = [
                     '',
                     $date === null || $date !== $item['date'] ? $this->convertDateToFormatExcel($item['date']) : null,
@@ -97,7 +112,31 @@ class GeneratePlanningController extends Controller
                 $i++;
             }
         }
+
+        foreach ($rotations as $rotation) {
+            $sheet2Data->push([]);
+            $data = [
+                'name' => $rotation->type
+            ];
+            foreach ($rotation->rotations as $item) {
+                $json = json_decode($item['horaire']);
+
+                $teletravail = property_exists($json, 'teletravail') ? $json->teletravail ? 'TLT' : 'HUB' : 'HUB';
+
+                $data['day'] = $item['day'];
+                $data['is_off'] = $json->is_off ? 'OFF': null;
+                $data['teletravail'] = $json->technicien ? 'HUB' : $teletravail;
+                $data['technicien'] = $json->technicien ? 'Iti' : null;
+                $data['debut_journee'] = $json->debut_journee;
+                $data['debut_pause'] = $json->debut_pause;
+                $data['fin_pause'] = $json->fin_pause;
+                $data['fin_journee'] = $json->fin_journee;
+                $sheet2Data->push($data);
+            }
+        }
+
         $worksheet1->fromArray($sheet1Data->toArray());
+        $worksheet2->fromArray($sheet2Data->toArray());
         $worksheets = [$worksheet1];
 
         foreach ($worksheets as $worksheet)
@@ -110,12 +149,14 @@ class GeneratePlanningController extends Controller
         $spreadsheet->getActiveSheet()->getStyle('B')
             ->getNumberFormat()
             ->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DDMMYYYY);
-        $writer = new Xlsx($spreadsheet);
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="'. urlencode('planning.xlsx').'"');
-        $writer->save('php://output');
 
-//        Storage::put('avatars/1', $writer);
+        $writer = new Xlsx($spreadsheet);
+        ob_start();
+        $writer->save('php://output');
+        $ret = base64_encode(ob_get_contents());
+        ob_end_clean();
+
+        return $ret;
     }
 
     private function convertDateToFormatExcel ($date)
@@ -124,6 +165,15 @@ class GeneratePlanningController extends Controller
         $excel_date = 25569 + ($unix_date / 86400);
 
         return $excel_date;
+    }
+
+    private function loadRotation ()
+    {
+        $rotations = TypeRotation::with('rotations')
+            ->where('hub_id', Auth::user()->hub_id)
+            ->get();
+
+        return $rotations;
     }
 
     private function getCellDej ($debut, $fin): array

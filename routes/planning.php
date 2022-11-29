@@ -33,4 +33,5 @@ Route::patch('/planning/update/teletravail', [PlanningController::class, 'update
     ->name('planning.update.teletravail');
 
 Route::get('/planning/generate', [GeneratePlanningController::class, 'generetePlanning'])
-    ->middleware('auth');
+    ->middleware('auth')
+    ->name('generate');

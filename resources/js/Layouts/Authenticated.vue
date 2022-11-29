@@ -50,6 +50,9 @@
                                 <BreezeNavLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" :href="route('planning')" :active="route().current('planning')" as="button">
                                     Planning
                                 </BreezeNavLink>
+                                <BreezeNavLink @click="generatePlanning()" class="p-2 hover:bg-black hover:text-white font-bold rounded-full" as="button">
+                                    Télécharger le Planning
+                                </BreezeNavLink>
                                 <BreezeNavLink class="p-2 hover:bg-black hover:text-white font-bold rounded-full" v-if="$page.props.auth.user.responsable" :href="route('administration')" :active="route().current('administration')" as="button">
                                     Administration
                                 </BreezeNavLink>
@@ -210,6 +213,31 @@ export default {
       }
     },
     methods: {
+        generatePlanning () {
+            axios.get('/planning/generate')
+                .then(response => {
+                    const linkSource = 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,'+ response.data ;
+                    const downloadLink = document.createElement("a");
+                    const fileName = 'planning.xlsx';
+
+                    downloadLink.href = linkSource;
+                    downloadLink.download = fileName;
+                    downloadLink.click();
+                    this.$notify({
+                        title: "Succès",
+                        text: "Génération du planning effectué avec succès !",
+                        type: 'success',
+                    });
+                })
+                .catch(error => {
+                    console.log(error)
+                    this.$notify({
+                        title: "Erreur",
+                        text: "Oups désolé il y a une erreur !",
+                        type: 'info',
+                    });
+                })
+        },
         updateAuthorizeHub (data) {
             axios.patch('/hub/' + this.$page.props.hub.id + '/authorize', {
                 isAuthorize: data

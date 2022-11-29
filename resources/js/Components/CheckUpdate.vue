@@ -19,10 +19,23 @@
                                     </div>
                                     <div class="modal-body p-5 w-full h-full overflow-y-auto ">
                                         <h2 class="text-lg">
-                                            <b>1 - Ajout de la gestion des jours fériés dans "Gestion du hub"</b>
+                                            <b>1 - Ajout téléchargement du planning (format excel)</b>
                                         </h2>
                                         <p class="text-justify">
-                                            Les coordinateurs peuvent désormais générer les jours fériés facilement ce qui permet d'avoir une visibilité sur les jours fériés sur le planning.<br>
+                                            Vous pouvez désormais télécharger le planning au format Excel (mode simplifié)
+                                        </p>
+                                        <h2 class="text-lg">
+                                            <b>2 - Affichage du planning sur la semaine</b>
+                                        </h2>
+                                        <p class="text-justify">
+                                            Visualisation du planning sur la semaine au lieu de ne le voir que sur un jour. Affichage non modifié sur le mobile.
+                                        </p>
+                                        <h2 class="text-lg">
+                                            <b>3 - Possibilité de voir le planning antérieur</b>
+                                        </h2>
+                                        <p class="text-justify">
+                                            Sous réserve que celui-ci soit disponible, il est désormais possible de voir l'ensemble du planning sans filtre de date.
+                                            Cela n'est possible que lors de la génération du planning via le système interne de Chronos.
                                         </p>
                                     </div>
                                     <div class="modal-footer py-3 px-5 border0-t text-right">
