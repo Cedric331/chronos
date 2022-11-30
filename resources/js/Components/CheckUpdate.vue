@@ -22,7 +22,7 @@
                                             <b>1 - Ajout téléchargement du planning (format excel)</b>
                                         </h2>
                                         <p class="text-justify">
-                                            Vous pouvez désormais télécharger le planning au format Excel (mode simplifié)
+                                            Vous pouvez désormais télécharger le planning au format Excel (mode simplifié).
                                         </p>
                                         <h2 class="text-lg">
                                             <b>2 - Affichage du planning sur la semaine</b>

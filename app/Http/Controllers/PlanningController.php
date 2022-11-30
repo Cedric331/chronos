@@ -101,8 +101,8 @@ class PlanningController extends Controller
                 $time = strtotime(date('l d F Y', strtotime(now()))) - strtotime(date('l d F Y', strtotime('- '.($this->getLundi() - 1).' days')));
                 $oldTime = strtotime(now()) - $time;
 
-                if  (strtotime(date('l d F Y', $oldTime)) === strtotime(date("l d F Y", $unix_date)) ||
-                    strtotime(date('l d F Y', $oldTime)) < strtotime(date("l d F Y", $unix_date))) {
+//                if  (strtotime(date('l d F Y', $oldTime)) === strtotime(date("l d F Y", $unix_date)) ||
+//                    strtotime(date('l d F Y', $oldTime)) < strtotime(date("l d F Y", $unix_date))) {
 
 
                 $numberMembers = $i;
@@ -179,7 +179,7 @@ class PlanningController extends Controller
                     date("l d F Y", $unix_date) => $members->toArray()
                 ];
                 $collect->push($object);
-            }
+//            }
         }
 }
         $spreadsheet->__destruct();

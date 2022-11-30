@@ -20354,6 +20354,8 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         _this.$emit('update', response.data);
       })["catch"](function (error) {
+        _this.$emit('error');
+
         console.log(error);
       })["finally"](function () {
         _this.show = false;
@@ -21388,6 +21390,8 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function () {
         _this.$emit('update', 'user');
       })["catch"](function (error) {
+        _this.$emit('error');
+
         console.log(error);
       })["finally"](function () {
         _this.closeModal();
@@ -21411,6 +21415,8 @@ __webpack_require__.r(__webpack_exports__);
           }).then(function () {
             _this2.$emit('update', true);
           })["catch"](function (error) {
+            _this2.$emit('error');
+
             console.log(error);
           })["finally"](function () {
             _this2.closeModal();
@@ -21806,6 +21812,13 @@ __webpack_require__.r(__webpack_exports__);
     },
     createUser: function createUser() {
       this.showModalUser = true;
+    },
+    error: function error() {
+      this.$notify({
+        title: "Succès",
+        text: "Erreur lors de l'envoi du mail ! Veuillez actualiser la page et recommencer",
+        type: 'success'
+      });
     },
     updateHub: function updateHub(data) {
       this.$notify({
@@ -23598,7 +23611,7 @@ var _hoisted_10 = /*#__PURE__*/_withScopeId(function () {
     "class": "text-lg"
   }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("b", null, "1 - Ajout téléchargement du planning (format excel)")]), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
     "class": "text-justify"
-  }, " Vous pouvez désormais télécharger le planning au format Excel (mode simplifié) "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
+  }, " Vous pouvez désormais télécharger le planning au format Excel (mode simplifié). "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
     "class": "text-lg"
   }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("b", null, "2 - Affichage du planning sur la semaine")]), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
     "class": "text-justify"
@@ -27931,7 +27944,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         onUpdate: _cache[4] || (_cache[4] = function (data) {
           return $options.updateHub(data);
         }),
-        onCloseModal: _cache[5] || (_cache[5] = function (data) {
+        onError: _cache[5] || (_cache[5] = function ($event) {
+          return $options.error();
+        }),
+        onCloseModal: _cache[6] || (_cache[6] = function (data) {
           return _this.showModalHub = data;
         })
       }, null, 512
@@ -27939,10 +27955,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.showModalHub]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_ModalUser, {
         hub: _this.hub.id,
         isAdmin: true,
-        onUpdate: _cache[6] || (_cache[6] = function ($event) {
+        onError: _cache[7] || (_cache[7] = function ($event) {
+          return $options.error();
+        }),
+        onUpdate: _cache[8] || (_cache[8] = function ($event) {
           return $options.updateUser();
         }),
-        onCloseModal: _cache[7] || (_cache[7] = function (data) {
+        onCloseModal: _cache[9] || (_cache[9] = function (data) {
           return _this.showModalUser = data;
         })
       }, null, 8
@@ -31361,7 +31380,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.load-class[data-v-754a9f5a] {\r\n    position: absolute;\r\n    display: inline-block;\r\n    right:40%;\r\n    bottom:50%;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.load-class[data-v-754a9f5a] {\n    position: absolute;\n    display: inline-block;\n    right:40%;\n    bottom:50%;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -31481,7 +31500,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.success {\r\n    margin: 5px;\r\n    padding: 10px;\r\n    font-size: 12px;\r\n    background: #68cd86;\r\n    border-left-color: #42a85f;\n}\n.warn {\r\n    background: #ffb648;\r\n    border-left-color: #f48a06;\n}\n.error {\r\n    background: #e54d42;\r\n    border-left-color: #b82e24;\n}\n.load-class {\r\n    position: absolute;\r\n    display: inline-block;\r\n    right:40%;\r\n    bottom:50%;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.success {\n    margin: 5px;\n    padding: 10px;\n    font-size: 12px;\n    background: #68cd86;\n    border-left-color: #42a85f;\n}\n.warn {\n    background: #ffb648;\n    border-left-color: #f48a06;\n}\n.error {\n    background: #e54d42;\n    border-left-color: #b82e24;\n}\n.load-class {\n    position: absolute;\n    display: inline-block;\n    right:40%;\n    bottom:50%;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

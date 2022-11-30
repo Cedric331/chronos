@@ -122,8 +122,8 @@
             v-if="confirm"
             @closeConfirm="data => this.closeDialogue(data)">
         </Dialog>
-        <ModalHub v-show="showModalHub" @update="data => updateHub(data)" @closeModal="data => this.showModalHub = data"></ModalHub>
-        <ModalUser v-show="showModalUser" :hub="this.hub.id" :isAdmin="true" @update="updateUser()" @closeModal="data => this.showModalUser = data"></ModalUser>
+        <ModalHub v-show="showModalHub" @update="data => updateHub(data)" @error="error()" @closeModal="data => this.showModalHub = data"></ModalHub>
+        <ModalUser v-show="showModalUser" :hub="this.hub.id" :isAdmin="true" @error="error()" @update="updateUser()" @closeModal="data => this.showModalUser = data"></ModalUser>
     </BreezeAuthenticatedLayout>
 </template>
 
@@ -162,6 +162,13 @@ export default {
         },
         createUser () {
             this.showModalUser = true
+        },
+        error () {
+            this.$notify({
+                title: "Succès",
+                text: "Erreur lors de l'envoi du mail ! Veuillez actualiser la page et recommencer",
+                type: 'success',
+            });
         },
         updateHub (data) {
             this.$notify({

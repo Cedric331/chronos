@@ -117,6 +117,7 @@ export default {
                 this.$emit('update', 'user')
             })
             .catch(error => {
+                this.$emit('error')
                 console.log(error)
             })
           .finally(() => {
@@ -138,6 +139,7 @@ export default {
                    }).then(() => {
                        this.$emit('update', true)
                    }).catch(error => {
+                       this.$emit('error')
                        console.log(error)
                    })
                        .finally(() => {

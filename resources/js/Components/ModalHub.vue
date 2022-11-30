@@ -76,7 +76,8 @@ export default {
             }).then(response => {
                 this.$emit('update', response.data)
             }).catch(error => {
-                console.log(error)
+              this.$emit('error')
+              console.log(error)
             })
             .finally(() => {
                 this.show = false
