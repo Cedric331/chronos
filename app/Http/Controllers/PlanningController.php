@@ -101,9 +101,6 @@ class PlanningController extends Controller
                 $time = strtotime(date('l d F Y', strtotime(now()))) - strtotime(date('l d F Y', strtotime('- '.($this->getLundi() - 1).' days')));
                 $oldTime = strtotime(now()) - $time;
 
-//                if  (strtotime(date('l d F Y', $oldTime)) === strtotime(date("l d F Y", $unix_date)) ||
-//                    strtotime(date('l d F Y', $oldTime)) < strtotime(date("l d F Y", $unix_date))) {
-
 
                 $numberMembers = $i;
                 $members = collect();
@@ -179,7 +176,6 @@ class PlanningController extends Controller
                     date("l d F Y", $unix_date) => $members->toArray()
                 ];
                 $collect->push($object);
-//            }
         }
 }
         $spreadsheet->__destruct();
@@ -306,6 +302,24 @@ class PlanningController extends Controller
             unset($collaborateur['dates']);
         }
 
+        $collection = $collect->sliding(7, 7);
+        foreach ($collection as $item) {
+            $item['time'] = $this->timeHours($item);
+        }
+        $collect = collect();
+        foreach ($collection as $items) {
+            $newItem = true;
+            foreach ($items as $item) {
+                if ($newItem) {
+                    $collect->push(['time' => $items['time']]);
+                    $newItem = false;
+                }
+                if (is_array($item)) {
+                    $collect->push($item);
+                }
+            }
+        }
+
         if (!$request->loadData && $request->showPlanning === null) {
             return Inertia::render('Planning', [
                 'collaborateurs' => $collaborateurs,
@@ -368,6 +382,7 @@ class PlanningController extends Controller
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
     public function loadPlanningWeek (Request $request): \Illuminate\Http\JsonResponse
     {
@@ -398,11 +413,84 @@ class PlanningController extends Controller
             }
         }
 
+        $data = $collect->groupBy('collaborateur')->unique();
+
+        foreach ($data as $item) {
+            $item['time'] = $this->timeHours($item);
+        }
+
+        $today = null;
+        $dateJour = date('Y-m-d',strtotime(now()));
+
+        if (strtotime($days['week_start']) <= strtotime($dateJour) && strtotime($days['week_end']) >= strtotime($dateJour)) {
+            $today = explode(' ', $this->formatDateFr(now()))[0];
+        }
+
         return response()->json([
-            'planning' => $collect->groupBy('collaborateur')->unique(),
-            'today' => explode(' ', $this->formatDateFr(now()))[0],
+            'planning' => $data,
+            'today' => $today,
             'weeks' => [date('d-m-Y', strtotime($days['week_start'])), date('d-m-Y', strtotime($days['week_end']))],
         ]);
+    }
+
+    /**
+     * @param $data
+     * @return array|string|null
+     * @throws \Exception
+     */
+    private function timeHours($data)
+    {
+        date_default_timezone_set('Europe/Paris');
+        $minutes = null;
+        foreach ($data as $value) {
+
+            if ($value['horaires'] && $value['horaires']->debut_journee && $value['horaires']->fin_journee) {
+
+                $origin = new DateTimeImmutable(Str::of($value['horaires']->debut_journee)->replace('h', ':'));
+                $target = new DateTimeImmutable(Str::of($value['horaires']->fin_journee)->replace('h', ':'));
+
+                $interval = $origin->diff($target);
+                $timeJournee = $interval->format('%H:%I');
+
+                if ($value['horaires']->debut_pause && $value['horaires']->fin_pause) {
+
+                    $origin = new DateTimeImmutable(Str::of($value['horaires']->debut_pause)->replace('h', ':'));
+                    $target = new DateTimeImmutable(Str::of($value['horaires']->fin_pause)->replace('h', ':'));
+                    $interval = $origin->diff($target);
+                    $timepause = $interval->format('%H:%I');
+
+
+                    $origin = new DateTimeImmutable($timepause);
+                    $target = new DateTimeImmutable($timeJournee);
+                    $interval = $origin->diff($target);
+                    $hours = $interval->format('%H:%I');
+
+                } else {
+                    $hours = $timeJournee;
+                }
+
+                $minutes += $this->convertMinute($hours);
+            }
+        }
+
+            if ($minutes) {
+                $hrs = $minutes / 60;
+                $mins = $minutes % 60;
+
+                return ((int)$hrs . "h" . ((int)$mins === 0 ? '00' : (int)$mins));
+            } else {
+                return null;
+            }
+    }
+
+    /**
+     * @param $hours
+     * @return float|int|string
+     */
+    protected function convertMinute ($hours)
+    {
+        $t = explode(':', $hours);
+        return $t[0] * 60 + $t[1];
     }
 
     private function getStartAndEndDate($week, $year): array

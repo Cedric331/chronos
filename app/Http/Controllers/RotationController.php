@@ -226,8 +226,6 @@ class RotationController extends Controller
 
         $collaborateur = Collaborateur::find($request->collaborateur['id']);
 
-        $collaborateur->joursFerie()->detach();
-
         $i = 0;
         while (date("Y-m-d", strtotime($selectTimeStart)) !== date("Y-m-d", strtotime($selectTimeEnd . "+1 week"))) {
 
@@ -241,21 +239,11 @@ class RotationController extends Controller
 
                 $jourFerie = JoursFerie::where('date', $date->date)
                     ->where('hub_id', Auth::user()->hub_id)
-                    ->first();
+                    ->count();
 
                 if ($rotation['day'] === $day) {
                     $horaire = json_decode($rotation['horaire']);
 
-                    if ($jourFerie) {
-                        $horaires = [
-                            'debut_journee' => 'OFF',
-                            'debut_pause' => null,
-                            'fin_pause' => null,
-                            'fin_journee' => 'OFF',
-                            'teletravail' => false,
-                            'type' => 'F',
-                        ];
-                    } else {
                         $horaires = [
                             'debut_journee' => $horaire->debut_journee,
                             'debut_pause' => $horaire->debut_pause,
@@ -267,20 +255,25 @@ class RotationController extends Controller
                         ];
                     }
                 }
-            }
 
             $collaborateurDate = CollaborateurDate::where('hub_id', $hub->id)
                 ->where('collaborateur_id', $collaborateur->id)
                 ->where('date_id', $date->id)
                 ->count();
 
-            if ($collaborateurDate == 0) {
-                $collaborateur->dates()->attach($date, [
-                    'hub_id' => $hub->id,
-                    'horaire' => json_encode($horaires)
-                ]);
-            } else {
-                $collaborateur->dates()->updateExistingPivot($date->id, ['horaire' => json_encode($horaires)]);
+            if ($jourFerie == 0) {
+                if ($collaborateurDate == 0) {
+                    $collaborateur->dates()->attach($date, [
+                        'hub_id' => $hub->id,
+                        'horaire' => json_encode($horaires)
+                    ]);
+                } else {
+                    $collect = $collaborateur->dates()->where('date_id', $date->id)->first();
+                    $json = json_decode($collect->pivot->horaire);
+                    if ($json->type !== 'CP' && $json->type !== 'RJF' && $json->type !== 'FOR') {
+                        $collaborateur->dates()->updateExistingPivot($date->id, ['horaire' => json_encode($horaires)]);
+                    }
+                }
             }
 
             $selectTimeStart = date('l d F Y',(strtotime('+1 days', strtotime($selectTimeStart))));

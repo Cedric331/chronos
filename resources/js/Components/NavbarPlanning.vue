@@ -21,7 +21,7 @@
                         <div class="flex justify-center">
                             <div class="w-auto">
                                 <select v-model="selected" @change="updateCollaborateur()" class=" block w-full text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600" aria-label="Voir le planning">
-                                    <option v-for="member in collaborateurs" :key="member.id" :value="member" :selected="selected.id === member.id">
+                                    <option v-for="member in collaborateurs" :key="member.id" :value="member">
                                         {{ member.name }}
                                     </option>
                                 </select>
@@ -43,7 +43,7 @@ export default {
     },
     data () {
         return {
-            selected: this.collaborateur
+            selected: null
         }
     },
     methods: {
@@ -62,6 +62,13 @@ export default {
           console.log(error)
         })
       }
+    },
+    beforeMount() {
+        this.collaborateurs.forEach(item => {
+            if (item.id === this.collaborateur.id) {
+                this.selected = item
+            }
+        })
     }
 }
 </script>

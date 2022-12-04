@@ -24,9 +24,11 @@
                                                     <table class="table-auto w-full">
                                                         <colgroup>
                                                             <col>
+                                                            <col>
                                                             <col :class="this.today === 'Lundi' ? 'border-4 border-red-600 rounded-lg' : null">
                                                             <col :class="this.today === 'Mardi' ? 'border-4 border-red-600 rounded-lg' : null">
                                                             <col :class="this.today === 'Mercredi' ? 'border-4 border-red-600 rounded-lg' : null">
+                                                            <col :class="this.today === 'Jeudi' ? 'border-4 border-red-600 rounded-lg' : null">
                                                             <col :class="this.today === 'Vendredi' ? 'border-4 border-red-600 rounded-lg' : null">
                                                             <col :class="this.today === 'Samedi' ? 'border-4 border-red-600 rounded-lg' : null">
                                                             <col :class="this.today === 'Dimanche' ? 'border-4 border-red-600 rounded-lg' : null">
@@ -35,6 +37,9 @@
                                                         <tr>
                                                             <th class="p-2 whitespace-nowrap">
                                                                 <div class="font-bold text-center">Conseiller</div>
+                                                            </th>
+                                                            <th class="p-2 whitespace-nowrap">
+                                                                <div class="font-bold text-center">Heures</div>
                                                             </th>
                                                             <th :style="this.today === 'Lundi' ? 'bg-color-blue' : null" class="p-2 whitespace-nowrap">
                                                                 <div class="font-bold text-center">Lundi</div>
@@ -66,7 +71,18 @@
                                                                     <div class="font-bold">{{index}}</div>
                                                                 </div>
                                                             </td>
+                                                            <td v-if="element.time === '35h00'" class="p-2 whitespace-nowrap border-2 border-black">
+                                                                <div class="flex items-center">
+                                                                    <div class="font-bold">{{element.time}}</div>
+                                                                </div>
+                                                            </td>
+                                                            <td v-else class="p-2 whitespace-nowrap border-2 border-black">
+                                                                <div class="flex items-center">
+                                                                    <div class="text-red-600 font-bold">{{element.time}}</div>
+                                                                </div>
+                                                            </td>
                                                             <td v-for="i in numbers" :style="colorPlanning(element[i])" class="border-2 border-black p-3 m-1 whitespace-nowrap">
+
                                                                 <div v-if="element[i].horaires">
                                                                     <p v-if="element[i].type !== 'Iti'" class="font-bold text-justify line-clamp-3" :style="texte">
                                                                         {{ element[i].horaires.teletravail ? 'Télétravail' : 'Hub'}} {{ element[i].horaires.rotation ? ' - ' + element[i].horaires.rotation : ''}}
