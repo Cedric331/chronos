@@ -9,7 +9,9 @@
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <div class="sm:flex sm:items-start flex justify-center">
                         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title"><b>Création d'un nouveau Conseiller</b></h3>
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                <b>{{ isUpdate ? 'Modification d\'un Conseiller' : 'Création d\'un nouveau Conseiller' }}</b>
+                            </h3>
                             <div class="mt-2">
                                 <div>
                                     <input v-model="name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" placeholder="Nom du Collaborateur">
@@ -22,8 +24,8 @@
                     </div>
                 </div>
                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button @click="store()" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
-                        Créer
+                    <button @click="isUpdate ? update() : store()" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        {{ isUpdate ? 'Modifier' : 'Créer' }}
                     </button>
                     <button @click="this.collaborateur = null; this.$emit('closeModal')" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                         Annuler
@@ -37,18 +39,19 @@
 <script>
 export default {
     name: "ModalCollaborateur",
+    emits: ["closeStore", "closeModal"],
+    props: {
+        isUpdate: Boolean,
+        collaborateurUpdate: Object
+    },
     data () {
         return {
             collaborateur: null,
+            name: '',
             errors: false
         }
     },
     methods: {
-        closeModal () {
-            this.name = null
-            this.errors = false
-            this.$emit('closeConfirm')
-        },
         store () {
            axios.post('/collaborateur', {
                name: this.name
@@ -57,12 +60,26 @@ export default {
                 this.$emit('closeStore', response.data)
             })
             .catch(err => {
+                this.errors = true
                 console.log(err)
             })
-            .finally(() => {
-                this.name = null
-                this.errors = false
+        },
+        update () {
+            axios.patch('/collaborateur/' + this.collaborateurUpdate.id, {
+                name: this.name
             })
+            .then(response => {
+                this.$emit('closeStore', response.data)
+            })
+            .catch(err => {
+                this.errors = true
+                console.log(err)
+            })
+        }
+    },
+    mounted () {
+        if (this.isUpdate) {
+            this.name = this.collaborateurUpdate.name
         }
     }
 }

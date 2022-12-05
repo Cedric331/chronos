@@ -5,13 +5,13 @@
         <div v-if="allPlannings && members && member">
                 <div class="min-h-screen bg-gray-700">
                     <NavbarPlanning style="z-index: 1" :collaborateur="member" :collaborateurs="members" @notificationUpdate="notificationUpdate()" @updateCollaborateur="data => updateCollaborateur(data)"/>
-                    <div class="p-4 gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-8 select-none">
+                    <div class="p-2 gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-8 select-none">
                         <div v-for="(planning, index) in allPlannings" :key="index" :style="colorPlanning(planning)" :class="[planning.today && !this.isSelected(planning) ? ' shadow-blue-400/80 shadow-2xl bg-white border-solid border-4 border-blue-500' : '', planning.today && this.isSelected(planning) ? ' shadow-blue-400/80 shadow-2xl bg-white': '', this.isSelected(planning) ? ' border-4 border-red-500' : '', this.$page.props.auth.user.coordinateur ? ' cursor-pointer' : '']" class="hover:scale-105 relative w-full rounded-md shadow-md shadow-dark hover:shadow-red-400/80 hover:shadow-2xl hover:bg-white">
                             <div v-if="planning.time" class="p-2">
-                                <div class="p-2">
+                                <div>
                                     <div>
                                         <div>
-                                            <p class="font-bold text-sm py-1 mb-3 underline" :style="texte">Nombre d'heures sur la semaine</p>
+                                            <p class="font-bold text-sm mb-3 underline" :style="texte">Nombre d'heures sur la semaine</p>
                                         </div>
                                     </div>
                                     <div>

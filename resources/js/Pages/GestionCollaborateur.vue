@@ -28,6 +28,9 @@
                                     {{ collaborateur.name }}
                                 </th>
                                 <td class="px-6 py-4 text-right">
+                                    <button @click="updateCollaborateur(collaborateur)" class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-full mr-3">
+                                        Modifier
+                                    </button>
                                     <button @click="deleteConfirm(collaborateur)" class="bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-4 rounded-full">
                                         Supprimer
                                     </button>
@@ -46,7 +49,9 @@
         </Dialog>
         <ModalCollaborateur
             v-if="openModal"
-            @closeModal="this.openModal = false"
+            :isUpdate="isUpdate"
+            :collaborateurUpdate="collaborateurUpdate"
+            @closeModal="this.openModal = false; this.collaborateurUpdate = {}; this.isUpdate = false"
             @closeStore="data => this.closeStore(data)">
         </ModalCollaborateur>
 </template>
@@ -69,24 +74,47 @@ export default {
     },
     data () {
         return {
+            collaborateurUpdate: {},
             collaborateur: null,
+            isUpdate: false,
             openModal: false,
             confirm: false
         }
     },
     methods: {
         closeStore (data) {
-            this.collaborateurs.push(data)
-            this.$notify({
-                title: "Succès",
-                text: "Collaborateur ajouté avec succès !",
-                type: 'success',
-            });
+            if (this.isUpdate) {
+                this.collaborateurs.forEach((item, index) => {
+                    if (item.id === data.id) {
+                        this.collaborateurs[index] = data
+                    }
+                })
+                this.$notify({
+                    title: "Succès",
+                    text: "Collaborateur modifié avec succès !",
+                    type: 'success',
+                });
+                this.isUpdate = false
+            } else {
+                this.collaborateurs.push(data)
+                this.$notify({
+                    title: "Succès",
+                    text: "Collaborateur ajouté avec succès !",
+                    type: 'success',
+                });
+            }
             this.openModal = false
+            this.collaborateur = null
         },
         deleteConfirm (data) {
             this.collaborateur = data
             this.confirm = true
+        },
+        updateCollaborateur (data) {
+            this.collaborateurUpdate = data
+            this.isUpdate = true
+            this.openModal = true
+
         },
         closeDialogue () {
             axios.delete('/collaborateur/' + this.collaborateur.id)

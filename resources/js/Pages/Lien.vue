@@ -5,7 +5,7 @@
     </Head>
     <BreezeAuthenticatedLayout>
             <div>
-                <div class="w-full bg-gray-100 px-10 pt-10 h-16 content-center">
+                <div class="w-full min-h-screen px-10 pt-10 h-16 content-center">
                     <div class="flex justify-center my-auto">
                         <button @click.stop="showModal = true" class="inline-flex items-center flex justify-center h-10 px-5 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800">
                             <span>Ajouter un lien</span>
@@ -91,7 +91,7 @@
                             </table>
                         </div>
                     </div>
-                    <Pagination class="w-full flex justify-center mt-6" :key="listeArray.length" :links="listeArray.links"></Pagination>
+                    <Pagination v-if="listeArray.length > 12" class="w-full flex justify-center mt-6" :key="listeArray.length" :links="listeArray.links"></Pagination>
                 </div>
 
                 <div class="w-full mt-5 bg-gray-200 sm:invisible visible">

@@ -6,6 +6,7 @@ use App\Models\Collaborateur;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class CollaborateurController extends Controller
@@ -38,12 +39,42 @@ class CollaborateurController extends Controller
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
-            'name' => 'required|max:30'
+            'name' => [
+                'required',
+                'max:30',
+                Rule::unique('collaborateurs')->where(function ($query) use ($request) {
+                    return $query->where('name', $request->name)->where('hub_id', Auth::user()->hub_id);
+                })
+            ]
         ]);
 
         $collaborateur = Collaborateur::create([
             'name' => $request->name,
             'hub_id' => Auth::user()->hub_id
+        ]);
+
+        return response()->json($collaborateur);
+    }
+
+    /**
+     * @param Request $request
+     * @param Collaborateur $collaborateur
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, Collaborateur $collaborateur): \Illuminate\Http\JsonResponse
+    {
+        $request->validate([
+            'name' => [
+                'required',
+                'max:30',
+                Rule::unique('collaborateurs')->where(function ($query) use ($request) {
+                    return $query->where('name', $request->name)->where('hub_id', Auth::user()->hub_id);
+                })
+            ]
+        ]);
+
+        $collaborateur->update([
+            'name' => $request->name
         ]);
 
         return response()->json($collaborateur);

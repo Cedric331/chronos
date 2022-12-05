@@ -28,6 +28,7 @@
                                                v-model="dateEnd"
                                                :min="dateLimitStart" :max="dateLimitEnd">
                                     </div>
+
                                     <div class="border border-4 shadow-2xl my-5 w-full mx-auto rounded-md p-16 flex flex-col sm:flex-row sm:justify-evenly">
                                         <div class="p-16 flex flex-col bg-white rounded-lg">
                                             <h1 class="font-semibold tracking-wide mb-2">Choisir le conseiller</h1>
@@ -44,6 +45,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
 
                                         <div class="p-16 flex flex-col bg-white rounded-lg">
                                             <h1 class="font-semibold tracking-wide mb-2">Ordre des rotations</h1>
@@ -69,6 +71,10 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="text-red-600 my-2" v-if="collaborateurs.length === 0">
+                                        Vous devez créer des conseillers sur "Hub -> Gestion du Hub -> Gestion des conseillers"
+                                    </div>
+
                                     <div class="flex justify-center">
                                         <button @click="generatePlanning()" class="text-sm font-medium hover:bg-gray-700 bg-black text-white rounded-lg p-2">Confirmer le Planning</button>
                                     </div>

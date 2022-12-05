@@ -479,7 +479,7 @@ class PlanningController extends Controller
 
                 return ((int)$hrs . "h" . ((int)$mins === 0 ? '00' : (int)$mins));
             } else {
-                return null;
+                return '00h00';
             }
     }
 
