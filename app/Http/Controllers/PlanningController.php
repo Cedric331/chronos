@@ -70,6 +70,7 @@ class PlanningController extends Controller
      */
     public function import (importHubRequest $request, Hub $hub): bool|string
     {
+        set_time_limit(120);
         $name = 'planning-'.Carbon::now()->format('Y').'.'.$request->file('file')->getClientOriginalExtension();
         $request->file('file')->storeAs('planning/'.$hub->ville, $name);
          $store = Planning::firstOrCreate([
@@ -203,6 +204,7 @@ class PlanningController extends Controller
                     'collaborateur_id' => null
                 ]);
             }
+            $item->joursFerie()->detach();
             $item->dates()->detach();
             $item->delete();
         }
@@ -445,6 +447,15 @@ class PlanningController extends Controller
         foreach ($data as $value) {
 
             if ($value['horaires'] && $value['horaires']->debut_journee && $value['horaires']->fin_journee) {
+                $value['horaires']->debut_journee = trim($value['horaires']->debut_journee);
+                if (strlen($value['horaires']->debut_journee) <= 3) {
+                    $value['horaires']->debut_journee .= '00';
+                }
+
+                $value['horaires']->fin_journee = trim($value['horaires']->fin_journee);
+                if (strlen($value['horaires']->fin_journee) <= 3) {
+                    $value['horaires']->fin_journee .= '00';
+                }
 
                 $origin = new DateTimeImmutable(Str::of($value['horaires']->debut_journee)->replace('h', ':'));
                 $target = new DateTimeImmutable(Str::of($value['horaires']->fin_journee)->replace('h', ':'));

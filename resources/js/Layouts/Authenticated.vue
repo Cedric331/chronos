@@ -61,22 +61,26 @@
 
                         <div class="flex">
                             <div v-if="this.$page.props.auth.user.coordinateur" class="flex items-center sm:ml-6">
-                                <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
-                                    <input v-model="isAuthorize" @click="updateAuthorizeHub(!isAuthorize)" type="checkbox" name="toggle" id="toggle" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer" />
-                                    <label for="toggle" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-300 cursor-pointer"></label>
+                                <div v-if="this.window.width > 1200">
+                                    <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                                        <input v-model="isAuthorize" @click="updateAuthorizeHub(!isAuthorize)" type="checkbox" name="toggle" id="toggle" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer" />
+                                        <label for="toggle" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-300 cursor-pointer"></label>
+                                    </div>
+                                    <label for="toggle" class="text-xs font-bold">Autoriser la modification des horaires</label>
                                 </div>
-                                <label for="toggle" class="text-sm font-bold">Autoriser la modification des horaires</label>
-                                <div>
-<!--                                    <select v-model="selected" size="5" class="font-bold rounded-full w-full text-sm leading-4 font-medium rounded-md rounded transition ease-in-out m-0">-->
-<!--                                        <option v-for="hub in this.$page.props.hubs" :key="hub.id" :value="hub.ville">-->
-<!--                                            {{ hub.ville }}-->
-<!--                                        </option>-->
-<!--                                    </select>-->
-                                    <label for="hub" class="font-bold rounded-full w-full text-md leading-4 mx-5">Hub :</label>
+                                <div v-if="this.window.width < 1200">
+                                    <select v-model="selected" class="ml-2 font-bold rounded-full w-full text-sm leading-4 font-medium rounded-md rounded transition ease-in-out m-0">
+                                        <option v-for="hub in this.$page.props.hubs" :key="hub.id" :value="hub.ville">
+                                            {{ hub.ville }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div v-else>
+                                    <label for="hub" class="font-bold rounded-full w-full text-sm leading-4 mx-5">Hub :</label>
                                     <input v-model="selected" list="hub" id="ice-cream-choice" name="hub">
-                                        <datalist id="hub" style="height:5.1em;overflow:hidden">
-                                            <option class="font-bold text-sm" v-for="hub in this.$page.props.hubs" :key="hub.id" :value="hub.ville">{{ hub.ville }} </option>
-                                        </datalist>
+                                    <datalist id="hub" style="height:5.1em;overflow:hidden">
+                                        <option class="font-bold text-sm" v-for="hub in this.$page.props.hubs" :key="hub.id" :value="hub.ville">{{ hub.ville }} </option>
+                                    </datalist>
                                 </div>
                             </div>
                             <div v-else class="flex items-center sm:ml-6">
@@ -199,6 +203,9 @@ export default {
     data() {
         return {
             showingNavigationDropdown: false,
+            window: {
+                width: 0
+            },
             isAuthorize: this.$page.props.hub.droit_update === 1,
             selected: this.$page.props.hub.ville
         }
@@ -212,7 +219,17 @@ export default {
               })
       }
     },
+    created() {
+        window.addEventListener('resize', this.handleResize)
+        this.handleResize()
+    },
+    destroyed() {
+        window.removeEventListener('resize', this.handleResize)
+    },
     methods: {
+        handleResize () {
+            this.window.width = window.innerWidth
+        },
         generatePlanning () {
             axios.get('/planning/generate')
                 .then(response => {

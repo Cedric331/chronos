@@ -7,7 +7,7 @@
                     <NavbarPlanning style="z-index: 1" :collaborateur="member" :collaborateurs="members" @notificationUpdate="notificationUpdate()" @updateCollaborateur="data => updateCollaborateur(data)"/>
                     <div class="p-2 gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-8 select-none">
                         <div v-for="(planning, index) in allPlannings" :key="index" :style="colorPlanning(planning)" :class="[planning.today && !this.isSelected(planning) ? ' shadow-blue-400/80 shadow-2xl bg-white border-solid border-4 border-blue-500' : '', planning.today && this.isSelected(planning) ? ' shadow-blue-400/80 shadow-2xl bg-white': '', this.isSelected(planning) ? ' border-4 border-red-500' : '', this.$page.props.auth.user.coordinateur ? ' cursor-pointer' : '']" class="hover:scale-105 relative w-full rounded-md shadow-md shadow-dark hover:shadow-red-400/80 hover:shadow-2xl hover:bg-white">
-                            <div v-if="planning.time" class="p-2">
+                            <div v-if="planning.time && window.width > 1200" class="p-2">
                                 <div>
                                     <div>
                                         <div>
@@ -25,7 +25,7 @@
                                 </div>
                             </div>
                             <div v-else>
-                                <div v-if="planning.horaires" class="absolute top-0 right-0">
+                                <div v-if="planning.date" class="absolute top-0 right-0">
                                     <div @click="viewDate(planning.date_id, index)" class=" flex justify-end p-1">
                                         <svg class="fill-current" :style="texte" height="16px" version="1.1" viewBox="0 0 24 24" width="16px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title/>
                                             <g stroke-width="1">
@@ -33,7 +33,7 @@
                                             </g>
                                         </svg>
                                     </div>
-                                    <div v-if="!planning.horaires.teletravail">
+                                    <div v-if="planning.horaires && !planning.horaires.teletravail">
                                         <div v-if="$page.props.auth.user.coordinateur || this.$page.props.hub.droit_update === 1 && planning.horaires && planning.type !== 'Iti'" @click="changeHome(planning, planning.horaires.teletravail, index)" class="flex justify-end p-1">
                                             <svg class="fill-current" :style="texte" height="16px" version="1.1" viewBox="0 0 20 20" width="16px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title/>
                                                 <g stroke-width="1">
@@ -53,7 +53,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div @click="selectPlanning(planning)" class="p-2">
+                                <div v-if="planning.date" @click="selectPlanning(planning)" class="p-2">
                                     <div>
                                         <div>
                                             <p class="font-bold text-sm py-1 underline" :style="texte">{{ planning.date }}</p>
@@ -182,10 +182,23 @@ export default {
             showPlanningWeek: false,
             updatePlanning: false,
             updateSwitch: false,
+            window: {
+                width: 0
+            },
             texte: this.colorTexte()
         }
     },
+    created() {
+        window.addEventListener('resize', this.handleResize)
+        this.handleResize()
+    },
+    destroyed() {
+        window.removeEventListener('resize', this.handleResize)
+    },
     methods: {
+        handleResize () {
+            this.window.width = window.innerWidth
+        },
         showPlanningUpdate () {
             this.showAllPlanning = !this.showAllPlanning
             axios.get('/planning', {
