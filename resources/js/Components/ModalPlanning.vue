@@ -82,7 +82,7 @@
 export default {
     name: "ModalPlanning",
     props: {
-        showDates: Array,
+        showDates: Object,
         datePlanning: Object
     },
     data () {

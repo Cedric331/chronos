@@ -274,6 +274,23 @@ class RotationController extends Controller
                         $collaborateur->dates()->updateExistingPivot($date->id, ['horaire' => json_encode($horaires)]);
                     }
                 }
+            } else {
+                $horaires = [
+                    'debut_journee' => null,
+                    'debut_pause' => null,
+                    'fin_pause' => null,
+                    'fin_journee' => null,
+                    'teletravail' => false,
+                    'type' => 'F',
+                    'rotation' => null,
+                ];
+
+                if ($collaborateurDate == 0) {
+                    $collaborateur->dates()->attach($date, [
+                        'hub_id' => $hub->id,
+                        'horaire' => json_encode($horaires)
+                    ]);
+                }
             }
 
             $selectTimeStart = date('l d F Y',(strtotime('+1 days', strtotime($selectTimeStart))));

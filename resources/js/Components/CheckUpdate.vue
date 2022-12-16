@@ -19,23 +19,10 @@
                                     </div>
                                     <div class="modal-body p-5 w-full h-full overflow-y-auto ">
                                         <h2 class="text-lg">
-                                            <b>1 - Ajout téléchargement du planning (format excel)</b>
+                                            <b>1 - Ajout de publicité Amazon</b>
                                         </h2>
                                         <p class="text-justify">
-                                            Vous pouvez désormais télécharger le planning au format Excel (mode simplifié).
-                                        </p>
-                                        <h2 class="text-lg">
-                                            <b>2 - Affichage du planning sur la semaine</b>
-                                        </h2>
-                                        <p class="text-justify">
-                                            Visualisation du planning sur la semaine au lieu de ne le voir que sur un jour. Affichage non modifié sur le mobile.
-                                        </p>
-                                        <h2 class="text-lg">
-                                            <b>3 - Possibilité de voir le planning antérieur</b>
-                                        </h2>
-                                        <p class="text-justify">
-                                            Sous réserve que celui-ci soit disponible, il est désormais possible de voir l'ensemble du planning sans filtre de date.
-                                            Cela n'est possible que lors de la génération du planning via le système interne de Chronos.
+                                            Vous pouvez constater, qu'à partir de maintenant, une bannière Amazon est intégrée sur la page de planification. J'ai essayé de faire en sorte que cela soit le moins intrusif possible. Son unique but est de financer le serveur sur lequel le site est hébergé. J'obtiens donc une commission sur celle-ci. Elle n'a pas pour but de rester, je l'espère. Je vous remercie de votre compréhension.
                                         </p>
                                     </div>
                                     <div class="modal-footer py-3 px-5 border0-t text-right">
