@@ -28,8 +28,17 @@ class AdminController extends Controller
     {
         $hubs = Hub::with('members')->get();
 
+        $logFile = file(storage_path().'/logs/laravel.log');
+        $logCollection = collect();
+        foreach ($logFile as $line) {
+            if (str_contains($line, 'local.INFO:')) {
+                $logCollection->push(str_replace(['local.INFO:', '[', ']'], '', htmlspecialchars($line)));
+            }
+        }
+
         return Inertia::render('Admin/Dashboard', [
             'hubs' => $hubs,
+            'logs' => $logCollection,
         ]);
     }
 

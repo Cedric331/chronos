@@ -44,6 +44,13 @@
                                                 Ajouter un membre sur le hub de {{ this.hub.ville }}
                                             </button>
 
+                                            <button @click="this.showModalLog = true" type="button" class="py-2 px-4 flex justify-center items-center bg-green-600 hover:bg-green-700 text-white transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                                                </svg>
+                                                Voir les logs
+                                            </button>
+
                                             <button v-if="this.$page.props.auth.user.admin" @click.prevent="checkUpdate()" type="button" class="py-2 px-4 flex justify-center items-center  bg-blue-600 hover:bg-blue-700 text-white transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
@@ -122,6 +129,7 @@
             v-if="confirm"
             @closeConfirm="data => this.closeDialogue(data)">
         </Dialog>
+        <ModalLog v-show="showModalLog" :logs="this.logs" @closeModal="this.showModalLog = false"></ModalLog>
         <ModalHub v-show="showModalHub" @update="data => updateHub(data)" @error="error()" @closeModal="data => this.showModalHub = data"></ModalHub>
         <ModalUser v-show="showModalUser" :hub="this.hub.id" :isAdmin="true" @error="error()" @update="updateUser()" @closeModal="data => this.showModalUser = data"></ModalUser>
     </BreezeAuthenticatedLayout>
@@ -133,9 +141,11 @@ import ModalHub from "@/Components/ModalHub.vue";
 import ModalUser from "@/Components/ModalUser.vue";
 import Dialog from "@/Components/Dialog.vue";
 import { Head } from '@inertiajs/inertia-vue3';
+import ModalLog from "@/Components/ModalLog.vue";
 
 export default {
     components: {
+        ModalLog,
         BreezeAuthenticatedLayout,
         Dialog,
         ModalUser,
@@ -144,6 +154,7 @@ export default {
     },
     props: {
         hubs: Array,
+        logs: Array
     },
     data () {
         return {
@@ -153,6 +164,7 @@ export default {
             hub: null,
             collaborateur: null,
             showModalHub: false,
+            showModalLog: false,
             showModalUser: false
         }
     },

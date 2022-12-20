@@ -19,6 +19,7 @@ use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
@@ -99,6 +100,8 @@ class RotationController extends Controller
             ->where('hub_id', Auth::user()->hub_id)
             ->find($typeRotation->id);
 
+        Log::info('Utilisateur '.Auth::user()->name.' de '. Hub::find(Auth::user()->hub_id)->ville.' a crée une rotation');
+
         return response()->json($rotations);
     }
 
@@ -163,6 +166,8 @@ class RotationController extends Controller
             ->where('hub_id', Auth::user()->hub_id)
             ->find($typeRotation->id);
 
+        Log::info('Utilisateur '.Auth::user()->name.' de '. Hub::find(Auth::user()->hub_id)->ville.' a modifié une rotation');
+
         return response()->json($rotations);
     }
 
@@ -198,6 +203,8 @@ class RotationController extends Controller
         $rotation->rotations()->delete();
 
        $delete = $rotation->delete();
+
+        Log::info('Utilisateur '.Auth::user()->name.' de '. Hub::find(Auth::user()->hub_id)->ville.' a supprimé une rotation');
 
         return response()->json($delete);
     }
@@ -305,6 +312,7 @@ class RotationController extends Controller
                 }
             }
         }
+        Log::info('Utilisateur '.Auth::user()->name.' de '. Hub::find(Auth::user()->hub_id)->ville.' a généré un planning pour ' . $collaborateur->name);
 
        return response()->json($collaborateur);
     }

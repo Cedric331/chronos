@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Collaborateur;
+use App\Models\Hub;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
@@ -53,6 +55,8 @@ class CollaborateurController extends Controller
             'hub_id' => Auth::user()->hub_id
         ]);
 
+        Log::info('Utilisateur '.Auth::user()->name.' de '. Hub::find(Auth::user()->hub_id)->ville.' a ajouté un conseiller');
+
         return response()->json($collaborateur);
     }
 
@@ -77,6 +81,8 @@ class CollaborateurController extends Controller
             'name' => $request->name
         ]);
 
+        Log::info('Utilisateur '.Auth::user()->name.' de '. Hub::find(Auth::user()->hub_id)->ville.' a modifié un conseiller');
+
         return response()->json($collaborateur);
     }
 
@@ -95,6 +101,8 @@ class CollaborateurController extends Controller
         $collaborateur->dates()->detach();
         $collaborateur->joursFerie()->detach();
         $delete = $collaborateur->delete();
+
+        Log::info('Utilisateur '.Auth::user()->name.' de '. Hub::find(Auth::user()->hub_id)->ville.' a supprimé un conseiller');
 
        return response()->json($delete);
     }

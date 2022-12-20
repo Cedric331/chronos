@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ControllerResponse;
+use App\Models\Hub;
 use App\Models\Lien;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class LienController extends Controller
@@ -51,6 +53,8 @@ class LienController extends Controller
 
         $liens = Lien::where('hub_id', Auth::user()->hub_id)->paginate(12);
 
+        Log::info('Utilisateur '.Auth::user()->name.' de '. Hub::find(Auth::user()->hub_id)->ville.' a ajouté un lien');
+
         return response()->json($liens);
     }
 
@@ -80,6 +84,8 @@ class LienController extends Controller
             return response()->json('Action non autorisée', 401);
         }
 
+        Log::info('Utilisateur '.Auth::user()->name.' de '. Hub::find(Auth::user()->hub_id)->ville.' a modifié un lien');
+
         return ControllerResponse::update($update, $lien, true);
     }
 
@@ -98,6 +104,8 @@ class LienController extends Controller
         }
 
         $liens = Lien::where('hub_id', Auth::user()->hub_id)->paginate(12);
+
+        Log::info('Utilisateur '.Auth::user()->name.' de '. Hub::find(Auth::user()->hub_id)->ville.' a supprimé un lien');
 
         return response()->json($liens);
     }

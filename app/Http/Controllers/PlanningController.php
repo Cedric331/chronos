@@ -18,6 +18,7 @@ use DateTimeImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -250,6 +251,7 @@ class PlanningController extends Controller
         $hub->update([
             'import_horodatage' => date('Y-m-d H:i:s', strtotime('now'))
         ]);
+        Log::info('Utilisateur '.Auth::user()->name.' de '. Hub::find(Auth::user()->hub_id)->ville.' a importé un fichier EXCEL');
 
         return $hub->horodatage();
     }
@@ -720,6 +722,7 @@ class PlanningController extends Controller
         }
 
         $data = $request;
+        Log::info('Utilisateur '.Auth::user()->name.' de '. Hub::find(Auth::user()->hub_id)->ville.' a modifié le planning de '. Collaborateur::find($request->user['id'])->name);
 
         if ($request->sendMail) {
             $this->sendMailPlanningUpdate($data, $type);

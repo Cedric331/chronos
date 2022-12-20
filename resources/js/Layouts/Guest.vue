@@ -1,12 +1,16 @@
 <template>
-    <div id="main" :style="'background-image: url(/images/background'+ this.$page.props.season +'.jpg);'" class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+    <div id="main" :style="'background-image: url(/images/background-fuji.jpg);'" class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
         <div>
             <Link href="/">
-                <BreezeApplicationLogo class="w-20 h-20 fill-current text-gray-500" />
+                <BreezeApplicationLogo class="w-25 h-25 fill-current"
+                        :source="'/images/logo1.png'"
+                        :widthLogo="'100px'"
+                        :heightLogo="'100px'"
+                />
             </Link>
         </div>
 
-        <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+        <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg bg-opacity-90">
             <slot />
         </div>
     </div>

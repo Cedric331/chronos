@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ControllerResponse;
+use App\Models\Hub;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class InformationEquipeController extends Controller
 {
-
     /**
      * @return \Inertia\Response
      */
@@ -23,6 +24,8 @@ class InformationEquipeController extends Controller
             $user->anniversaire_en = $user->anniversaire;
             $user->anniversaire = $user->anniversaire ? date('d-m-Y', strtotime($user->anniversaire)) : null;
         }
+
+        Log::info('Utilisateur '.Auth::user()->name.' de '. Hub::find(Auth::user()->hub_id)->ville.' a consulté les informations des conseillers');
 
         return Inertia::render('InformationEquipe', [
             'users' => $users

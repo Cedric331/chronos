@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ControllerResponse;
 use App\Mail\NouveauUtilisateur;
+use App\Models\Hub;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
@@ -61,6 +63,8 @@ class EquipeController extends Controller
         Mail::to($request->email)
             ->send(new NouveauUtilisateur($data));
 
+        Log::info('Utilisateur '.Auth::user()->name.' de '. Hub::find(Auth::user()->hub_id)->ville.' a envoyé une invitation un utilisateur');
+
         return response()->json(true);
     }
 
@@ -87,6 +91,8 @@ class EquipeController extends Controller
             'hub_id' => $request->hub,
         ]);
 
+        Log::info('Utilisateur '.Auth::user()->name.' de '. Hub::find(Auth::user()->hub_id)->ville.' a modifié un utilisateur');
+
         return ControllerResponse::update($update);
     }
 
@@ -101,6 +107,8 @@ class EquipeController extends Controller
         }
 
        $delete = $user->delete();
+
+        Log::info('Utilisateur '.Auth::user()->name.' de '. Hub::find(Auth::user()->hub_id)->ville.' a supprimé un utilisateur');
 
        return ControllerResponse::delete($delete);
     }

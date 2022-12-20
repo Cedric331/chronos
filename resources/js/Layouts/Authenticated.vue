@@ -8,7 +8,11 @@
                         <!-- Logo -->
                         <div class="shrink-0 flex items-center">
                             <Link :href="route('planning')">
-                                <BreezeApplicationLogo class="block w-auto" />
+                                <BreezeApplicationLogo class="block w-auto"
+                                                       :source="'/images/logo.png'"
+                                                       :widthLogo="'80px'"
+                                                       :heightLogo="'50px'"
+                                />
                             </Link>
                         </div>
                             <!-- Navigation Links -->
