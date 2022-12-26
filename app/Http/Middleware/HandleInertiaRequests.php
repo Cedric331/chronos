@@ -72,13 +72,13 @@ class HandleInertiaRequests extends Middleware
     private function timestampToSeason(): string {
         $dayOfTheYear = date('z', strtotime(now()));
 
-        if($dayOfTheYear < 80 || $dayOfTheYear > 356){
+        if($dayOfTheYear <= 80 || $dayOfTheYear >= 354){
             return 2;
         }
-        if($dayOfTheYear < 173){
+        if($dayOfTheYear <= 173){
             return 3;
         }
-        if($dayOfTheYear < 266){
+        if($dayOfTheYear <= 266){
             return 4;
         }
         return 1;

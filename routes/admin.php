@@ -28,3 +28,8 @@ Route::post('/administration/check-update/user', [AdminController::class, 'check
     ->middleware('auth')
     ->middleware('role:Responsable|Administrateur')
     ->name('administration.check');
+
+Route::get('/administration/delete/log', [AdminController::class, 'deleteLog'])
+    ->middleware('auth')
+    ->middleware('role:Responsable|Administrateur')
+    ->name('administration.log');

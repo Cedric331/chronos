@@ -4,9 +4,9 @@
         <title>Information des Utilisateurs</title>
     </Head>
     <BreezeAuthenticatedLayout>
-            <div class="w-12/12 h-full px-10 pt-10 h-16 flex justify-center">
+            <div v-if="window.width > 1200" class="w-12/12 h-screen px-10 pt-10 h-16 flex justify-center">
 
-                    <div class="w-7/12 overflow-x-auto shadow-md sm:rounded-lg p-8 sm:visible invisible">
+                    <div class="w-7/12 overflow-x-auto shadow-md sm:rounded-lg p-8">
                         <table class="w-auto font-bold text-left">
                             <thead class="text-xs uppercase bg-white">
                             <tr>
@@ -58,7 +58,7 @@
 
                 </div>
 
-            <div class="my-5 bg-gray-200 flex items-center justify-center sm:invisible visible">
+            <div v-else class="my-5 flex items-center justify-center">
                 <div class="text-center md:text-left">
                     <div v-for="user in users" :key="user.id" class="border-b bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 mt-2 p-4">
                         <div class="font-medium text-white whitespace-nowrap">
@@ -119,10 +119,23 @@ export default {
             showModal: false,
             confirm: false,
             isUpdate: false,
-            user: null
+            user: null,
+            window: {
+                width: 0
+            }
         }
     },
+    created() {
+        window.addEventListener('resize', this.handleResize)
+        this.handleResize()
+    },
+    destroyed() {
+        window.removeEventListener('resize', this.handleResize)
+    },
     methods: {
+        handleResize () {
+            this.window.width = window.innerWidth
+        },
         openModal() {
             this.showModal = true
             this.isUpdate = false

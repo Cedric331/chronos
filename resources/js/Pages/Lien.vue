@@ -5,14 +5,14 @@
     </Head>
     <BreezeAuthenticatedLayout>
             <div>
-                <div class="w-full min-h-screen px-10 pt-10 h-16 content-center">
+                <div v-if="window.width > 1200" class="w-full min-h-screen px-10 pt-10 h-16 content-center">
                     <div class="flex justify-center my-auto">
                         <button @click.stop="showModal = true" class="inline-flex items-center flex justify-center h-10 px-5 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800">
                             <span>Ajouter un lien</span>
                         </button>
                     </div>
 
-                    <div class="w-4/6 mx-auto sm:visible invisible">
+                    <div class="w-4/6 mx-auto">
                         <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
 
                             <div class="flex mb-2">
@@ -94,9 +94,8 @@
                     <Pagination v-if="listeArray.length > 12" class="w-full flex justify-center mt-6" :key="listeArray.length" :links="listeArray.links"></Pagination>
                 </div>
 
-                <div class="w-full mt-5 bg-gray-200 sm:invisible visible">
-
-                    <div class="flex my-2">
+                <div v-else class="w-full mt-5">
+                    <div class="flex my-2 mt-4">
                         <div class="relative m-1 mb-1">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                 <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20"
@@ -106,7 +105,6 @@
                                           clip-rule="evenodd"></path>
                                 </svg>
                             </div>
-
                             <input v-model="search" type="text" class="text-gray-900 text-sm block w-full pl-10 p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Recherche">
                         </div>
 
@@ -186,7 +184,10 @@ export default {
             showModal: false,
             isUpdate: false,
             selected: null,
-            error: null
+            error: null,
+            window: {
+                width: 0
+            }
         }
     },
     watch: {
@@ -215,7 +216,17 @@ export default {
                 })
         }
     },
+    created() {
+        window.addEventListener('resize', this.handleResize)
+        this.handleResize()
+    },
+    destroyed() {
+        window.removeEventListener('resize', this.handleResize)
+    },
     methods: {
+        handleResize () {
+            this.window.width = window.innerWidth
+        },
         store (data) {
             this.$notify({
                 title: "Succès",

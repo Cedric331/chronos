@@ -1,9 +1,9 @@
 <template>
-    <div id="main" :style="'background-image: url(/images/background-fuji.jpg);'" class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+    <div id="main" :style="'background-image: url(/images/background-accueil.jpg);'" class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
         <div>
             <Link href="/">
                 <BreezeApplicationLogo class="w-25 h-25 fill-current"
-                        :source="'/images/logo1.png'"
+                        :source="'/images/logo.png'"
                         :widthLogo="'100px'"
                         :heightLogo="'100px'"
                 />

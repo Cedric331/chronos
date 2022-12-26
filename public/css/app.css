@@ -978,6 +978,24 @@ select {
 .max-h-\[50rem\] {
   max-height: 50rem;
 }
+.max-h-\[90vh\] {
+  max-height: 90vh;
+}
+.max-h-\[80vh\] {
+  max-height: 80vh;
+}
+.max-h-\[90\%\] {
+  max-height: 90%;
+}
+.max-h-\[90rem\] {
+  max-height: 90rem;
+}
+.max-h-\[30rem\] {
+  max-height: 30rem;
+}
+.max-h-\[40rem\] {
+  max-height: 40rem;
+}
 .min-h-screen {
   min-height: 100vh;
 }
@@ -2127,6 +2145,10 @@ select {
   --tw-border-opacity: 1;
   border-color: rgb(96 165 250 / var(--tw-border-opacity));
 }
+.hover\:border-green-400:hover {
+  --tw-border-opacity: 1;
+  border-color: rgb(74 222 128 / var(--tw-border-opacity));
+}
 .hover\:bg-gray-700:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(55 65 81 / var(--tw-bg-opacity));
@@ -2356,6 +2378,10 @@ select {
 .focus\:ring-gray-800:focus {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(31 41 55 / var(--tw-ring-opacity));
+}
+.focus\:ring-green-400:focus {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(74 222 128 / var(--tw-ring-opacity));
 }
 .focus\:ring-opacity-50:focus {
   --tw-ring-opacity: 0.5;

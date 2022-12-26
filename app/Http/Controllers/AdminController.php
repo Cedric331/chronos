@@ -8,10 +8,13 @@ use App\Mail\NouveauUtilisateur;
 use App\Models\Hub;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class AdminController extends Controller
@@ -28,18 +31,36 @@ class AdminController extends Controller
     {
         $hubs = Hub::with('members')->get();
 
-        $logFile = file(storage_path().'/logs/laravel.log');
         $logCollection = collect();
-        foreach ($logFile as $line) {
-            if (str_contains($line, 'local.INFO:')) {
-                $logCollection->push(str_replace(['local.INFO:', '[', ']'], '', htmlspecialchars($line)));
+        $existFile = file_exists(storage_path().'/logs/laravel.log');
+
+        if ($existFile) {
+            $logFile = file(storage_path().'/logs/laravel.log');
+            foreach ($logFile as $line) {
+                if (str_contains($line, 'production.INFO:')) {
+                    $logCollection->push(html_entity_decode(str_replace(['production.INFO:', '[', ']'], '', htmlspecialchars($line))));
+                }
             }
         }
 
         return Inertia::render('Admin/Dashboard', [
             'hubs' => $hubs,
-            'logs' => $logCollection,
+            'logs' => $logCollection->reverse(),
         ]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function deleteLog (): bool
+    {
+        $files = file(storage_path().'/logs/laravel.log');
+
+        if ($files) {
+            file_put_contents(storage_path().'/logs/laravel.log', '');
+        }
+
+        return true;
     }
 
     /**
