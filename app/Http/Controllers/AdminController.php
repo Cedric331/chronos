@@ -38,14 +38,17 @@ class AdminController extends Controller
             $logFile = file(storage_path().'/logs/laravel.log');
             foreach ($logFile as $line) {
                 if (str_contains($line, 'production.INFO:')) {
-                    $logCollection->push(html_entity_decode(str_replace(['production.INFO:', '[', ']'], '', htmlspecialchars($line))));
+                    $value = html_entity_decode(str_replace(['production.INFO:', '[', ']'], '', htmlspecialchars($line)));
+                    if ($value) {
+                        $logCollection->push($value);
+                    }
                 }
             }
         }
 
         return Inertia::render('Admin/Dashboard', [
             'hubs' => $hubs,
-            'logs' => $logCollection->reverse(),
+            'logs' => $logCollection,
         ]);
     }
 

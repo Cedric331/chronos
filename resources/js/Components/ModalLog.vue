@@ -11,7 +11,7 @@
                             <h1 class="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">Information sur les logs</h1>
 
                             <div class="relative mb-5 mt-2 overflow-y-auto">
-                                <div v-for="log in logs" class="text-gray-600 font-normal w-full h-12 flex items-center text-sm">
+                                <div v-for="log in reversedLogs" class="text-gray-600 font-normal w-full h-12 flex items-center text-sm">
                                     <p>{{ log }}</p>
                                 </div>
                             </div>
@@ -34,6 +34,11 @@ export default {
     emits: ['closeModal'],
     props: {
         logs: Object
+    },
+    computed: {
+        reversedLogs() {
+            return this.logs.reverse();
+        },
     },
     methods: {
         deleteLog () {
