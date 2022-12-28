@@ -289,6 +289,13 @@ class PlanningController extends Controller
         $collect = collect();
         if ($collaborateur) {
             foreach ($collaborateur->dates as $date) {
+                $events = [];
+                if ($date->pivot->evenements !== null) {
+                    foreach (json_decode($date->pivot->evenements) as $event) {
+                        array_push($events, $event);
+                    }
+                }
+
                 if ($request->showPlanning === 'true' || strtotime(date('l d F Y', strtotime($date->date))) > strtotime(date('l d F Y', strtotime('- '.$this->getLundi().' days')))) {
                     $horaires = $this->getHoraire($date->pivot->horaire);
                     $object = [
@@ -297,6 +304,7 @@ class PlanningController extends Controller
                         'horaires' => $horaires,
                         'horaire_id' => $date->pivot->id,
                         'type' => $this->getType($date->pivot->horaire, $horaires),
+                        'events' => empty($events) ? null : $events,
                         'today' => $this->formatDateFr(now()) === $this->formatDateFr($date->date)
                     ];
                     $collect->push($object);

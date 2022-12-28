@@ -22,7 +22,7 @@ class Collaborateur extends Model
     public function dates (): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Date::class, 'collaborateur_dates')
-            ->withPivot('horaire','id');
+            ->withPivot('horaire', 'id', 'evenements');
     }
 
     public function joursFerie (): \Illuminate\Database\Eloquent\Relations\BelongsToMany

@@ -70,16 +70,26 @@
                                             Début :  <span class="font-bold">{{ planning.horaires.debut_journee }}</span>
                                         </p>
                                         <div v-if="planning.horaires.debut_pause">
-                                            <p class="font-semibold text-justify line-clamp-3" :style="texte">
-                                                Pause Déj:  <span class="font-bold">{{ planning.horaires.debut_pause }}</span>
-                                            </p>
-                                            <p class="font-semibold text-justify line-clamp-3" :style="texte">
-                                                Fin Déj :  <span class="font-bold">{{ planning.horaires.fin_pause }}</span>
+                                            <p class="font-semibold" :style="texte">
+                                                Pause :  <span class="font-semibold">{{ planning.horaires.debut_pause }} - {{ planning.horaires.fin_pause }}</span>
                                             </p>
                                         </div>
                                         <p class="font-semibold text-justify line-clamp-3" :style="texte">
                                             Fin : <span class="font-bold">{{ planning.horaires.fin_journee }}</span>
                                         </p>
+                                        <div v-if="planning.events !== null">
+                                            <p>---------</p>
+                                            <div v-for="event in planning.events">
+                                                    <div class="flex justify-between">
+                                                        <p class="font-semibold" :style="texte">
+                                                            <span class="font-semibold">{{ event.name }} {{ event.heure_debut }} {{ event.heure_fin }}</span>
+                                                        </p>
+                                                        <svg v-if="$page.props.auth.user.coordinateur" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                        </svg>
+                                                    </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div v-else>
                                         <p class="font-bold text-justify line-clamp-3" :style="texte">
@@ -92,6 +102,12 @@
                     </div>
                 </div>
             <SelectedDate @click="updatePlanning = true" v-if="selectedPlanning.length > 0 && $page.props.auth.user.coordinateur || selectedPlanning.length > 0 && this.$page.props.hub.droit_update === 1" :classCss="'fixed bottom-3 right-6 bg-blue-500 rounded-full'" :value="'Modifier horaires'" :selected="selectedPlanning.length"></SelectedDate>
+
+            <div v-if="selectedPlanning.length > 0 && $page.props.auth.user.coordinateur" class="fixed bottom-16 right-6 bg-blue-500 rounded-full">
+                <button @click="showEvent = true" class="relative text-white bg-gray-400 p-3 text-sm uppercase font-semibold rounded-full tracking-tight overflow-visible">
+                    Ajouter un évènement
+                </button>
+            </div>
 
             <div v-if="showAllPlanning" class="fixed bottom-3 left-6 bg-green-600 rounded-full">
                 <button @click="showPlanningUpdate()" class="relative text-white p-3 rounded-lg text-sm uppercase font-semibold tracking-tight overflow-visible">
@@ -118,6 +134,11 @@
             @refreshViewDate="(data, index) => this.viewDate(data, index)"
             @closeModal="this.showPlanning = false">
         </ModalPlanning>
+        <ModalEvent v-if="showEvent"
+                :collaborateur="member"
+                :selected="this.selectedPlanning"
+                @closeModal="this.showEvent = false">
+        </ModalEvent>
         <ModalPlanningWeek
             v-if="showPlanningWeek"
             :showDates="showDates"
@@ -147,10 +168,12 @@ import Checkbox from "@/Components/Checkbox";
 import CheckUpdate from "@/Components/CheckUpdate";
 import ModalSwitchPlanning from "@/Components/ModalSwitchPlanning.vue";
 import ModalPlanningWeek from "@/Components/ModalPlanningWeek.vue";
+import ModalEvent from "@/Components/ModalEvent.vue";
 
 export default {
     name: "Planning",
     components: {
+        ModalEvent,
         ModalSwitchPlanning,
         CheckUpdate,
         Checkbox,
@@ -180,6 +203,7 @@ export default {
             datePlanning: null,
             showPlanning: false,
             showPlanningWeek: false,
+            showEvent: false,
             updatePlanning: false,
             updateSwitch: false,
             window: {

@@ -32,3 +32,4 @@ require __DIR__.'/rotation.php';
 require __DIR__.'/jour_ferie.php';
 require __DIR__.'/collaborateur.php';
 require __DIR__.'/contact.php';
+require __DIR__.'/event.php';

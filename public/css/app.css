@@ -696,6 +696,12 @@ select {
 .left-6 {
   left: 1.5rem;
 }
+.bottom-6 {
+  bottom: 1.5rem;
+}
+.bottom-10 {
+  bottom: 2.5rem;
+}
 .z-0 {
   z-index: 0;
 }

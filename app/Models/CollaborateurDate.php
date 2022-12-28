@@ -17,9 +17,11 @@ class CollaborateurDate extends Pivot
      * @var array<int, string>
      */
     protected $fillable = [
+        'id',
         'horaire',
         'hub_id',
         'collaborateur_id',
+        'evenements',
         'date_id'
     ];
 }
