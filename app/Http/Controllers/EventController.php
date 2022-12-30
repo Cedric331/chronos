@@ -15,9 +15,18 @@ class EventController extends Controller
         $this->middleware(['role:Coordinateur|Responsable|Administrateur']);
     }
 
-    public function store (Request $request)
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store (Request $request): \Illuminate\Http\JsonResponse
     {
-        // TODO Vérifier heures + longueur name evenement
+        $request->validate([
+            'evenement' => 'required|string|max:9',
+            'heure_debut' => 'required',
+            'heure_fin' => 'required'
+        ]);
+
         // TODO Ajout delete evenement
         $event =  [
             'name' => $request->evenement,

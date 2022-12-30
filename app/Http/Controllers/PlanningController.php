@@ -305,6 +305,7 @@ class PlanningController extends Controller
                         'horaire_id' => $date->pivot->id,
                         'type' => $this->getType($date->pivot->horaire, $horaires),
                         'events' => empty($events) ? null : $events,
+                        'flipped' => false,
                         'today' => $this->formatDateFr(now()) === $this->formatDateFr($date->date)
                     ];
                     $collect->push($object);

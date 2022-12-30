@@ -7,7 +7,7 @@
                     <div class="relative py-8 px-5 md:px-10 bg-white shadow-md rounded border border-gray-400">
                         <h1 class="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">Création d'un évènement</h1>
                         <label for="evenement" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Nom de l'évènement</label>
-                        <input id="evenement" v-model="evenement" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Réunion, entretien..." />
+                        <input id="evenement" v-model="evenement" class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Réunion, entretien...(max 9 caractères)" />
                         <label for="heure_debut" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Heure de début</label>
                         <div class="relative mb-5 mt-2">
                             <div class="absolute text-gray-600 flex items-center px-4 border-r h-full">
